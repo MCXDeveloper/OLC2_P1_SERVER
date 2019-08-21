@@ -161,9 +161,18 @@
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="FCL\Entorno\Entorno.cs" />
+    <Compile Include="FCL\Entorno\Simbolo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="LUP\Abstracto\LUP_AST.cs" />
+    <Compile Include="LUP\Abstracto\LUP_Instruccion.cs" />
+    <Compile Include="LUP\Analizadores\LUP_ASTBuilder.cs" />
+    <Compile Include="LUP\Analizadores\LUP_Grammar.cs" />
+    <Compile Include="LUP\Arbol\LoginPackage.cs" />
+    <Compile Include="LUP\Arbol\LogoutPackage.cs" />
+    <Compile Include="LUP\Arbol\QueryPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -257,10 +266,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="CHISON\" />
+    <Folder Include="FCL\Abstracto\" />
+    <Folder Include="FCL\Analizadores\" />
+    <Folder Include="FCL\Arbol\" />
     <Folder Include="Models\" />
-    <Folder Include="Parser\Abstracto\" />
-    <Folder Include="Parser\Analizadores\" />
-    <Folder Include="Parser\Arbol\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
