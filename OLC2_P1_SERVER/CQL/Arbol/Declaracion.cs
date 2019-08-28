@@ -12,9 +12,9 @@ public class Declaracion : Instruccion
     private readonly int columna;
     private readonly string nombreObj;
     private readonly Instruccion valor;
-    private readonly LinkedList<string> lista_variables;
+    private readonly List<string> lista_variables;
     
-    public Declaracion(Tipo tipo, LinkedList<string> lista_variables, int fila, int columna)
+    public Declaracion(Tipo tipo, List<string> lista_variables, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
@@ -24,7 +24,7 @@ public class Declaracion : Instruccion
         this.lista_variables = lista_variables;
     }
 
-    public Declaracion(Tipo tipo, LinkedList<string> lista_variables, Instruccion valor, int fila, int columna)
+    public Declaracion(Tipo tipo, List<string> lista_variables, Instruccion valor, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
@@ -34,7 +34,7 @@ public class Declaracion : Instruccion
         this.lista_variables = lista_variables;
     }
 
-    public Declaracion(string nombreObj, LinkedList<string> lista_variables, int fila, int columna)
+    public Declaracion(string nombreObj, List<string> lista_variables, int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;
@@ -43,7 +43,7 @@ public class Declaracion : Instruccion
         this.lista_variables = lista_variables;
     }
 
-    public Declaracion(string nombreObj, LinkedList<string> lista_variables, Instruccion valor, int fila, int columna)
+    public Declaracion(string nombreObj, List<string> lista_variables, Instruccion valor, int fila, int columna)
     {
         this.fila = fila;
         this.valor = valor;

@@ -343,9 +343,7 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         DECLARACION.Rule = TIPO + LISTA_VARIABLES + puco
-            | identificador + LISTA_VARIABLES + puco
             | TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
-            | identificador + LISTA_VARIABLES + igual + EXPRESION + puco
             ;
 
         ASIGNACION.Rule = variable + igual + EXPRESION
@@ -389,6 +387,9 @@ public class Grammar : Irony.Parsing.Grammar
             | EXPRESION_RELACIONAL
             | PRIMITIVO
             | SENTENCIA_INC_DEC
+            | r_new + r_map + menor + TIPO + coma + TIPO + mayor
+            | r_new + r_list + menor + TIPO + mayor
+            | r_new + r_set + menor + TIPO + mayor
             | r_new + identificador
             | par_a + EXPRESION + par_c
             | llave_a + LISTA_EXPRESIONES + llave_c
@@ -435,6 +436,10 @@ public class Grammar : Irony.Parsing.Grammar
             | r_boolean
             | r_date
             | r_time
+            | r_map
+            | r_set
+            | r_list
+            | identificador
             ;
 
         #endregion

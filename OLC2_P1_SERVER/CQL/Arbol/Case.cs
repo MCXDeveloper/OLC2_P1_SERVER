@@ -7,9 +7,9 @@ using System.Web;
 public class Case : Instruccion
 {
     private readonly Instruccion condicion;
-    private readonly LinkedList<Instruccion> sentencias;
+    private readonly List<Instruccion> sentencias;
 
-    public Case(Instruccion condicion, LinkedList<Instruccion> sentencias)
+    public Case(Instruccion condicion, List<Instruccion> sentencias)
     {
         this.condicion = condicion;
         this.sentencias = sentencias;

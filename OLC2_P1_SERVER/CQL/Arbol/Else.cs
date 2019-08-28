@@ -9,16 +9,16 @@ public class Else : Instruccion
     private bool ValorCondicion;
     private readonly bool IsElse;
     private readonly Instruccion Condicion;
-    private readonly LinkedList<Instruccion> Sentencias;
+    private readonly List<Instruccion> Sentencias;
 
-    public Else(LinkedList<Instruccion> sentencias)
+    public Else(List<Instruccion> sentencias)
     {
         this.IsElse = false;
         this.Condicion = new Nulo();
         this.Sentencias = sentencias;
     }
 
-    public Else(Instruccion condicion, LinkedList<Instruccion> sentencias)
+    public Else(Instruccion condicion, List<Instruccion> sentencias)
     {
         this.IsElse = false;
         this.Condicion = condicion;

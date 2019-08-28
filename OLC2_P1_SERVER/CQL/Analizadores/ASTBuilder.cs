@@ -22,10 +22,10 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "LISTA_INSTRUCCIONES"))
         {
-            LinkedList<Instruccion> instrucciones = new LinkedList<Instruccion>();
+            List<Instruccion> instrucciones = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                instrucciones.AddLast((Instruccion)Recorrido(hijo));
+                instrucciones.Add((Instruccion)Recorrido(hijo));
             }
             return new AST(instrucciones);
         }
@@ -37,25 +37,11 @@ public class ASTBuilder
         {
             if (actual.ChildNodes.Count == 3)
             {
-                if(EstoyAca(actual.ChildNodes[0], "TIPO"))
-                {
-                    return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (LinkedList<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
-                }
-                else
-                {
-                    return new Declaracion(ObtenerLexema(actual, 0), (LinkedList<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
-                }
+                return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
             }
             else
             {
-                if (EstoyAca(actual.ChildNodes[0], "TIPO"))
-                {
-                    return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (LinkedList<string>)Recorrido(actual.ChildNodes[1]), (Instruccion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
-                }
-                else
-                {
-                    return new Declaracion(ObtenerLexema(actual, 0), (LinkedList<string>)Recorrido(actual.ChildNodes[1]), (Instruccion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
-                }
+                return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), (Instruccion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
             }
         }
         else if (EstoyAca(actual, "ASIGNACION"))
@@ -73,19 +59,19 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "LISTA_VARIABLES"))
         {
-            LinkedList<Variable> lista_variables = new LinkedList<Variable>();
+            List<Variable> lista_variables = new List<Variable>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_variables.AddLast((Variable)Recorrido(hijo));
+                lista_variables.Add((Variable)Recorrido(hijo));
             }
             return lista_variables;
         }
         else if (EstoyAca(actual, "LISTA_ACCESO"))
         {
-            LinkedList<string> lista_acceso = new LinkedList<string>();
+            List<string> lista_acceso = new List<string>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_acceso.AddLast((string)Recorrido(hijo));
+                lista_acceso.Add((string)Recorrido(hijo));
             }
             return lista_acceso;
         }
@@ -117,41 +103,41 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "LISTA_ELSE_IF"))
         {
-            LinkedList<Instruccion> lista_else_if = new LinkedList<Instruccion>();
+            List<Instruccion> lista_else_if = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_else_if.AddLast((Instruccion)Recorrido(hijo));
+                lista_else_if.Add((Instruccion)Recorrido(hijo));
             }
             return lista_else_if;
         }
         else if (EstoyAca(actual, "IF"))
         {
-            return new Else((Instruccion)Recorrido(actual.ChildNodes[2]), (LinkedList<Instruccion>)Recorrido(actual.ChildNodes[5]));
+            return new Else((Instruccion)Recorrido(actual.ChildNodes[2]), (List<Instruccion>)Recorrido(actual.ChildNodes[5]));
         }
         else if (EstoyAca(actual, "ELSE_IF"))
         {
-            return new Else((Instruccion)Recorrido(actual.ChildNodes[3]), (LinkedList<Instruccion>)Recorrido(actual.ChildNodes[6]));
+            return new Else((Instruccion)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]));
         }
         else if (EstoyAca(actual, "ELSE"))
         {
-            return new Else((LinkedList<Instruccion>)Recorrido(actual.ChildNodes[2]));
+            return new Else((List<Instruccion>)Recorrido(actual.ChildNodes[2]));
         }
         else if (EstoyAca(actual, "SENTENCIA_SWITCH"))
         {
-            return new Switch((Instruccion)Recorrido(actual.ChildNodes[2]), (LinkedList<Instruccion>)Recorrido(actual.ChildNodes[5]), (LinkedList<Instruccion>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new Switch((Instruccion)Recorrido(actual.ChildNodes[2]), (List<Instruccion>)Recorrido(actual.ChildNodes[5]), (List<Instruccion>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "LISTA_CASES"))
         {
-            LinkedList<Instruccion> lista_cases = new LinkedList<Instruccion>();
+            List<Instruccion> lista_cases = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_cases.AddLast((Instruccion)Recorrido(hijo));
+                lista_cases.Add((Instruccion)Recorrido(hijo));
             }
             return lista_cases;
         }
         else if (EstoyAca(actual, "CASE"))
         {
-            return new Case((Instruccion)Recorrido(actual.ChildNodes[1]), (LinkedList<Instruccion>)Recorrido(actual.ChildNodes[4]));
+            return new Case((Instruccion)Recorrido(actual.ChildNodes[1]), (List<Instruccion>)Recorrido(actual.ChildNodes[4]));
         }
         else if (EstoyAca(actual, "SENTENCIA_INC_DEC"))
         {
@@ -159,10 +145,10 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "LISTA_EXPRESIONES"))
         {
-            LinkedList<Instruccion> lista_expresiones = new LinkedList<Instruccion>();
+            List<Instruccion> lista_expresiones = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_expresiones.AddLast((Instruccion)Recorrido(hijo));
+                lista_expresiones.Add((Instruccion)Recorrido(hijo));
             }
             return lista_expresiones;
         }
@@ -235,6 +221,18 @@ public class ASTBuilder
             {
                 return Tipo.TIME;
             }
+            else if (EstoyAca(actual.ChildNodes[0], "map"))
+            {
+                return Tipo.MAP;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "set"))
+            {
+                return Tipo.SET;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "list"))
+            {
+                return Tipo.LIST;
+            }
             else
             {
                 return Tipo.OBJECT;
@@ -283,11 +281,6 @@ public class ASTBuilder
             else if (EstoyAca(actual.ChildNodes[0], "variable"))
             {
                 return new Identificador(ObtenerLexema(actual, 0));
-            }
-            else
-            {
-                // SENTENCIA_INC_DEC
-                return Recorrido(actual.ChildNodes[0]);
             }
         }
 

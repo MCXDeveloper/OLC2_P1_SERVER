@@ -5,9 +5,9 @@ using System.Web;
 
 public class AST
 {
-    private LinkedList<Instruccion> instrucciones;
+    private List<Instruccion> instrucciones;
 
-    public AST(LinkedList<Instruccion> instrucciones)
+    public AST(List<Instruccion> instrucciones)
     {
         this.instrucciones = instrucciones;
     }

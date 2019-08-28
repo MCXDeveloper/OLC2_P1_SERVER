@@ -16,6 +16,9 @@ public class Entorno
         BOOLEAN,
         DATE,
         TIME,
+        MAP,
+        SET,
+        LIST,
         OBJECT
     }
 
