@@ -7,7 +7,7 @@ namespace OLC2_P1_SERVER.CQL.Arbol
 {
     public class Nulo : Instruccion
     {
-        public object Ejecutar(Entorno ent, AST arbol)
+        public object Ejecutar(Entorno ent)
         {
             return new Nulo();
         }

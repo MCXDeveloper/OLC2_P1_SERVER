@@ -12,7 +12,7 @@ public class Primitivo : Instruccion
         this.valor = valor;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         return valor;
     }

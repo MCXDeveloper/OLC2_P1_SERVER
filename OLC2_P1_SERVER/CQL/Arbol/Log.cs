@@ -18,9 +18,9 @@ public class Log : Instruccion
         this.elemento = elemento;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
-        object ob = elemento.Ejecutar(ent, arbol);
+        object ob = elemento.Ejecutar(ent);
 
         string salida = "Error <<<>>> Se intentó imprimir una expresión nula.";
 

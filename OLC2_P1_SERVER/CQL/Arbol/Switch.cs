@@ -21,7 +21,7 @@ public class Switch : Instruccion
         this.sentenciasDefault = sentenciasDefault;
     }
     
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         // Consideraciones a tomar en cuenta para ejecutar una sentencia Selecciona:
         // 1. La expresión proporcionada como condicion debe de ser de tipo Expresion.
@@ -33,7 +33,7 @@ public class Switch : Instruccion
         bool caseFlag = false;
 
         // Primero: Valido la expresion proporcionada como condicion.
-        object expresion_condicion = condicion.Ejecutar(ent, arbol);
+        object expresion_condicion = condicion.Ejecutar(ent);
 
         // Segundo: Por cada uno de los casos establecidos en lista_casos verifico si la expresion proporcionada en la clase Caso es la misma que la expresion_condicion definida en el primer paso.
         foreach(Instruccion ins in listaCases)
@@ -42,12 +42,12 @@ public class Switch : Instruccion
             {
                 // Evalúo la expresion del caso
                 Case target = (Case)ins;
-                object exp = target.GetCondicion().Ejecutar(ent, arbol);
+                object exp = target.GetCondicion().Ejecutar(ent);
 
                 // Si el valor de la expresion definida en el selecciona hace match con la expresion definida por el Caso
                 if (expresion_condicion.Equals(exp))
                 {
-                    object resp = target.Ejecutar(ent, arbol);
+                    object resp = target.Ejecutar(ent);
 
                     // Si la respuesta de la ejecución de las sentencias del Caso devuelve un detener, se para la evaluación de los demás casos y de igual forma activo caseFlag = true
                     // Si no viene el detener, de igual forma activo caseFlag = true para que ya no se ejecute la sentencia defecto aunque se itere por los demás casos.
@@ -78,7 +78,7 @@ public class Switch : Instruccion
             {
                 if(ins is Return)
                 {
-                    return ins.Ejecutar(local, arbol);
+                    return ins.Ejecutar(local);
                 }
                 else if (ins is Break)
                 {
@@ -86,7 +86,7 @@ public class Switch : Instruccion
                 }
                 else
                 {
-                    ins.Ejecutar(local, arbol);
+                    ins.Ejecutar(local);
                 }
             }
 

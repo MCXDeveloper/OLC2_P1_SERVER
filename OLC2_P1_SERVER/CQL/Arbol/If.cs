@@ -36,11 +36,11 @@ public class If : Instruccion
         this.SubIfs.Add(b);
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         foreach(Instruccion ins in SubIfs)
         {
-            object response = ins.Ejecutar(ent, arbol);
+            object response = ins.Ejecutar(ent);
             
             if(response is Return)
             {

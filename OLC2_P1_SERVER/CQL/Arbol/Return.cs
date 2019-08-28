@@ -26,11 +26,11 @@ public class Return : Instruccion
         return exp_val;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         if(!(valor is Nulo))
         {
-            this.exp_val = valor.Ejecutar(ent, arbol);
+            this.exp_val = valor.Ejecutar(ent);
             return this;
         }
         else

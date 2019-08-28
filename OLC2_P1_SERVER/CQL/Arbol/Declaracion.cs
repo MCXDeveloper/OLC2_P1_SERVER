@@ -52,7 +52,7 @@ public class Declaracion : Instruccion
         this.lista_variables = lista_variables;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         // Si el valor brindado en el constructor es igual a null significa que la declaración no termino con la igualacion a una expresion
         // por lo que a todos se les asignaría valor Nulo().

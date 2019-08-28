@@ -25,9 +25,9 @@ public class Else : Instruccion
         this.Sentencias = sentencias;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
-        ValorCondicion = (Condicion is Nulo) ? false : (bool)Condicion.Ejecutar(ent, arbol);
+        ValorCondicion = (Condicion is Nulo) ? false : (bool)Condicion.Ejecutar(ent);
 
         if(ValorCondicion || IsElse)
         {
@@ -37,11 +37,11 @@ public class Else : Instruccion
             {
                 if (ins is Return)
                 {
-                    return ins.Ejecutar(local, arbol);
+                    return ins.Ejecutar(local);
                 }
                 else
                 {
-                    ins.Ejecutar(local, arbol);
+                    ins.Ejecutar(local);
                 }
             }
 

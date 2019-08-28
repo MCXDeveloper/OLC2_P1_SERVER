@@ -99,11 +99,11 @@ public class Operacion : Instruccion
         }
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
 
-        object op1 = opIzq?.Ejecutar(ent, arbol);
-        object op2 = opDer?.Ejecutar(ent, arbol);
+        object op1 = opIzq?.Ejecutar(ent);
+        object op2 = opDer?.Ejecutar(ent);
         object respuesta = new Nulo();
 
         switch (tipo)

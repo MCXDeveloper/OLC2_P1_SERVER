@@ -20,7 +20,7 @@ public class Case : Instruccion
         return condicion;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         // Si un caso se esta ejecutando, es porque la condicion de acá y la expresión del selecciona hicieron match.
         // Por lo que se procede a ejecutar cada una de las sentencias este caso.
@@ -32,7 +32,7 @@ public class Case : Instruccion
         {
             if(ins is Return)
             {
-                return ((Return)ins).Ejecutar(local, arbol);
+                return (Return)ins.Ejecutar(local);
             }
             else if (ins is Break)
             {
@@ -40,7 +40,7 @@ public class Case : Instruccion
             }
             else
             {
-                ins.Ejecutar(local, arbol);
+                ins.Ejecutar(local);
             }
         }
 

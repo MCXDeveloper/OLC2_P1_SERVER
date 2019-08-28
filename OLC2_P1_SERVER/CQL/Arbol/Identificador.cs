@@ -13,7 +13,7 @@ public class Identificador : Instruccion
         this.id = id;
     }
 
-    public object Ejecutar(Entorno ent, AST arbol)
+    public object Ejecutar(Entorno ent)
     {
         Variable sim = (Variable)ent.ObtenerVariable(id);
         return (sim.GetValor() is Nulo) ? sim : sim.GetValor();
