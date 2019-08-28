@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class LUP_AST
+public class AST
 {
-    private readonly LinkedList<LUP_Instruccion> instrucciones;
+    private LinkedList<Instruccion> instrucciones;
 
-    public LUP_AST(LinkedList<LUP_Instruccion> instrucciones)
+    public AST(LinkedList<Instruccion> instrucciones)
     {
         this.instrucciones = instrucciones;
     }

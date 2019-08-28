@@ -161,8 +161,26 @@
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="FCL\Entorno\Entorno.cs" />
-    <Compile Include="FCL\Entorno\Simbolo.cs" />
+    <Compile Include="CQL\Abstracto\AST.cs" />
+    <Compile Include="CQL\Abstracto\Instruccion.cs" />
+    <Compile Include="CQL\Analizadores\ASTBuilder.cs" />
+    <Compile Include="CQL\Analizadores\Grammar.cs" />
+    <Compile Include="CQL\Arbol\Asignacion.cs" />
+    <Compile Include="CQL\Arbol\Case.cs" />
+    <Compile Include="CQL\Arbol\Date.cs" />
+    <Compile Include="CQL\Arbol\Declaracion.cs" />
+    <Compile Include="CQL\Arbol\Else.cs" />
+    <Compile Include="CQL\Arbol\If.cs" />
+    <Compile Include="CQL\Arbol\Log.cs" />
+    <Compile Include="CQL\Arbol\Nulo.cs" />
+    <Compile Include="CQL\Arbol\Operacion.cs" />
+    <Compile Include="CQL\Arbol\Switch.cs" />
+    <Compile Include="CQL\Arbol\Time.cs" />
+    <Compile Include="CQL\Entorno\Entorno.cs" />
+    <Compile Include="CQL\Entorno\Funcion.cs" />
+    <Compile Include="CQL\Entorno\Variable.cs" />
+    <Compile Include="CQL\Manejadores\Error.cs" />
+    <Compile Include="CQL\Manejadores\TError.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -267,9 +285,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CHISON\" />
-    <Folder Include="FCL\Abstracto\" />
-    <Folder Include="FCL\Analizadores\" />
-    <Folder Include="FCL\Arbol\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
