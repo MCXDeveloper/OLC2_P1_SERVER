@@ -276,6 +276,24 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm menor_igual = ToTerm("<=");
         KeyTerm mayor_igual = ToTerm(">=");
         KeyTerm interrogacion = ToTerm("?");
+        CommentTerminal COMENTARIO_MULTIPLE = new CommentTerminal("COMENTARIO_MULTIPLE", "/*", "*/");
+        CommentTerminal COMENTARIO_DE_LINEA = new CommentTerminal("COMENTARIO_DE_LINEA", "//", "\n", "\r\n");
+
+        RegisterOperators(1, Associativity.Right, igual);
+        RegisterOperators(2, Associativity.Right, interrogacion);
+        RegisterOperators(3, Associativity.Left, or);
+        RegisterOperators(4, Associativity.Left, and);
+        RegisterOperators(5, Associativity.Left, xor);
+        RegisterOperators(6, Associativity.Left, igualdad, diferente);
+        RegisterOperators(7, Associativity.Neutral, mayor, menor, mayor_igual, menor_igual);
+        RegisterOperators(8, Associativity.Left, mas, menos);
+        RegisterOperators(9, Associativity.Left, por, div, mod);
+        RegisterOperators(10, Associativity.Right, not);
+        RegisterOperators(11, Associativity.Neutral, inc, dec);
+        RegisterOperators(12, Associativity.Left, par_a, par_c);
+
+        NonGrammarTerminals.Add(COMENTARIO_DE_LINEA);
+        NonGrammarTerminals.Add(COMENTARIO_MULTIPLE);
 
         #endregion
 
@@ -292,13 +310,6 @@ public class Grammar : Irony.Parsing.Grammar
 
         #endregion
 
-        #region COMENTARIOS
-
-        CommentTerminal COMENTARIO_MULTIPLE = new CommentTerminal("COMENTARIO_MULTIPLE", "/*", "*/");
-        CommentTerminal COMENTARIO_DE_LINEA = new CommentTerminal("COMENTARIO_DE_LINEA", "//", "\n", "\r\n");
-
-        #endregion
-
         #region NO_TERMINALES
 
         NonTerminal IF = new NonTerminal("IF");
@@ -308,6 +319,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal CASE = new NonTerminal("CASE");
         NonTerminal INICIO = new NonTerminal("INICIO");
         NonTerminal ELSE_IF = new NonTerminal("ELSE_IF");
+        NonTerminal ATR_MAP = new NonTerminal("ATR_MAP");
         NonTerminal EXPRESION = new NonTerminal("EXPRESION");
         NonTerminal PRIMITIVO = new NonTerminal("PRIMITIVO");
         NonTerminal ASIGNACION = new NonTerminal("ASIGNACION");
@@ -317,6 +329,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_IF = new NonTerminal("SENTENCIA_IF");
         NonTerminal LISTA_ACCESO = new NonTerminal("LISTA_ACCESO");
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
+        NonTerminal LISTA_ATR_MAP = new NonTerminal("LISTA_ATR_MAP");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
@@ -343,12 +356,30 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         DECLARACION.Rule = TIPO + LISTA_VARIABLES + puco
+            | TIPO + LISTA_VARIABLES + igual + r_new + r_map + menor + TIPO + coma + TIPO + mayor + puco
+            | TIPO + LISTA_VARIABLES + igual + r_new + r_list + menor + TIPO + mayor + puco
+            | TIPO + LISTA_VARIABLES + igual + r_new + r_set + menor + TIPO + mayor + puco
+            | TIPO + LISTA_VARIABLES + igual + r_new + identificador + puco
+            | TIPO + LISTA_VARIABLES + igual + cor_a + LISTA_ATR_MAP + cor_c + puco
+            | TIPO + LISTA_VARIABLES + igual + cor_a + LISTA_EXPRESIONES + cor_c + puco
+            | TIPO + LISTA_VARIABLES + igual + llave_a + LISTA_EXPRESIONES + llave_c + puco
             | TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
             ;
 
-        ASIGNACION.Rule = variable + igual + EXPRESION
-            | variable + punto + LISTA_ACCESO + igual + EXPRESION
+        ASIGNACION.Rule = variable + igual + r_new + r_map + menor + TIPO + coma + TIPO + mayor + puco
+            | variable + igual + r_new + r_list + menor + TIPO + mayor + puco
+            | variable + igual + r_new + r_set + menor + TIPO + mayor + puco
+            | variable + igual + r_new + identificador + puco
+            | variable + igual + cor_a + LISTA_ATR_MAP + cor_c + puco
+            | variable + igual + cor_a + LISTA_EXPRESIONES + cor_c + puco
+            | variable + igual + llave_a + LISTA_EXPRESIONES + llave_c + puco
+            | variable + igual + EXPRESION + puco
+            | variable + punto + LISTA_ACCESO + igual + EXPRESION + puco
             ;
+
+        LISTA_ATR_MAP.Rule = MakePlusRule(LISTA_ATR_MAP, coma, ATR_MAP);
+
+        ATR_MAP.Rule = PRIMITIVO + dospu + EXPRESION;
 
         LISTA_VARIABLES.Rule = MakePlusRule(LISTA_VARIABLES, coma, variable);
 
@@ -387,12 +418,7 @@ public class Grammar : Irony.Parsing.Grammar
             | EXPRESION_RELACIONAL
             | PRIMITIVO
             | SENTENCIA_INC_DEC
-            | r_new + r_map + menor + TIPO + coma + TIPO + mayor
-            | r_new + r_list + menor + TIPO + mayor
-            | r_new + r_set + menor + TIPO + mayor
-            | r_new + identificador
             | par_a + EXPRESION + par_c
-            | llave_a + LISTA_EXPRESIONES + llave_c
             //| EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         
@@ -436,9 +462,12 @@ public class Grammar : Irony.Parsing.Grammar
             | r_boolean
             | r_date
             | r_time
-            | r_map
+            | r_set + menor + TIPO + mayor
             | r_set
+            | r_list + menor + TIPO + mayor
             | r_list
+            | r_map + menor + TIPO + coma + TIPO + mayor
+            | r_map
             | identificador
             ;
 

@@ -197,48 +197,66 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "TIPO"))
         {
-            if (EstoyAca(actual.ChildNodes[0], "int"))
+            if (actual.ChildNodes.Count > 1)
             {
-                return Tipo.INT;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "double"))
-            {
-                return Tipo.DOUBLE;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "boolean"))
-            {
-                return Tipo.BOOLEAN;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "string"))
-            {
-                return Tipo.STRING;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "date"))
-            {
-                return Tipo.DATE;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "time"))
-            {
-                return Tipo.TIME;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "map"))
-            {
-                return Tipo.MAP;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "set"))
-            {
-                return Tipo.SET;
-            }
-            else if (EstoyAca(actual.ChildNodes[0], "list"))
-            {
-                return Tipo.LIST;
+                if (EstoyAca(actual.ChildNodes[0], "set"))
+                {
+                    return new Set(Recorrido(actual.ChildNodes[2]));
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "list"))
+                {
+                    return new List(Recorrido(actual.ChildNodes[2]));
+                }
+                else
+                {
+                    return new Map(Recorrido(actual.ChildNodes[2]), Recorrido(actual.ChildNodes[4]));
+                }
             }
             else
             {
-                return Tipo.OBJECT;
+                if (EstoyAca(actual.ChildNodes[0], "int"))
+                {
+                    return Tipo.INT;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "double"))
+                {
+                    return Tipo.DOUBLE;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "boolean"))
+                {
+                    return Tipo.BOOLEAN;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "string"))
+                {
+                    return Tipo.STRING;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "date"))
+                {
+                    return Tipo.DATE;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "time"))
+                {
+                    return Tipo.TIME;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "map"))
+                {
+                    return Tipo.MAP;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "set"))
+                {
+                    return Tipo.SET;
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "list"))
+                {
+                    return Tipo.LIST;
+                }
+                else
+                {
+                    return Tipo.OBJECT;
+                }
             }
+            
         }
-
         else if (EstoyAca(actual, "PRIMITIVO"))
         {
             if (EstoyAca(actual.ChildNodes[0], "numero"))
