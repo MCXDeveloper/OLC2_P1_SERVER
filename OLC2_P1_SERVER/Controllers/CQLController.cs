@@ -7,31 +7,33 @@ using System.Web.Http;
 
 namespace OLC2_P1_SERVER.Controllers
 {
-    public class APIController : ApiController
+    public class CQLController : ApiController
     {
-        // GET: api/API
+        // GET: api/CQL
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/API/5
+        // GET: api/CQL/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/API
-        public void Post([FromBody]string value)
+        // POST: api/CQL
+        public void Post([FromBody]string cadena)
         {
+            Executer executer = new Executer();
+            executer.Analizar(cadena);
         }
 
-        // PUT: api/API/5
+        // PUT: api/CQL/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/API/5
+        // DELETE: api/CQL/5
         public void Delete(int id)
         {
         }

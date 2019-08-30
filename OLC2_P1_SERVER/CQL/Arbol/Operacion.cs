@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class Operacion : Instruccion
+public class Operacion : Expresion
 {
-    
     public enum TipoOperacion
     {
         SUMA,
@@ -32,12 +31,12 @@ public class Operacion : Instruccion
     }
 
     private readonly TipoOperacion tipo;
-    private readonly Instruccion opIzq;
-    private readonly Instruccion opDer;
+    private readonly Expresion opIzq;
+    private readonly Expresion opDer;
     private readonly int fila;
     private readonly int columna;
 
-    public Operacion(Instruccion opIzq, TipoOperacion tipo, int fila, int columna)
+    public Operacion(Expresion opIzq, TipoOperacion tipo, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
@@ -45,7 +44,7 @@ public class Operacion : Instruccion
         this.columna = columna;
     }
 
-    public Operacion(Instruccion opIzq, Instruccion opDer, TipoOperacion tipo, int fila, int columna)
+    public Operacion(Expresion opIzq, Expresion opDer, TipoOperacion tipo, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
@@ -99,9 +98,42 @@ public class Operacion : Instruccion
         }
     }
 
+    public Entorno.Tipo GetTipo(Entorno ent)
+    {
+        object valor = Ejecutar(ent);
+
+        if(valor is int)
+        {
+            return Entorno.Tipo.INT;
+        }
+        else if (valor is double)
+        {
+            return Entorno.Tipo.DOUBLE;
+        }
+        else if (valor is string)
+        {
+            return Entorno.Tipo.STRING;
+        }
+        else if (valor is bool)
+        {
+            return Entorno.Tipo.BOOLEAN;
+        }
+        else if (valor is Date)
+        {
+            return Entorno.Tipo.DATE;
+        }
+        else if (valor is Time)
+        {
+            return Entorno.Tipo.TIME;
+        }
+        else
+        {
+            return Entorno.Tipo.DESCONOCIDO;
+        }
+    }
+
     public object Ejecutar(Entorno ent)
     {
-
         object op1 = opIzq?.Ejecutar(ent);
         object op2 = opDer?.Ejecutar(ent);
         object respuesta = new Nulo();
@@ -654,11 +686,14 @@ public class Operacion : Instruccion
 
     private object EjecutarDecremento(object op1)
     {
+        // TODO realizar funcion de incremento
         throw new NotImplementedException();
     }
 
     private object EjecutarIncremento(object op1)
     {
+        // TODO realizar funcion de incremento
         throw new NotImplementedException();
     }
+
 }

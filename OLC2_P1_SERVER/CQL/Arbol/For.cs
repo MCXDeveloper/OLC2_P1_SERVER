@@ -6,12 +6,12 @@ using System.Web;
 
 public class For : Instruccion
 {
-    private readonly Instruccion condicion;
+    private readonly Expresion condicion;
     private readonly Instruccion inicializador;
     private readonly Instruccion incrementador;
     private readonly List<Instruccion> lista_instrucciones;
 
-    public For(Instruccion inicializador, Instruccion condicion, Instruccion incrementador, List<Instruccion> lista_instrucciones)
+    public For(Instruccion inicializador, Expresion condicion, Instruccion incrementador, List<Instruccion> lista_instrucciones)
     {
         this.condicion = condicion;
         this.inicializador = inicializador;

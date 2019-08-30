@@ -330,6 +330,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_ACCESO = new NonTerminal("LISTA_ACCESO");
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
         NonTerminal LISTA_ATR_MAP = new NonTerminal("LISTA_ATR_MAP");
+        NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
@@ -356,25 +357,11 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         DECLARACION.Rule = TIPO + LISTA_VARIABLES + puco
-            | TIPO + LISTA_VARIABLES + igual + r_new + r_map + menor + TIPO + coma + TIPO + mayor + puco
-            | TIPO + LISTA_VARIABLES + igual + r_new + r_list + menor + TIPO + mayor + puco
-            | TIPO + LISTA_VARIABLES + igual + r_new + r_set + menor + TIPO + mayor + puco
-            | TIPO + LISTA_VARIABLES + igual + r_new + identificador + puco
-            | TIPO + LISTA_VARIABLES + igual + cor_a + LISTA_ATR_MAP + cor_c + puco
-            | TIPO + LISTA_VARIABLES + igual + cor_a + LISTA_EXPRESIONES + cor_c + puco
-            | TIPO + LISTA_VARIABLES + igual + llave_a + LISTA_EXPRESIONES + llave_c + puco
             | TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
             ;
 
-        ASIGNACION.Rule = variable + igual + r_new + r_map + menor + TIPO + coma + TIPO + mayor + puco
-            | variable + igual + r_new + r_list + menor + TIPO + mayor + puco
-            | variable + igual + r_new + r_set + menor + TIPO + mayor + puco
-            | variable + igual + r_new + identificador + puco
-            | variable + igual + cor_a + LISTA_ATR_MAP + cor_c + puco
-            | variable + igual + cor_a + LISTA_EXPRESIONES + cor_c + puco
-            | variable + igual + llave_a + LISTA_EXPRESIONES + llave_c + puco
-            | variable + igual + EXPRESION + puco
-            | variable + punto + LISTA_ACCESO + igual + EXPRESION + puco
+        ASIGNACION.Rule = variable + TIPO_ASIGNACION + EXPRESION + puco
+            | variable + punto + LISTA_ACCESO + TIPO_ASIGNACION + EXPRESION + puco
             ;
 
         LISTA_ATR_MAP.Rule = MakePlusRule(LISTA_ATR_MAP, coma, ATR_MAP);
@@ -411,6 +398,8 @@ public class Grammar : Irony.Parsing.Grammar
 
         SENTENCIA_INC_DEC.Rule = variable + inc
             | variable + dec
+            | variable + punto + LISTA_ACCESO + inc
+            | variable + punto + LISTA_ACCESO + dec
             ;
 
         EXPRESION.Rule = EXPRESION_ARITMETICA
@@ -418,6 +407,10 @@ public class Grammar : Irony.Parsing.Grammar
             | EXPRESION_RELACIONAL
             | PRIMITIVO
             | SENTENCIA_INC_DEC
+            | r_new + TIPO
+            | cor_a + LISTA_ATR_MAP + cor_c
+            | cor_a + LISTA_EXPRESIONES + cor_c
+            | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
             //| EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
@@ -470,6 +463,15 @@ public class Grammar : Irony.Parsing.Grammar
             | r_map
             | identificador
             ;
+
+        TIPO_ASIGNACION.Rule = igual
+            | xmas
+            | xmenos
+            | xpor
+            | xdiv
+            ;
+
+        this.Root = INICIO;
 
         #endregion
 

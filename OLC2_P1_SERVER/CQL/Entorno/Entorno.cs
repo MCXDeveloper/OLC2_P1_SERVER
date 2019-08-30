@@ -19,7 +19,9 @@ public class Entorno
         MAP,
         SET,
         LIST,
-        OBJECT
+        OBJECT,
+        NULO,
+        DESCONOCIDO
     }
 
     private readonly Entorno anterior;
@@ -73,7 +75,7 @@ public class Entorno
         return new Nulo();
     }
 
-    public void ReemplazarVariable(Tipo tipo, string id, Variable nuevoValor)
+    public void ReemplazarVariable(string id, Variable nuevoValor)
     {
         bool flag = false;
 

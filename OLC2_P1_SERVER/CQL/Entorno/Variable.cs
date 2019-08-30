@@ -45,4 +45,14 @@ public class Variable
         return valor;
     }
 
+    public Tipo GetTipo()
+    {
+        return tipo;
+    }
+
+    public string GetNombre()
+    {
+        return nombre;
+    }
+
 }

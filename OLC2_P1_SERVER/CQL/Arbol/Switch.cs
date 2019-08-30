@@ -8,11 +8,11 @@ public class Switch : Instruccion
 {
     private readonly int fila;
     private readonly int columna;
-    private readonly Instruccion condicion;
+    private readonly Expresion condicion;
     private readonly List<Instruccion> listaCases;
     private readonly List<Instruccion> sentenciasDefault;
     
-    public Switch(Instruccion condicion, List<Instruccion> listaCases, List<Instruccion> sentenciasDefault, int fila, int columna)
+    public Switch(Expresion condicion, List<Instruccion> listaCases, List<Instruccion> sentenciasDefault, int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;

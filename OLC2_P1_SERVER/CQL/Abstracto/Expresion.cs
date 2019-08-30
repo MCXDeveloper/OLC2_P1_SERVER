@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static Entorno;
 
-public interface Instruccion
+public interface Expresion
 {
+    Tipo GetTipo(Entorno ent);
     object Ejecutar(Entorno ent);
 }

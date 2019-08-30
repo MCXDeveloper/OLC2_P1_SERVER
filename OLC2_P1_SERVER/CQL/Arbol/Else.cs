@@ -8,7 +8,7 @@ public class Else : Instruccion
 {
     private bool ValorCondicion;
     private readonly bool IsElse;
-    private readonly Instruccion Condicion;
+    private readonly Expresion Condicion;
     private readonly List<Instruccion> Sentencias;
 
     public Else(List<Instruccion> sentencias)
@@ -18,7 +18,7 @@ public class Else : Instruccion
         this.Sentencias = sentencias;
     }
 
-    public Else(Instruccion condicion, List<Instruccion> sentencias)
+    public Else(Expresion condicion, List<Instruccion> sentencias)
     {
         this.IsElse = false;
         this.Condicion = condicion;
