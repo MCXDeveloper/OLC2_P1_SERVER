@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class Map
+public class MapType
 {
-    private readonly object tipoIzq;
-    private readonly object tipoDer;
+    private readonly TipoDato tipoIzq;
+    private readonly TipoDato tipoDer;
 
-    public Map(object tipoIzq, object tipoDer)
+    public MapType(TipoDato tipoIzq, TipoDato tipoDer)
     {
         this.tipoIzq = tipoIzq;
         this.tipoDer = tipoDer;

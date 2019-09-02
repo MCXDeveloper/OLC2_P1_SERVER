@@ -22,10 +22,11 @@ namespace OLC2_P1_SERVER.Controllers
         }
 
         // POST: api/CQL
-        public void Post([FromBody]string cadena)
+        public void Post([FromBody]Tester test)
         {
             Executer executer = new Executer();
-            executer.Analizar(cadena);
+            executer.Analizar(test.cadena);
+            // System.Diagnostics.Debug.Write(test.cadena);
         }
 
         // PUT: api/CQL/5
@@ -37,5 +38,10 @@ namespace OLC2_P1_SERVER.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class Tester
+    {
+        public string cadena { get; set; }
     }
 }

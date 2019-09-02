@@ -320,16 +320,20 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal INICIO = new NonTerminal("INICIO");
         NonTerminal ELSE_IF = new NonTerminal("ELSE_IF");
         NonTerminal ATR_MAP = new NonTerminal("ATR_MAP");
+        NonTerminal ATR_TYPE = new NonTerminal("ATR_TYPE");
         NonTerminal EXPRESION = new NonTerminal("EXPRESION");
         NonTerminal PRIMITIVO = new NonTerminal("PRIMITIVO");
+        NonTerminal USER_TYPE = new NonTerminal("USER_TYPE");
         NonTerminal ASIGNACION = new NonTerminal("ASIGNACION");
         NonTerminal INSTRUCCION = new NonTerminal("INSTRUCCION");
         NonTerminal DECLARACION = new NonTerminal("DECLARACION");
         NonTerminal LISTA_CASES = new NonTerminal("LISTA_CASES");
+        NonTerminal CREATE_TYPE = new NonTerminal("CREATE_TYPE");
         NonTerminal SENTENCIA_IF = new NonTerminal("SENTENCIA_IF");
         NonTerminal LISTA_ACCESO = new NonTerminal("LISTA_ACCESO");
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
         NonTerminal LISTA_ATR_MAP = new NonTerminal("LISTA_ATR_MAP");
+        NonTerminal LISTA_ATR_TYPE = new NonTerminal("LISTA_ATR_TYPE");
         NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
@@ -351,10 +355,19 @@ public class Grammar : Irony.Parsing.Grammar
         INSTRUCCION.Rule = DECLARACION
             | ASIGNACION
             | LOG
+            | CREATE_TYPE
             | SENTENCIA_IF
             | SENTENCIA_SWITCH
             | SENTENCIA_INC_DEC
             ;
+
+        CREATE_TYPE.Rule = r_create + r_type + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
+            | r_create + r_type + r_if + r_not + r_exists + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
+            ;
+
+        LISTA_ATR_TYPE.Rule = MakePlusRule(LISTA_ATR_TYPE, coma, ATR_TYPE);
+
+        ATR_TYPE.Rule = identificador + TIPO;
 
         DECLARACION.Rule = TIPO + LISTA_VARIABLES + puco
             | TIPO + LISTA_VARIABLES + igual + EXPRESION + puco

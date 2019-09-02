@@ -8,13 +8,13 @@ using static Entorno;
 public class Declaracion : Instruccion
 {
     private readonly int fila;
-    private readonly Tipo tipo;
     private readonly int columna;
+    private readonly TipoDato tipo;
     private readonly string nombreObj;
     private readonly Expresion valor;
     private readonly List<string> lista_variables;
     
-    public Declaracion(Tipo tipo, List<string> lista_variables, int fila, int columna)
+    public Declaracion(TipoDato tipo, List<string> lista_variables, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
@@ -24,31 +24,13 @@ public class Declaracion : Instruccion
         this.lista_variables = lista_variables;
     }
 
-    public Declaracion(Tipo tipo, List<string> lista_variables, Expresion valor, int fila, int columna)
+    public Declaracion(TipoDato tipo, List<string> lista_variables, Expresion valor, int fila, int columna)
     {
         this.tipo = tipo;
         this.fila = fila;
         this.valor = valor;
         this.nombreObj = null;
         this.columna = columna;
-        this.lista_variables = lista_variables;
-    }
-
-    public Declaracion(string nombreObj, List<string> lista_variables, int fila, int columna)
-    {
-        this.fila = fila;
-        this.columna = columna;
-        this.valor = new Nulo();
-        this.nombreObj = nombreObj;
-        this.lista_variables = lista_variables;
-    }
-
-    public Declaracion(string nombreObj, List<string> lista_variables, Expresion valor, int fila, int columna)
-    {
-        this.fila = fila;
-        this.valor = valor;
-        this.columna = columna;
-        this.nombreObj = nombreObj;
         this.lista_variables = lista_variables;
     }
 
@@ -72,8 +54,7 @@ public class Declaracion : Instruccion
                     else
                     {
                         ent.Agregar(variable, new Variable(nombreObj, variable, new Nulo()));
-                    }
-                    
+                    }   
                 }
                 else
                 {
@@ -90,7 +71,101 @@ public class Declaracion : Instruccion
 
                 if (!(simbolo is Nulo))
                 {
-                    //TODO falta declarar los 3 tipos de objeto posibles: Expresiones, Objetos (UserTypes) & Collections
+                    // Valido que tipo de declaración viene.  Existen 3 tipos:
+                    // 1. Expresion
+                    // 2. Collections (Map, Set, List)
+                    // 3. Objetos (UserTypes)
+
+                    if(i.Equals(lista_variables.Count - 1))
+                    {
+                        // Verifico si la Expresión que equivale a 'valor' es de tipo Estructura.  Esto indica que la variable esta siendo construida por medio de la palabra 'new'.
+                        if(valor is Estructura)
+                        {
+                            // Valido que el tipo de la Expresión sea el mismo del que fue declarado.
+                            if (valor.GetTipo(ent).GetRealTipo().Equals(tipo.GetRealTipo()))
+                            {
+                                // Verifico si el tipo es OBJECT, ya que requiere una validación adicional que sería el nombre del objeto.
+                                if (tipo.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
+                                {
+                                    // Valido que el nombre del objeto sea el mismo del que fue declarado.
+                                    if (valor.GetTipo(ent).GetElemento().Equals(valor.GetTipo(ent).GetElemento()))
+                                    {
+                                        // Una vez ha sido validado todo lo anterior, se procede a verificar si existe el UserType correspondiente para el objeto que se está creando.
+                                        string nombre_user_type = (string)tipo.GetElemento();
+                                        object user_type = ent.ObtenerUserType(nombre_user_type);
+
+                                        // Si el UserType si existe, se procede a copiar la lista de atributos del UserType original para esta nueva instancia y se almacena en el entorno.
+                                        if (!(user_type is Nulo))
+                                        {
+                                            UserType objeto = (UserType)user_type;
+                                            
+                                            // Creo la lista que va a representar los diferentes atributos del objeto que se está creando.
+                                            List<AtributoObjeto> listaAtrObj = BuildObjectAttributeList(objeto);
+                                            
+                                            // Agrego el objeto al entorno
+                                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Objeto(tipo, listaAtrObj)));
+                                        }
+                                        else
+                                        {
+                                            Error.AgregarError("Semántico", "[DECLARACION]", "El UserType '"+ nombre_user_type +"' con el que se está declarando la variable no existe en el sistema.", fila, columna);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  Se está declarando un objeto de tipo '" + tipo.GetRealTipo().ToString() + "', el cual no concuerda con el tipo de dato que devuelve la expresión ('" + valor.GetTipo(ent).GetRealTipo().ToString() + "').", fila, columna);
+                                    }
+                                }
+                                // De lo contrario, si el tipo es un MAP
+                                else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP))
+                                {
+
+                                }
+                                // De lo contrario, si el tipo es un LIST
+                                else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.LIST))
+                                {
+
+                                }
+                                // De lo contrario, si el tipo es un SET
+                                else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.SET))
+                                {
+
+                                }
+                                // De lo contrario, si es una expresión normal.
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        // De lo contrario, puede ser una expresión normal ó un objeto/map/list/set que está siendo igualado a un arreglo como tal.
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        if (tipo.GetRealTipo().Equals(TipoDato.Tipo.INT))
+                        {
+                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Primitivo(0)));
+                        }
+                        else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+                        {
+                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Primitivo(0.0)));
+                        }
+                        else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
+                        {
+                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Primitivo(false)));
+                        }
+                        else
+                        {
+                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Nulo()));
+                        }
+                    }
                 }
                 else
                 {
@@ -103,5 +178,30 @@ public class Declaracion : Instruccion
 
     }
 
+    private List<AtributoObjeto> BuildObjectAttributeList(UserType objeto)
+    {
+        List<AtributoObjeto> listaAtrObj = new List<AtributoObjeto>();
 
+        foreach (AtributoUT ao in objeto.GetListaAtributos())
+        {
+            if (ao.GetTipoAtributo().Equals(TipoDato.Tipo.INT))
+            {
+                listaAtrObj.Add(new AtributoObjeto(ao.Tipo, ao.Identificador, 0));
+            }
+            else if (ao.GetTipoAtributo().Equals(TipoDato.Tipo.DOUBLE))
+            {
+                listaAtrObj.Add(new AtributoObjeto(ao.Tipo, ao.Identificador, 0.0));
+            }
+            else if (ao.GetTipoAtributo().Equals(TipoDato.Tipo.BOOLEAN))
+            {
+                listaAtrObj.Add(new AtributoObjeto(ao.Tipo, ao.Identificador, false));
+            }
+            else
+            {
+                listaAtrObj.Add(new AtributoObjeto(ao.Tipo, ao.Identificador, new Nulo()));
+            }
+        }
+
+        return listaAtrObj;
+    }
 }

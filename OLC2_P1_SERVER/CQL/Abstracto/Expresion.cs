@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Entorno;
 
 public interface Expresion
 {
-    Tipo GetTipo(Entorno ent);
+    TipoDato GetTipo(Entorno ent);
     object Ejecutar(Entorno ent);
 }

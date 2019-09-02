@@ -4,22 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using static Entorno;
+using static TipoDato;
 
 public class Variable
 {
-    private readonly Tipo tipo;
     private readonly object valor;
+    private readonly TipoDato tipo;
     private readonly string nombre;
     private readonly string nombreObj;
 
-    public Variable(Tipo tipo, string nombre)
+    public Variable(TipoDato tipo, string nombre)
     {
         this.tipo = tipo;
         this.nombre = nombre;
         this.valor = new Nulo();
     }
 
-    public Variable(Tipo tipo, string nombre, object valor)
+    public Variable(TipoDato tipo, string nombre, object valor)
     {
         this.tipo = tipo;
         this.valor = valor;
@@ -47,7 +48,7 @@ public class Variable
 
     public Tipo GetTipo()
     {
-        return tipo;
+        return tipo.GetRealTipo();
     }
 
     public string GetNombre()

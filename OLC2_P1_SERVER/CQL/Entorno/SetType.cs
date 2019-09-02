@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class Set
+public class SetType
 {
-    private readonly object inner_type;
+    private readonly TipoDato inner_type;
 
-    public Set(object inner_type)
+    public SetType(TipoDato inner_type)
     {
         this.inner_type = inner_type;
     }

@@ -7,32 +7,17 @@ using System.Web;
 
 public class Entorno
 {
-
-    public enum Tipo
-    {
-        INT,
-        DOUBLE,
-        STRING,
-        BOOLEAN,
-        DATE,
-        TIME,
-        MAP,
-        SET,
-        LIST,
-        OBJECT,
-        NULO,
-        DESCONOCIDO
-    }
-
     private readonly Entorno anterior;
     private readonly Hashtable tablaVariables;
     private readonly Hashtable tablaFunciones;
+    private readonly Hashtable tablaUserTypes;
         
     public Entorno(Entorno anterior)
     {
         this.anterior = anterior;
         this.tablaVariables = new Hashtable();
         this.tablaFunciones = new Hashtable();
+        this.tablaUserTypes = new Hashtable();
     }
 
     public void Agregar(string id, object simbolo)
@@ -41,9 +26,13 @@ public class Entorno
         {
             this.tablaVariables.Add(id, (Variable)simbolo);
         }
-        else
+        else if (simbolo is Funcion)
         {
             this.tablaFunciones.Add(id, (Funcion)simbolo);
+        }
+        else
+        {
+            this.tablaUserTypes.Add(id, (UserType)simbolo);
         }
     }
 
@@ -61,11 +50,25 @@ public class Entorno
         return new Nulo();
     }
 
-    public object ObtenerFuncion(Tipo tipo, string id)
+    public object ObtenerFuncion(TipoDato tipo, string id)
     {
         for (Entorno e = this; e != null; e = e.anterior)
         {
             Funcion encontrado = (Funcion)(e.tablaFunciones[id]);
+            if (encontrado != null)
+            {
+                return encontrado;
+            }
+        }
+
+        return new Nulo();
+    }
+
+    public object ObtenerUserType(string id)
+    {
+        for (Entorno e = this; e != null; e = e.anterior)
+        {
+            UserType encontrado = (UserType)(e.tablaUserTypes[id]);
             if (encontrado != null)
             {
                 return encontrado;
@@ -91,12 +94,12 @@ public class Entorno
 
         if(!flag)
         {
-            Console.WriteLine("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
+            System.Diagnostics.Debug.Write("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
         }
 
     }
 
-    public void ReemplazarFuncion(Tipo tipo, string id, Funcion nuevoValor)
+    public void ReemplazarFuncion(TipoDato tipo, string id, Funcion nuevoValor)
     {
         bool flag = false;
 
@@ -112,7 +115,7 @@ public class Entorno
 
         if (!flag)
         {
-            Console.WriteLine("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
+            System.Diagnostics.Debug.Write("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
         }
 
     }

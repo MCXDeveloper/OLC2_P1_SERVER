@@ -25,7 +25,7 @@ public class AST : Instruccion
 
         // TODO Ejecutar todos los elementos del arbol
 
-        Console.WriteLine("Aquí debería de ejecutar los elementos del árbol");
+        System.Diagnostics.Debug.Write("Aquí debería de ejecutar los elementos del árbol");
 
         return new Nulo();
     }

@@ -33,7 +33,7 @@ public class Log : Instruccion
         }
 
         /* Esta linea debe de ser reemplazada por un paquete de LUP de tipo MESSAGE */
-        Console.WriteLine(salida);
+        System.Diagnostics.Debug.Write(salida);
 
         return new Nulo();
         

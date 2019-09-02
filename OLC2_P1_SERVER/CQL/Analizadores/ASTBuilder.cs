@@ -5,7 +5,6 @@ using System.Web;
 using Irony.Parsing;
 using OLC2_P1_SERVER.CQL.Arbol;
 using static Asignacion;
-using static Entorno;
 
 public class ASTBuilder
 {
@@ -39,10 +38,10 @@ public class ASTBuilder
             {
                 case 3:
                     // TIPO + LISTA_VARIABLES + puco
-                    return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
+                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
                 default:
                     // TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
-                    return new Declaracion((Tipo)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
+                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
             }
         }
         else if (EstoyAca(actual, "ASIGNACION"))
@@ -57,12 +56,35 @@ public class ASTBuilder
                     return new AsignacionObjeto(TipoAsignacion.AS_NORMAL, ObtenerLexema(actual, 0), (List<string>)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
-        else if (EstoyAca(actual, "LISTA_VARIABLES"))
+        else if (EstoyAca(actual, "CREATE_TYPE"))
         {
-            List<Variable> lista_variables = new List<Variable>();
+            switch (actual.ChildNodes.Count)
+            {
+                case 7:
+                    return new CreateUserType(false, ObtenerLexema(actual, 2), (List<AtributoUT>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new CreateUserType(true, ObtenerLexema(actual, 2), (List<AtributoUT>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
+        else if (EstoyAca(actual, "LISTA_ATR_TYPE"))
+        {
+            List<AtributoUT> lista_atr_type = new List<AtributoUT>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_variables.Add((Variable)Recorrido(hijo));
+                lista_atr_type.Add((AtributoUT)Recorrido(hijo));
+            }
+            return lista_atr_type;
+        }
+        else if (EstoyAca(actual, "ATR_TYPE"))
+        {
+            return new AtributoUT((TipoDato)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 0));
+        }
+        else if (EstoyAca(actual, "LISTA_VARIABLES"))
+        {
+            List<string> lista_variables = new List<string>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_variables.Add(hijo.Token.Text);
             }
             return lista_variables;
         }
@@ -165,7 +187,7 @@ public class ASTBuilder
                 case 3:
                     return Recorrido(actual.ChildNodes[1]);
                 case 2:
-                    return new Estructura(Recorrido(actual.ChildNodes[1]));
+                    return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));
                 default:
                     return Recorrido(actual.ChildNodes[0]);
             }
@@ -216,58 +238,58 @@ public class ASTBuilder
             {
                 if (EstoyAca(actual.ChildNodes[0], "set"))
                 {
-                    return new Set(Recorrido(actual.ChildNodes[2]));
+                    return new TipoDato(TipoDato.Tipo.SET, new SetType((TipoDato)Recorrido(actual.ChildNodes[2])));
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "list"))
                 {
-                    return new List(Recorrido(actual.ChildNodes[2]));
+                    return new TipoDato(TipoDato.Tipo.LIST, new ListType((TipoDato)Recorrido(actual.ChildNodes[2])));
                 }
                 else
                 {
-                    return new Map(Recorrido(actual.ChildNodes[2]), Recorrido(actual.ChildNodes[4]));
+                    return new TipoDato(TipoDato.Tipo.MAP, new MapType((TipoDato)Recorrido(actual.ChildNodes[2]), (TipoDato)Recorrido(actual.ChildNodes[4])));
                 }
             }
             else
             {
                 if (EstoyAca(actual.ChildNodes[0], "int"))
                 {
-                    return Tipo.INT;
+                    return new TipoDato(TipoDato.Tipo.INT);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "double"))
                 {
-                    return Tipo.DOUBLE;
+                    return new TipoDato(TipoDato.Tipo.DOUBLE);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "boolean"))
                 {
-                    return Tipo.BOOLEAN;
+                    return new TipoDato(TipoDato.Tipo.BOOLEAN);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "string"))
                 {
-                    return Tipo.STRING;
+                    return new TipoDato(TipoDato.Tipo.STRING);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "date"))
                 {
-                    return Tipo.DATE;
+                    return new TipoDato(TipoDato.Tipo.DATE);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "time"))
                 {
-                    return Tipo.TIME;
+                    return new TipoDato(TipoDato.Tipo.TIME);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "map"))
                 {
-                    return Tipo.MAP;
+                    return new TipoDato(TipoDato.Tipo.MAP);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "set"))
                 {
-                    return Tipo.SET;
+                    return new TipoDato(TipoDato.Tipo.SET);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "list"))
                 {
-                    return Tipo.LIST;
+                    return new TipoDato(TipoDato.Tipo.LIST);
                 }
                 else
                 {
-                    return Tipo.OBJECT;
+                    return new TipoDato(TipoDato.Tipo.OBJECT, ObtenerLexema(actual, 0));
                 }
             }
             
