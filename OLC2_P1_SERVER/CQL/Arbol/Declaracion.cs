@@ -118,33 +118,76 @@ public class Declaracion : Instruccion
                                 // De lo contrario, si el tipo es un MAP
                                 else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP))
                                 {
+                                    // Valido que GetElemento sea de tipo MapType, ya que de lo contrario, sería un error de declaración con new.
+                                    if(valor.GetTipo(ent).GetElemento() is MapType)
+                                    {
+                                        MapType tipoMap = (MapType)valor.GetTipo(ent).GetElemento();
 
+                                        // Valido que el tipo de dato de la clave (TipoIzq) sea de tipo primitivo, si no, hay que arrojar un error.
+                                        if(tipoMap.ValidarTipoPrimitivoEnClave())
+                                        {
+                                            //TODO Verificar si no hay que hacer alguna otra validación con respecto al tipo de dato de la derecha.
+                                            
+                                            // Agrego el Map al entorno
+                                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Map(tipoMap.TipoIzq, tipoMap.TipoDer, fila, columna)));
+                                        }
+                                        else
+                                        {
+                                            Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  En la declaración de tipo 'new' con MAP, el tipo de dato de la clave debe de ser de tipo primitivo.", fila, columna);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  La declaración de tipo 'new' con MAP recibe como parámetro dos tipos de dato.", fila, columna);
+                                    }
                                 }
                                 // De lo contrario, si el tipo es un LIST
                                 else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.LIST))
                                 {
-
+                                    // Valido que GetElemento sea de tipo ListType, ya que de lo contrario, sería un error de declaración con new.
+                                    if (valor.GetTipo(ent).GetElemento() is ListType)
+                                    {
+                                        ListType tipoList = (ListType)valor.GetTipo(ent).GetElemento();
+                                        // Agrego la List al entorno
+                                        // TODO Verificar validaciones adicionales al tipo de dato de la lista
+                                        ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new XList(tipoList.TipoDatoList, fila, columna)));
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  La declaración de tipo 'new' con LIST recibe como parámetro un tipo de dato.", fila, columna);
+                                    }
                                 }
                                 // De lo contrario, si el tipo es un SET
                                 else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.SET))
                                 {
-
+                                    // Valido que GetElemento sea de tipo SetType, ya que de lo contrario, sería un error de declaración con new.
+                                    if (valor.GetTipo(ent).GetElemento() is SetType)
+                                    {
+                                        SetType tipoSet = (SetType)valor.GetTipo(ent).GetElemento();
+                                        // Agrego la Set al entorno
+                                        // TODO Verificar validaciones adicionales al tipo de dato de la lista
+                                        ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new XSet(tipoSet.TipoDatoSet, fila, columna)));
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  La declaración de tipo 'new' con SET recibe como parámetro un tipo de dato.", fila, columna);
+                                    }
                                 }
                                 // De lo contrario, si es una expresión normal.
                                 else
                                 {
-
+                                    //TODO validar esta mierda en la declaracion
                                 }
                             }
                             else
                             {
-
+                                Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  El tipo de dato de la expresión no es del mismo tipo del que fue declarada la variable.  (Recibido: " + valor.GetTipo(ent).GetRealTipo().ToString() + " | Declarado: " + tipo.GetRealTipo().ToString() + ")", fila, columna);
                             }
                         }
                         // De lo contrario, puede ser una expresión normal ó un objeto/map/list/set que está siendo igualado a un arreglo como tal.
                         else
                         {
-
+                            // TODO hacer la declaracion cuando las mierdas estas vienen igualadas a una mierda entre llave toda culera :v
                         }
                     }
                     else

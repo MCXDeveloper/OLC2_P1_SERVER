@@ -5,10 +5,10 @@ using System.Web;
 
 public class SetType
 {
-    private readonly TipoDato inner_type;
+    public TipoDato TipoDatoSet { get; set; }
 
-    public SetType(TipoDato inner_type)
+    public SetType(TipoDato tipo_dato_set)
     {
-        this.inner_type = inner_type;
+        TipoDatoSet = tipo_dato_set;
     }
 }

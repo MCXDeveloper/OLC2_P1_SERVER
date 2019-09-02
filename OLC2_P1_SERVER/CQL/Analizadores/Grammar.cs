@@ -421,8 +421,7 @@ public class Grammar : Irony.Parsing.Grammar
             | PRIMITIVO
             | SENTENCIA_INC_DEC
             | r_new + TIPO
-            | cor_a + LISTA_ATR_MAP + cor_c
-            | cor_a + LISTA_EXPRESIONES + cor_c
+            | llave_a + LISTA_ATR_MAP + llave_c
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
             //| EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION

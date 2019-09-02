@@ -5,10 +5,10 @@ using System.Web;
 
 public class ListType
 {
-    private readonly TipoDato inner_type;
+    public TipoDato TipoDatoList { get; set; }
 
-    public ListType(TipoDato inner_type)
+    public ListType(TipoDato tipo_dato_list)
     {
-        this.inner_type = inner_type;
+        TipoDatoList = tipo_dato_list;
     }
 }
