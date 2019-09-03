@@ -399,6 +399,7 @@ public class Grammar : Irony.Parsing.Grammar
         ACCESO.Rule = r_insert + par_a + EXPRESION + coma + EXPRESION + par_c
             | r_set + par_a + EXPRESION + coma + EXPRESION + par_c
             | r_substring + par_a + EXPRESION + coma + EXPRESION + par_c
+            | r_insert + par_a + EXPRESION + par_c
             | r_remove + par_a + EXPRESION + par_c
             | r_contains + par_a + EXPRESION + par_c
             | r_startswith + par_a + EXPRESION + par_c
@@ -460,6 +461,7 @@ public class Grammar : Irony.Parsing.Grammar
             | llave_a + LISTA_ATR_MAP + llave_c
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
+            | par_a + TIPO + par_c + EXPRESION
             //| EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         

@@ -17,4 +17,19 @@ public class Time
     {
         return TimeSpan.ParseExact(Tiempo, @"hh\:mm\:ss", CultureInfo.InvariantCulture);
     }
+
+    public int GetHours()
+    {
+        return GetParsedTime().Hours;
+    }
+
+    public int GetMinutes()
+    {
+        return GetParsedTime().Minutes;
+    }
+
+    public int GetSeconds()
+    {
+        return GetParsedTime().Seconds;
+    }
 }

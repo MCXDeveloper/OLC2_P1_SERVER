@@ -16,4 +16,19 @@ public class Date
     {
         return DateTime.Parse(Fecha);
     }
+
+    public int GetDay()
+    {
+        return GetParsedDate().Day;
+    }
+
+    public int GetMonth()
+    {
+        return GetParsedDate().Month;
+    }
+
+    public int GetYear()
+    {
+        return GetParsedDate().Year;
+    }
 }

@@ -168,7 +168,7 @@ public class ASTBuilder
                 case 2:
                     return new Operacion(new Identificador(ObtenerLexema(actual, 0)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
-                    return new Operacion(new AccesoObjeto(ObtenerLexema(actual, 0), (List<string>)Recorrido(actual.ChildNodes[2])), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Operacion(new AccesoObjeto(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "LISTA_EXPRESIONES"))
@@ -185,7 +185,7 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 3:
-                    if(EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
+                    if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
                     {
                         return new CollectionValue((List<AtributosMap>)Recorrido(actual.ChildNodes[1]));
                     }
@@ -199,6 +199,8 @@ public class ASTBuilder
                     }
                 case 2:
                     return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));
+                case 4:
+                    return new CasteoExplicito((TipoDato)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
                     return Recorrido(actual.ChildNodes[0]);
             }
@@ -372,9 +374,104 @@ public class ASTBuilder
                 return new Identificador(ObtenerLexema(actual, 0));
             }
         }
+        else if (EstoyAca(actual, "LISTA_ACCESO"))
+        {
+            List<Expresion> lista_acceso = new List<Expresion>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_acceso.Add((Expresion)Recorrido(hijo));
+            }
+            return lista_acceso;
+        }
         else if (EstoyAca(actual, "ACCESO"))
         {
-
+            if(EstoyAca(actual.ChildNodes[0], "insert"))
+            {
+                if(actual.ChildNodes.Count == 4)
+                {
+                    return new FuncionInsert((Expresion)Recorrido(actual.ChildNodes[2]));
+                }
+                else
+                {
+                    return new FuncionInsert((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]));
+                }
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "set"))
+            {
+                return new FuncionSet((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "substring"))
+            {
+                return new FuncionSubstring((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "remove"))
+            {
+                return new FuncionRemove((Expresion)Recorrido(actual.ChildNodes[2]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "contains"))
+            {
+                return new FuncionContains((Expresion)Recorrido(actual.ChildNodes[2]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "startswith"))
+            {
+                return new FuncionStartsWith((Expresion)Recorrido(actual.ChildNodes[2]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "endswith"))
+            {
+                return new FuncionEndsWith((Expresion)Recorrido(actual.ChildNodes[2]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "get"))
+            {
+                return new FuncionGet((Expresion)Recorrido(actual.ChildNodes[2]));
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "size"))
+            {
+                return new FuncionSize();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "clear"))
+            {
+                return new FuncionClear();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "length"))
+            {
+                return new FuncionLength();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "touppercase"))
+            {
+                return new FuncionToUpperCase();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "tolowercase"))
+            {
+                return new FuncionToLowerCase();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "getyear"))
+            {
+                return new FuncionGetYear();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "getmonth"))
+            {
+                return new FuncionGetMonth();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "getday"))
+            {
+                return new FuncionGetDay();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "gethour"))
+            {
+                return new FuncionGetHour();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "getminutes"))
+            {
+                return new FuncionGetMinutes();
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "getseconds"))
+            {
+                return new FuncionGetSeconds();
+            }
+            else
+            {
+                return new Atributo(ObtenerLexema(actual, 0));
+            }
         }
 
         return new Nulo();
