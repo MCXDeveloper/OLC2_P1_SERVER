@@ -188,6 +188,8 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
+                case 1:
+                    return Recorrido(actual.ChildNodes[0]);
                 case 3:
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
                     {
@@ -206,7 +208,7 @@ public class ASTBuilder
                 case 4:
                     return new CasteoExplicito((TipoDato)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return Recorrido(actual.ChildNodes[0]);
+                    return new OperadorTernario((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "LISTA_ATR_MAP"))
