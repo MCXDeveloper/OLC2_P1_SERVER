@@ -101,6 +101,10 @@ public class ASTBuilder
         {
             return new Log((Instruccion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
         }
+        else if (EstoyAca(actual, "SENTENCIA_DO_WHILE"))
+        {
+            return new DoWhile((Expresion)Recorrido(actual.ChildNodes[6]), (List<Instruccion>)Recorrido(actual.ChildNodes[2]));
+        }
         else if (EstoyAca(actual, "SENTENCIA_IF"))
         {
             if (actual.ChildNodes.Count == 1)

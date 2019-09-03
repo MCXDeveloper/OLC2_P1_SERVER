@@ -351,6 +351,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
         NonTerminal SENTENCIA_INC_DEC = new NonTerminal("SENTENCIA_INC_DEC");
         NonTerminal LISTA_EXPRESIONES = new NonTerminal("LISTA_EXPRESIONES");
+        NonTerminal SENTENCIA_DO_WHILE = new NonTerminal("SENTENCIA_DO_WHILE");
         NonTerminal LISTA_INSTRUCCIONES = new NonTerminal("LISTA_INSTRUCCIONES");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
@@ -369,6 +370,7 @@ public class Grammar : Irony.Parsing.Grammar
             | CREATE_TYPE
             | SENTENCIA_IF
             | SENTENCIA_SWITCH
+            | SENTENCIA_DO_WHILE
             | SENTENCIA_INC_DEC
             ;
 
@@ -420,6 +422,8 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         LOG.Rule = r_log + par_a + EXPRESION + par_c + puco;
+
+        SENTENCIA_DO_WHILE.Rule = r_do + llave_a + LISTA_INSTRUCCIONES + llave_c + r_while + par_a + EXPRESION + par_c + puco;
 
         SENTENCIA_IF.Rule = IF
             | IF + LISTA_ELSE_IF
