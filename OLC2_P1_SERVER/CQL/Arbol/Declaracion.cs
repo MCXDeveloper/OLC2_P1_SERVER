@@ -273,7 +273,25 @@ public class Declaracion : Instruccion
                         else
                         {
                             object value = valor.Ejecutar(ent);
-                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, value));
+                            TipoDato valueType = valor.GetTipo(ent);
+
+                            if (tipo.Equals(valueType))
+                            {
+                                ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, value));
+                            }
+                            else
+                            {
+                                value = CasteoImplicito(tipo, valueType, value);
+
+                                if (value is Nulo)
+                                {
+                                    Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  El tipo de la variable no concuerda con el tipo de dato del valor de la expresión. (Recibido: " + valueType.GetRealTipo().ToString() + " | Declarado: " + tipo.GetRealTipo().ToString() + ")", fila, columna);
+                                }
+                                else
+                                {
+                                    ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, value));
+                                }
+                            }   
                         }
                     }
                     else
@@ -332,5 +350,19 @@ public class Declaracion : Instruccion
         }
 
         return listaAtrObj;
+    }
+
+    private object CasteoImplicito(TipoDato tipoDeclaracion, TipoDato tipoValor, object valor)
+    {
+        if (tipo.GetRealTipo().Equals(TipoDato.Tipo.INT) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToInt32((double)valor);
+        }
+        else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return ((int)valor) * 1.0;
+        }
+        
+        return new Nulo();
     }
 }

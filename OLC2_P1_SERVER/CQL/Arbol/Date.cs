@@ -5,15 +5,15 @@ using System.Web;
 
 public class Date
 {
-    private readonly string fecha;
+    public string Fecha { get; set; }
 
     public Date(string fecha)
     {
-        this.fecha = fecha;
+        Fecha = fecha;
     }
 
     public DateTime GetParsedDate()
     {
-        return DateTime.Parse(fecha);
+        return DateTime.Parse(Fecha);
     }
 }

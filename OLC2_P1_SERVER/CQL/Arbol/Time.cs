@@ -6,15 +6,15 @@ using System.Web;
 
 public class Time
 {
-    private readonly string tiempo;
+    public string Tiempo { get; set; }
 
     public Time(string tiempo)
     {
-        this.tiempo = tiempo;
+        Tiempo = tiempo;
     }
 
     public TimeSpan GetParsedTime()
     {
-        return TimeSpan.ParseExact(tiempo, @"hh\:mm\:ss", CultureInfo.InvariantCulture);
+        return TimeSpan.ParseExact(Tiempo, @"hh\:mm\:ss", CultureInfo.InvariantCulture);
     }
 }
