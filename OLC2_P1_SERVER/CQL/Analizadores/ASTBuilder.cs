@@ -50,7 +50,7 @@ public class ASTBuilder
             {
                 case 3:
                     // variable + igual + EXPRESION + puco
-                    return new Asignacion(TipoAsignacion.AS_NORMAL, ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Asignacion(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
                     // variable + punto + LISTA_ACCESO + igual + EXPRESION + puco
                     return new AsignacionObjeto(TipoAsignacion.AS_NORMAL, ObtenerLexema(actual, 0), (List<string>)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
@@ -172,7 +172,7 @@ public class ASTBuilder
                 case 2:
                     return new Operacion(new Identificador(ObtenerLexema(actual, 0)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
-                    return new Operacion(new AccesoObjeto(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Operacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "LISTA_EXPRESIONES"))
@@ -199,9 +199,23 @@ public class ASTBuilder
                     {
                         return new CollectionValue((List<Expresion>)Recorrido(actual.ChildNodes[1]));
                     }
-                    else
+                    else if (EstoyAca(actual.ChildNodes[1], "EXPRESION"))
                     {
                         return Recorrido(actual.ChildNodes[1]);
+                    }
+                    else
+                    {
+                        if(EstoyAca(actual.ChildNodes[0], "today"))
+                        {
+                            return new Today();
+                        }else if (EstoyAca(actual.ChildNodes[0], "now"))
+                        {
+                            return new Now();
+                        }
+                        else
+                        {
+                            return new AccesoObjeto(true, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+                        }
                     }
                 case 2:
                     return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));

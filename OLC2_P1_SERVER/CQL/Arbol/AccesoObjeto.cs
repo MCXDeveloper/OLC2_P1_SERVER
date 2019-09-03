@@ -8,12 +8,14 @@ public class AccesoObjeto : Expresion
 {
     private readonly int fila;
     private readonly int columna;
+    public bool IsValor { get; set; }
     public string Variable { get; set; }
     public List<Expresion> ListaAcceso { get; set; }
     
-    public AccesoObjeto(string variable, List<Expresion> lista_acceso, int fila, int columna)
+    public AccesoObjeto(bool isValor, string variable, List<Expresion> lista_acceso, int fila, int columna)
     {
         this.fila = fila;
+        IsValor = isValor;
         Variable = variable;
         this.columna = columna;
         ListaAcceso = lista_acceso;
@@ -21,7 +23,48 @@ public class AccesoObjeto : Expresion
 
     public TipoDato GetTipo(Entorno ent)
     {
-        throw new NotImplementedException();
+        object valor = Ejecutar(ent);
+
+        if (valor is int)
+        {
+            return new TipoDato(TipoDato.Tipo.INT);
+        }
+        else if (valor is double)
+        {
+            return new TipoDato(TipoDato.Tipo.DOUBLE);
+        }
+        else if (valor is string)
+        {
+            return new TipoDato(TipoDato.Tipo.STRING);
+        }
+        else if (valor is bool)
+        {
+            return new TipoDato(TipoDato.Tipo.BOOLEAN);
+        }
+        else if (valor is Date)
+        {
+            return new TipoDato(TipoDato.Tipo.DATE);
+        }
+        else if (valor is Time)
+        {
+            return new TipoDato(TipoDato.Tipo.TIME);
+        }
+        else if (valor is Map)
+        {
+            return new TipoDato(TipoDato.Tipo.MAP);
+        }
+        else if (valor is XList)
+        {
+            return new TipoDato(TipoDato.Tipo.LIST);
+        }
+        else if (valor is XSet)
+        {
+            return new TipoDato(TipoDato.Tipo.SET);
+        }
+        else
+        {
+            return new TipoDato(TipoDato.Tipo.OBJECT);
+        }
     }
 
     public object Ejecutar(Entorno ent)
@@ -338,7 +381,7 @@ public class AccesoObjeto : Expresion
             Objeto obj = (Objeto)elemento;
 
             // Obtengo el valor del atributo.  Si no existiese, el resultado sería Nulo().
-            response = obj.GetAtributo(nombre_atributo);
+            response = obj.GetAtributo(IsValor, nombre_atributo);
         }
         else
         {
