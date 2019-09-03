@@ -26,7 +26,7 @@ public class Map
         // Primero valido que el tipo de dato de la clave coincida con el tipo de dato del parámetro clave.
         if(ValidarTipoDatoClave(clave))
         {
-            // TODO Validacion con respecto a la recursividad de los tipos de dato cuando sea el valor un Map/Set/List/Objeto
+            ListaElementos.Add(clave, valor);
         }
         else
         {

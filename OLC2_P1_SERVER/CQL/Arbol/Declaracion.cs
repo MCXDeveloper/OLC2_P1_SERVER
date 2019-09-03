@@ -79,7 +79,7 @@ public class Declaracion : Instruccion
                     if(i.Equals(lista_variables.Count - 1))
                     {
                         // Verifico si la Expresión que equivale a 'valor' es de tipo Estructura.  Esto indica que la variable esta siendo construida por medio de la palabra 'new'.
-                        if(valor is Estructura)
+                        if (valor is Estructura)
                         {
                             // Valido que el tipo de la Expresión sea el mismo del que fue declarado.
                             if (valor.GetTipo(ent).GetRealTipo().Equals(tipo.GetRealTipo()))
@@ -98,16 +98,16 @@ public class Declaracion : Instruccion
                                         if (!(user_type is Nulo))
                                         {
                                             UserType objeto = (UserType)user_type;
-                                            
+
                                             // Creo la lista que va a representar los diferentes atributos del objeto que se está creando.
                                             List<AtributoObjeto> listaAtrObj = BuildObjectAttributeList(objeto);
-                                            
+
                                             // Agrego el objeto al entorno
                                             ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Objeto(tipo, listaAtrObj)));
                                         }
                                         else
                                         {
-                                            Error.AgregarError("Semántico", "[DECLARACION]", "El UserType '"+ nombre_user_type +"' con el que se está declarando la variable no existe en el sistema.", fila, columna);
+                                            Error.AgregarError("Semántico", "[DECLARACION]", "El UserType '" + nombre_user_type + "' con el que se está declarando la variable no existe en el sistema.", fila, columna);
                                         }
                                     }
                                     else
@@ -119,15 +119,15 @@ public class Declaracion : Instruccion
                                 else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP))
                                 {
                                     // Valido que GetElemento sea de tipo MapType, ya que de lo contrario, sería un error de declaración con new.
-                                    if(valor.GetTipo(ent).GetElemento() is MapType)
+                                    if (valor.GetTipo(ent).GetElemento() is MapType)
                                     {
                                         MapType tipoMap = (MapType)valor.GetTipo(ent).GetElemento();
 
                                         // Valido que el tipo de dato de la clave (TipoIzq) sea de tipo primitivo, si no, hay que arrojar un error.
-                                        if(tipoMap.ValidarTipoPrimitivoEnClave())
+                                        if (tipoMap.ValidarTipoPrimitivoEnClave())
                                         {
                                             //TODO Verificar si no hay que hacer alguna otra validación con respecto al tipo de dato de la derecha.
-                                            
+
                                             // Agrego el Map al entorno
                                             ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, new Map(tipoMap.TipoIzq, tipoMap.TipoDer, fila, columna)));
                                         }
@@ -173,11 +173,6 @@ public class Declaracion : Instruccion
                                         Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  La declaración de tipo 'new' con SET recibe como parámetro un tipo de dato.", fila, columna);
                                     }
                                 }
-                                // De lo contrario, si es una expresión normal.
-                                else
-                                {
-                                    //TODO validar esta mierda en la declaracion
-                                }
                             }
                             else
                             {
@@ -185,9 +180,100 @@ public class Declaracion : Instruccion
                             }
                         }
                         // De lo contrario, puede ser una expresión normal ó un objeto/map/list/set que está siendo igualado a un arreglo como tal.
+                        // Valido si valor es de tipo CollectionValue, lo cual representa cuando un Objeto/List/Map/Set esta siendo creado por medio de un arreglo de elementos.
+                        else if (valor is CollectionValue)
+                        {
+                            CollectionValue collection_value = (CollectionValue)valor;
+
+                            // Si el tipo de declaración fue MAP, CollectionValue debería contener MapArray distinto de null.
+                            if (tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP))
+                            {
+                                if (!(collection_value.MapArray is null))
+                                {
+                                    // Verifico que todas y cada una de las validaciones correspondientes a Map sean satisfactorias.
+                                    if (collection_value.ValidarTiposDeMap(collection_value.MapArray, ent, fila, columna))
+                                    {
+                                        // Agrego el Map al entorno
+                                        MapType tipoMap = collection_value.ObtenerMapType(ent);
+                                        Map mapita = new Map(tipoMap.TipoIzq, tipoMap.TipoDer, fila, columna);
+
+                                        foreach (AtributosMap amap in collection_value.MapArray)
+                                        {
+                                            mapita.Insert(amap.Key, amap.Value);
+                                        }
+
+                                        ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, mapita));
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  El arreglo que representa el valor de la declaración del MAP difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+                                    }
+                                }
+                                else
+                                {
+                                    Error.AgregarError("Semántico", "[DECLARACION]", "Error de declaración.  La variable fue declarada de tipo MAP y la expresión recibida no concuerda con la estructura de la colección MAP.", fila, columna);
+                                }
+                            }
+                            // Si el tipo de declaración fue un LIST, CollectionValue debería contener ListSetArray distinto de null.
+                            else if (tipo.GetRealTipo().Equals(TipoDato.Tipo.LIST))
+                            {
+                                if (!(collection_value.ListSetArray is null))
+                                {
+                                    if (collection_value.ValidarTiposList(collection_value.ListSetArray, ent, fila, columna))
+                                    {
+                                        ListType tipoList = collection_value.ObtenerListType(ent);
+                                        XList listita = new XList(tipoList.TipoDatoList, fila, columna);
+
+                                        foreach (Expresion ex in collection_value.ListSetArray)
+                                        {
+                                            listita.Insert(ex.Ejecutar(ent));
+                                        }
+
+                                        ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, listita));
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  El arreglo que representa el valor de la declaración del LIST difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+                                    }
+                                }
+                                else
+                                {
+                                    Error.AgregarError("Semántico", "[DECLARACION]", "Error de declaración.  La variable fue declarada de tipo LIST y la expresión recibida no concuerda con la estructura de la colección LIST.", fila, columna);
+                                }
+                            }
+                            // Si el tipo de declaración fue un SET, CollectionValue debería contener ListSetArray distinto de null.
+                            else
+                            {
+                                if (!(collection_value.ListSetArray is null))
+                                {
+                                    if (collection_value.ValidarTiposSet(collection_value.ListSetArray, ent, fila, columna))
+                                    {
+                                        SetType tipoSet = collection_value.ObtenerSetType(ent);
+                                        XSet setsito = new XSet(tipoSet.TipoDatoSet, fila, columna);
+
+                                        foreach (Expresion ex in collection_value.ListSetArray)
+                                        {
+                                            setsito.Insert(ex.Ejecutar(ent));
+                                        }
+
+                                        ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, setsito));
+                                    }
+                                    else
+                                    {
+                                        Error.AgregarError("Semántico", "[DECLARACION]", "Error de tipos.  El arreglo que representa el valor de la declaración del LIST difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+                                    }
+                                }
+                                else
+                                {
+                                    Error.AgregarError("Semántico", "[DECLARACION]", "Error de declaración.  La variable fue declarada de tipo LIST y la expresión recibida no concuerda con la estructura de la colección LIST.", fila, columna);
+                                }
+                            }
+                        }
+                        // Si no es ninguno de los anteriores, no queda otra opción que no sea una Expresión.
                         else
                         {
-                            // TODO hacer la declaracion cuando las mierdas estas vienen igualadas a una mierda entre llave toda culera :v
+                            object value = valor.Ejecutar(ent);
+                            ent.Agregar(nombre_variable, new Variable(tipo, nombre_variable, value));
                         }
                     }
                     else

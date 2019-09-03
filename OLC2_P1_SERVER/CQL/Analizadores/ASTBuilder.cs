@@ -185,7 +185,18 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 3:
-                    return Recorrido(actual.ChildNodes[1]);
+                    if(EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
+                    {
+                        return new CollectionValue((List<AtributosMap>)Recorrido(actual.ChildNodes[1]));
+                    }
+                    else if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                    {
+                        return new CollectionValue((List<Expresion>)Recorrido(actual.ChildNodes[1]));
+                    }
+                    else
+                    {
+                        return Recorrido(actual.ChildNodes[1]);
+                    }
                 case 2:
                     return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));
                 default:
@@ -360,6 +371,10 @@ public class ASTBuilder
             {
                 return new Identificador(ObtenerLexema(actual, 0));
             }
+        }
+        else if (EstoyAca(actual, "ACCESO"))
+        {
+
         }
 
         return new Nulo();

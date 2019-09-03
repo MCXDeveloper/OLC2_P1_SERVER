@@ -6,29 +6,33 @@ using static TipoDato;
 
 public class Estructura : Expresion
 {
-    private readonly TipoDato tipo_dato;
-
-    /* 
-     * Este constructor tiene las siguientes particularidades:
-     * 1. Recibe como parámetro un object el cual puede ser de los siguientes tipos:
-     *    - UserType
-     *    - Map
-     *    - List
-     *    - Set
-     * 2. Si viniese otro tipo, debería de ser une error ya que esta clase representa el ejecutar la sentencia "... = new UserType/Map/Set/List".
-     */
+    public TipoDato TipoDatoEstructura { get; set; }
+    
     public Estructura(TipoDato tipo_dato)
     {
-        this.tipo_dato = tipo_dato;
+        TipoDatoEstructura = tipo_dato;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        return tipo_dato;
+        return TipoDatoEstructura;
     }
 
     public TipoDato GetTipo(Entorno ent)
     {
-        return tipo_dato;
+        return TipoDatoEstructura;
+    }
+    
+    // Esta funcion se encarga de validar que la estructura sea únicamente de tipo UserType/Map/List/Set.
+    // En caso fuera otro tipo de dato, es error.
+
+    public bool ValidateStructType()
+    {
+        if(TipoDatoEstructura.GetRealTipo().Equals(TipoDato.Tipo.OBJECT) || TipoDatoEstructura.GetRealTipo().Equals(TipoDato.Tipo.MAP) || TipoDatoEstructura.GetRealTipo().Equals(TipoDato.Tipo.SET) || TipoDatoEstructura.GetRealTipo().Equals(TipoDato.Tipo.LIST))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

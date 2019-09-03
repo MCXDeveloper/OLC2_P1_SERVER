@@ -5,12 +5,12 @@ using System.Web;
 
 public class AtributosMap
 {
-    private readonly Expresion key;
-    private readonly Expresion value;
-
+    public Expresion Key { get; set; }
+    public Expresion Value { get; set; }
+    
     public AtributosMap(Expresion key, Expresion value)
     {
-        this.key = key;
-        this.value = value;
+        Key = key;
+        Value = value;
     }
 }

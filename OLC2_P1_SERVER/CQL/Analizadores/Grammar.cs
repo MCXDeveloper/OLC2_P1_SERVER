@@ -32,6 +32,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_now = ToTerm("now");
         KeyTerm r_log = ToTerm("log");
         KeyTerm r_try = ToTerm("try");
+        KeyTerm r_get = ToTerm("get");
         KeyTerm r_date = ToTerm("date");
         KeyTerm r_time = ToTerm("time");
         KeyTerm r_true = ToTerm("true");
@@ -49,6 +50,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_call = ToTerm("call");
         KeyTerm r_each = ToTerm("each");
         KeyTerm r_open = ToTerm("open");
+        KeyTerm r_size = ToTerm("size");
         KeyTerm r_false = ToTerm("false");
         KeyTerm r_while = ToTerm("while");
         KeyTerm r_alter = ToTerm("alter");
@@ -66,6 +68,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_close = ToTerm("close");
         KeyTerm r_throw = ToTerm("throw");
         KeyTerm r_catch = ToTerm("catch");
+        KeyTerm r_clear = ToTerm("clear");
         KeyTerm r_double = ToTerm("double");
         KeyTerm r_string = ToTerm("string");
         KeyTerm r_switch = ToTerm("switch");
@@ -82,11 +85,13 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_length = ToTerm("length");
         KeyTerm r_getday = ToTerm("getday");
         KeyTerm r_cursor = ToTerm("cursor");
+        KeyTerm r_remove = ToTerm("remove");
         KeyTerm r_boolean = ToTerm("boolean");
         KeyTerm r_primary = ToTerm("primary");
         KeyTerm r_getyear = ToTerm("getyear");
         KeyTerm r_gethour = ToTerm("gethour");
         KeyTerm r_default = ToTerm("default");
+        KeyTerm r_contains = ToTerm("contains");
         KeyTerm r_truncate = ToTerm("truncate");
         KeyTerm r_database = ToTerm("database");
         KeyTerm r_rollback = ToTerm("rollback");
@@ -146,6 +151,7 @@ public class Grammar : Irony.Parsing.Grammar
             "now",
             "log",
             "try",
+            "get",
             "date",
             "time",
             "true",
@@ -163,6 +169,8 @@ public class Grammar : Irony.Parsing.Grammar
             "call",
             "each",
             "open",
+            "size",
+            "clear",
             "false",
             "while",
             "alter",
@@ -180,6 +188,7 @@ public class Grammar : Irony.Parsing.Grammar
             "close",
             "throw",
             "catch",
+            "remove",
             "double",
             "string",
             "switch",
@@ -201,6 +210,7 @@ public class Grammar : Irony.Parsing.Grammar
             "getyear",
             "gethour",
             "default",
+            "contains",
             "truncate",
             "database",
             "rollback",
@@ -318,6 +328,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal ELSE = new NonTerminal("ELSE");
         NonTerminal CASE = new NonTerminal("CASE");
         NonTerminal INICIO = new NonTerminal("INICIO");
+        NonTerminal ACCESO = new NonTerminal("ACCESO");
         NonTerminal ELSE_IF = new NonTerminal("ELSE_IF");
         NonTerminal ATR_MAP = new NonTerminal("ATR_MAP");
         NonTerminal ATR_TYPE = new NonTerminal("ATR_TYPE");
@@ -383,7 +394,29 @@ public class Grammar : Irony.Parsing.Grammar
 
         LISTA_VARIABLES.Rule = MakePlusRule(LISTA_VARIABLES, coma, variable);
 
-        LISTA_ACCESO.Rule = MakePlusRule(LISTA_ACCESO, punto, identificador);
+        LISTA_ACCESO.Rule = MakePlusRule(LISTA_ACCESO, punto, ACCESO);
+
+        ACCESO.Rule = r_insert + par_a + EXPRESION + coma + EXPRESION + par_c
+            | r_set + par_a + EXPRESION + coma + EXPRESION + par_c
+            | r_substring + par_a + EXPRESION + coma + EXPRESION + par_c
+            | r_remove + par_a + EXPRESION + par_c
+            | r_contains + par_a + EXPRESION + par_c
+            | r_startswith + par_a + EXPRESION + par_c
+            | r_endswith + par_a + EXPRESION + par_c
+            | r_get + par_a + EXPRESION + par_c
+            | r_size + par_a + par_c
+            | r_clear + par_a + par_c
+            | r_length + par_a + par_c
+            | r_toupper + par_a + par_c
+            | r_tolower + par_a + par_c
+            | r_getyear + par_a + par_c
+            | r_getmonth + par_a + par_c
+            | r_getday + par_a + par_c
+            | r_gethour + par_a + par_c
+            | r_getminutes + par_a + par_c
+            | r_getseconds + par_a + par_c
+            | identificador
+            ;
 
         LOG.Rule = r_log + par_a + EXPRESION + par_c + puco;
 
@@ -421,6 +454,9 @@ public class Grammar : Irony.Parsing.Grammar
             | PRIMITIVO
             | SENTENCIA_INC_DEC
             | r_new + TIPO
+            | r_today + par_a + par_c
+            | r_now + par_a + par_c
+            | variable + punto + LISTA_ACCESO
             | llave_a + LISTA_ATR_MAP + llave_c
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c

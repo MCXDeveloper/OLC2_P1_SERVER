@@ -36,7 +36,7 @@ public class XSet
         }
         else
         {
-            Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
+            Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -75,7 +75,7 @@ public class XSet
             }
             else
             {
-                Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
+                Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
             }
         }
         else
