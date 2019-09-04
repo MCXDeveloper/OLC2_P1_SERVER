@@ -372,7 +372,17 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_SWITCH
             | SENTENCIA_DO_WHILE
             | SENTENCIA_INC_DEC
+            | DECLARACION_FUNCION
+            | LLAMADA_FUNCION
             ;
+
+        LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c + puco;
+
+        DECLARACION_FUNCION.Rule = TIPO + identificador + par_a + LISTA_PARAMETROS + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
+
+        LISTA_PARAMETROS.Rule = MakeStarRule(LISTA_PARAMETROS, coma, PARAMETRO);
+
+        PARAMETRO.Rule = TIPO + variable;
 
         CREATE_TYPE.Rule = r_create + r_type + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
             | r_create + r_type + r_if + r_not + r_exists + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
@@ -458,6 +468,7 @@ public class Grammar : Irony.Parsing.Grammar
             | EXPRESION_RELACIONAL
             | PRIMITIVO
             | SENTENCIA_INC_DEC
+            | LLAMADA_FUNCION
             | r_new + TIPO
             | r_today + par_a + par_c
             | r_now + par_a + par_c
@@ -466,7 +477,7 @@ public class Grammar : Irony.Parsing.Grammar
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
             | par_a + TIPO + par_c + EXPRESION
-            //| EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
+            | EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         
         EXPRESION_ARITMETICA.Rule = menos + EXPRESION

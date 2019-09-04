@@ -50,7 +50,7 @@ public class Entorno
         return new Nulo();
     }
 
-    public object ObtenerFuncion(TipoDato tipo, string id)
+    public object ObtenerFuncion(string id)
     {
         for (Entorno e = this; e != null; e = e.anterior)
         {
@@ -93,27 +93,6 @@ public class Entorno
         }
 
         if(!flag)
-        {
-            System.Diagnostics.Debug.Write("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
-        }
-
-    }
-
-    public void ReemplazarFuncion(TipoDato tipo, string id, Funcion nuevoValor)
-    {
-        bool flag = false;
-
-        for (Entorno e = this; e != null; e = e.anterior)
-        {
-            Funcion encontrado = (Funcion)(e.tablaFunciones[id]);
-            if (encontrado != null)
-            {
-                e.tablaFunciones[id] = nuevoValor;
-                flag = true;
-            }
-        }
-
-        if (!flag)
         {
             System.Diagnostics.Debug.Write("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
         }

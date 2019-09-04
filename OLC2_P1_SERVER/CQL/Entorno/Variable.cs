@@ -8,52 +8,37 @@ using static TipoDato;
 
 public class Variable
 {
-    private readonly object valor;
-    private readonly TipoDato tipo;
-    private readonly string nombre;
-    private readonly string nombreObj;
-
+    public object Valor { get; set; }
+    public string Nombre { get; set; }
+    public TipoDato Tipo { get; set; }
+    
     public Variable(TipoDato tipo, string nombre)
     {
-        this.tipo = tipo;
-        this.nombre = nombre;
-        this.valor = new Nulo();
+        Tipo = tipo;
+        Nombre = nombre;
+        Valor = new Nulo();
     }
 
     public Variable(TipoDato tipo, string nombre, object valor)
     {
-        this.tipo = tipo;
-        this.valor = valor;
-        this.nombre = nombre;
-    }
-
-    public Variable(string nombreObj, string nombre)
-    {
-        this.nombre = nombre;
-        this.valor = new Nulo();
-        this.nombreObj = nombreObj;
-    }
-
-    public Variable(string nombreObj, string nombre, object valor)
-    {
-        this.valor = valor;
-        this.nombre = nombre;
-        this.nombreObj = nombreObj;
+        Tipo = tipo;
+        Valor = valor;
+        Nombre = nombre;
     }
 
     public object GetValor()
     {
-        return valor;
+        return Valor;
     }
 
     public Tipo GetTipo()
     {
-        return tipo.GetRealTipo();
+        return Tipo.GetRealTipo();
     }
 
     public string GetNombre()
     {
-        return nombre;
+        return Nombre;
     }
 
 }

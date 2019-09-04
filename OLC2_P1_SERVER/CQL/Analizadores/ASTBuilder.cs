@@ -493,6 +493,27 @@ public class ASTBuilder
                 return new Atributo(ObtenerLexema(actual, 0));
             }
         }
+        else if (EstoyAca(actual, "DECLARACION_FUNCION"))
+        {
+            return new DeclaracionFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1), (List<ParametroFuncion>)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 2), GetColumna(actual, 2));
+        }
+        else if (EstoyAca(actual, "LISTA_PARAMETROS"))
+        {
+            List<ParametroFuncion> lista_params = new List<ParametroFuncion>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_params.Add((ParametroFuncion)Recorrido(hijo));
+            }
+            return lista_params;
+        }
+        else if (EstoyAca(actual, "PARAMETRO"))
+        {
+            return new ParametroFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1));
+        }
+        else if (EstoyAca(actual, "LLAMADA_FUNCION"))
+        {
+            return new LlamadaFuncion(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+        }
 
         return new Nulo();
     }
