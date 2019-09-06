@@ -405,6 +405,8 @@ public class Grammar : Irony.Parsing.Grammar
 
         SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c + puco
             | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + puco
+            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + par_c + puco
+            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + puco
             ;
 
         LISTA_COLUMNAS.Rule = MakePlusRule(LISTA_COLUMNAS, coma, COLUMNA);

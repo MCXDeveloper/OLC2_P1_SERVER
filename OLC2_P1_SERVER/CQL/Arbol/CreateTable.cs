@@ -9,22 +9,25 @@ public class CreateTable : Instruccion
 {
     private readonly int fila;
     private readonly int columna;
+    public bool IsExists { get; set; }
     public string NombreTabla { get; set; }
     public List<Columna> ListaColumnas { get; set; }
     public List<string> ListaLlavesPrimarias { get; set; }
 
-    public CreateTable(string nombre_tabla, List<Columna> lista_columnas, int fila, int columna)
+    public CreateTable(bool isExists, string nombre_tabla, List<Columna> lista_columnas, int fila, int columna)
     {
         this.fila = fila;
+        IsExists = isExists;
         this.columna = columna;
         NombreTabla = nombre_tabla;
         ListaLlavesPrimarias = null;
         ListaColumnas = lista_columnas;
     }
 
-    public CreateTable(string nombre_tabla, List<Columna> lista_columnas, List<string> lista_llaves_primarias, int fila, int columna)
+    public CreateTable(bool isExists, string nombre_tabla, List<Columna> lista_columnas, List<string> lista_llaves_primarias, int fila, int columna)
     {
         this.fila = fila;
+        IsExists = isExists;
         this.columna = columna;
         NombreTabla = nombre_tabla;
         ListaColumnas = lista_columnas;
@@ -70,7 +73,10 @@ public class CreateTable : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: "+ CQL.BaseDatosEnUso +" | Tabla: "+ NombreTabla +").", fila, columna);
+                if (!IsExists)
+                {
+                    Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | Tabla: " + NombreTabla + ").", fila, columna);
+                }
             }
         }
         else

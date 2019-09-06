@@ -543,9 +543,13 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 7:
-                    return new CreateTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                case 10:
+                    return new CreateTable(true, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                case 12:
+                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new CreateTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(true, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_COLUMNAS"))
