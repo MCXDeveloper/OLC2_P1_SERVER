@@ -15,6 +15,11 @@ public class Table : InstruccionBD
         Tabla = new DataTable(nombre_tabla);
     }
 
+    public bool ExistsColumn(string colName)
+    {
+        return Tabla.Columns.Contains(colName);
+    }
+
     public void AddColumn(Columna col)
     {
         col.ColumnName = col.NombreColumna;
@@ -22,9 +27,14 @@ public class Table : InstruccionBD
         Tabla.Columns.Add(col);
     }
     
-    public void DeleteColumn()
+    public void DeleteColumn(string colName)
     {
-
+        Tabla.Columns.Remove(colName);
+    }
+    
+    public bool IsPrimaryKeyColumn(string colName)
+    {
+        return Array.IndexOf(Tabla.PrimaryKey, Tabla.Columns[colName]) >= 0;
     }
 
     public void SetPrimaryKeys(Columna[] pks)

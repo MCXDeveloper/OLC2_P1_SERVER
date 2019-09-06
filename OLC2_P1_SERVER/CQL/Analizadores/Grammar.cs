@@ -333,6 +333,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal ACCESO = new NonTerminal("ACCESO");
         NonTerminal ELSE_IF = new NonTerminal("ELSE_IF");
         NonTerminal ATR_MAP = new NonTerminal("ATR_MAP");
+        NonTerminal COLUMNA = new NonTerminal("COLUMNA");
         NonTerminal ATR_TYPE = new NonTerminal("ATR_TYPE");
         NonTerminal EXPRESION = new NonTerminal("EXPRESION");
         NonTerminal PRIMITIVO = new NonTerminal("PRIMITIVO");
@@ -348,6 +349,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
         NonTerminal LISTA_ATR_MAP = new NonTerminal("LISTA_ATR_MAP");
         NonTerminal LISTA_ATR_TYPE = new NonTerminal("LISTA_ATR_TYPE");
+        NonTerminal LISTA_COLUMNAS = new NonTerminal("LISTA_COLUMNAS");
         NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal LLAMADA_FUNCION = new NonTerminal("LLAMADA_FUNCION");
@@ -359,12 +361,15 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_EXPRESIONES = new NonTerminal("LISTA_EXPRESIONES");
         NonTerminal SENTENCIA_DB_DROP = new NonTerminal("SENTENCIA_DB_DROP");
         NonTerminal SENTENCIA_DO_WHILE = new NonTerminal("SENTENCIA_DO_WHILE");
+        NonTerminal SENTENCIA_TB_ALTER = new NonTerminal("SENTENCIA_TB_ALTER");
         NonTerminal SENTENCIA_DB_CREATE = new NonTerminal("SENTENCIA_DB_CREATE");
         NonTerminal LISTA_INSTRUCCIONES = new NonTerminal("LISTA_INSTRUCCIONES");
         NonTerminal DECLARACION_FUNCION = new NonTerminal("DECLARACION_FUNCION");
+        NonTerminal SENTENCIA_TB_CREATE = new NonTerminal("SENTENCIA_TB_CREATE");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
         NonTerminal LLAMADA_PROCEDIMIENTO = new NonTerminal("LLAMADA_PROCEDIMIENTO");
+        NonTerminal LISTA_IDENTIFICADORES = new NonTerminal("LISTA_IDENTIFICADORES");
         NonTerminal DECLARACION_PROCEDIMIENTO = new NonTerminal("DECLARACION_PROCEDIMIENTO");
 
         #endregion
@@ -391,6 +396,11 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_USE
             | SENTENCIA_DB_DROP
             | SENTENCIA_TB_CREATE
+            | SENTENCIA_TB_ALTER
+            ;
+
+        SENTENCIA_TB_ALTER.Rule = r_alter + r_table + identificador + r_add + LISTA_COLUMNAS + puco
+            | r_alter + r_table + identificador + r_drop + LISTA_IDENTIFICADORES + puco
             ;
 
         SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c + puco

@@ -31,6 +31,11 @@ public class Database : InstruccionBD
     {
         ListaTablas.Add(tabla);
     }
+
+    public Table ObtenerTabla(string nombre_tabla)
+    {
+        return ListaTablas.Find(x => x.NombreTabla.Equals(nombre_tabla));
+    }
     
     public string CrearChison()
     {

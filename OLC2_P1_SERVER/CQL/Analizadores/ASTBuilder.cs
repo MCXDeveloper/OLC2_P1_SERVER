@@ -576,6 +576,17 @@ public class ASTBuilder
             }
             return lista_ids;
         }
+        else if (EstoyAca(actual, "SENTENCIA_TB_ALTER"))
+        {
+            if(EstoyAca(actual.ChildNodes[3], "add"))
+            {
+                return new AlterTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+            else
+            {
+                return new AlterTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
 
         return new Nulo();
     }
