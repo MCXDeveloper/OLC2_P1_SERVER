@@ -18,6 +18,7 @@ public class TipoDato
         STRING,
         OBJECT,
         BOOLEAN,
+        COUNTER,
         DESCONOCIDO
     }
 

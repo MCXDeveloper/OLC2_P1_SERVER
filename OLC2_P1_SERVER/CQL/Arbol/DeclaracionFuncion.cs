@@ -10,10 +10,10 @@ public class DeclaracionFuncion : Instruccion
     private readonly int columna;
     public string NombreFuncion { get; set; }
     public TipoDato TipoDatoFuncion { get; set; }
+    public List<Parametro> ListaParametros { get; set; }
     public List<Instruccion> ListaInstrucciones { get; set; }
-    public List<ParametroFuncion> ListaParametros { get; set; }
- 
-    public DeclaracionFuncion(TipoDato tipo_dato_funcion, string nombre_funcion, List<ParametroFuncion> lista_parametros, List<Instruccion> lista_instrucciones, int fila, int columna)
+    
+    public DeclaracionFuncion(TipoDato tipo_dato_funcion, string nombre_funcion, List<Parametro> lista_parametros, List<Instruccion> lista_instrucciones, int fila, int columna)
     {
         NombreFuncion = nombre_funcion;
         ListaParametros = lista_parametros;
@@ -58,7 +58,7 @@ public class DeclaracionFuncion : Instruccion
     {
         string key = NombreFuncion + "_";
 
-        foreach (ParametroFuncion param in ListaParametros)
+        foreach (Parametro param in ListaParametros)
         {
             key += (ListaParametros.Last().Equals(param) ? param.TipoDatoParametro.GetRealTipo().ToString() : param.TipoDatoParametro.GetRealTipo().ToString() + "_");
         }

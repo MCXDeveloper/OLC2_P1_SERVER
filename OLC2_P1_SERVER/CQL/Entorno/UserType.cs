@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class UserType
+public class UserType : InstruccionBD
 {
-    private readonly string identificador;
-    private readonly List<AtributoUT> lista_atributos;
-
+    public string Identificador { get; set; }
+    public List<AtributoUT> ListaAtributos { get; set; }
+    
     public UserType(string identificador, List<AtributoUT> lista_atributos)
     {
-        this.identificador = identificador;
-        this.lista_atributos = lista_atributos;
+        Identificador = identificador;
+        ListaAtributos = lista_atributos;
     }
 
-    public List<AtributoUT> GetListaAtributos()
+    public string CrearChison()
     {
-        return lista_atributos;
+        // TODO | UserType | Escribir función de CrearChison.
+        throw new NotImplementedException();
+    }
+
+    public string CrearPaqueteLUP()
+    {
+        // TODO | UserType | Escribir función de CrearPaqueteLup.
+        throw new NotImplementedException();
     }
 }

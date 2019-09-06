@@ -91,6 +91,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_getyear = ToTerm("getyear");
         KeyTerm r_gethour = ToTerm("gethour");
         KeyTerm r_default = ToTerm("default");
+        KeyTerm r_counter = ToTerm("counter");
         KeyTerm r_contains = ToTerm("contains");
         KeyTerm r_truncate = ToTerm("truncate");
         KeyTerm r_database = ToTerm("database");
@@ -210,6 +211,7 @@ public class Grammar : Irony.Parsing.Grammar
             "getyear",
             "gethour",
             "default",
+            "counter",
             "contains",
             "truncate",
             "database",
@@ -335,6 +337,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal EXPRESION = new NonTerminal("EXPRESION");
         NonTerminal PRIMITIVO = new NonTerminal("PRIMITIVO");
         NonTerminal USER_TYPE = new NonTerminal("USER_TYPE");
+        NonTerminal PARAMETRO = new NonTerminal("PARAMETRO");
         NonTerminal ASIGNACION = new NonTerminal("ASIGNACION");
         NonTerminal INSTRUCCION = new NonTerminal("INSTRUCCION");
         NonTerminal DECLARACION = new NonTerminal("DECLARACION");
@@ -347,15 +350,23 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_ATR_TYPE = new NonTerminal("LISTA_ATR_TYPE");
         NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
+        NonTerminal LLAMADA_FUNCION = new NonTerminal("LLAMADA_FUNCION");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
+        NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
+        NonTerminal SENTENCIA_DB_USE = new NonTerminal("SENTENCIA_DB_USE");
         NonTerminal SENTENCIA_INC_DEC = new NonTerminal("SENTENCIA_INC_DEC");
         NonTerminal LISTA_EXPRESIONES = new NonTerminal("LISTA_EXPRESIONES");
+        NonTerminal SENTENCIA_DB_DROP = new NonTerminal("SENTENCIA_DB_DROP");
         NonTerminal SENTENCIA_DO_WHILE = new NonTerminal("SENTENCIA_DO_WHILE");
+        NonTerminal SENTENCIA_DB_CREATE = new NonTerminal("SENTENCIA_DB_CREATE");
         NonTerminal LISTA_INSTRUCCIONES = new NonTerminal("LISTA_INSTRUCCIONES");
+        NonTerminal DECLARACION_FUNCION = new NonTerminal("DECLARACION_FUNCION");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
-        
+        NonTerminal LLAMADA_PROCEDIMIENTO = new NonTerminal("LLAMADA_PROCEDIMIENTO");
+        NonTerminal DECLARACION_PROCEDIMIENTO = new NonTerminal("DECLARACION_PROCEDIMIENTO");
+
         #endregion
 
         #region GRAMATICA
@@ -373,8 +384,38 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DO_WHILE
             | SENTENCIA_INC_DEC
             | DECLARACION_FUNCION
+            | DECLARACION_PROCEDIMIENTO
             | LLAMADA_FUNCION
+            | LLAMADA_PROCEDIMIENTO
+            | SENTENCIA_DB_CREATE
+            | SENTENCIA_DB_USE
+            | SENTENCIA_DB_DROP
+            | SENTENCIA_TB_CREATE
             ;
+
+        SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c + puco
+            | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + puco
+            ;
+
+        LISTA_COLUMNAS.Rule = MakePlusRule(LISTA_COLUMNAS, coma, COLUMNA);
+
+        COLUMNA.Rule = identificador + TIPO
+            | identificador + TIPO + r_primary + r_key
+            ;
+
+        LISTA_IDENTIFICADORES.Rule = MakePlusRule(LISTA_IDENTIFICADORES, coma, identificador);
+
+        SENTENCIA_DB_CREATE.Rule = r_create + r_database + identificador + puco
+            | r_create + r_database + r_if + r_not + r_exists + identificador + puco
+            ;
+
+        SENTENCIA_DB_USE.Rule = r_use + identificador + puco;
+
+        SENTENCIA_DB_DROP.Rule = r_drop + r_database + identificador;
+
+        DECLARACION_PROCEDIMIENTO.Rule = r_procedure + identificador + par_a + LISTA_PARAMETROS + par_c + coma + par_a + LISTA_PARAMETROS + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
+
+        LLAMADA_PROCEDIMIENTO.Rule = r_call + identificador + par_a + LISTA_EXPRESIONES + par_c;
 
         LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c + puco;
 
@@ -469,6 +510,7 @@ public class Grammar : Irony.Parsing.Grammar
             | PRIMITIVO
             | SENTENCIA_INC_DEC
             | LLAMADA_FUNCION
+            | LLAMADA_PROCEDIMIENTO
             | r_new + TIPO
             | r_today + par_a + par_c
             | r_now + par_a + par_c
@@ -520,6 +562,7 @@ public class Grammar : Irony.Parsing.Grammar
             | r_boolean
             | r_date
             | r_time
+            | r_counter
             | r_set + menor + TIPO + mayor
             | r_set
             | r_list + menor + TIPO + mayor

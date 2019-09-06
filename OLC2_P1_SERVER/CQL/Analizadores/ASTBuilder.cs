@@ -53,7 +53,7 @@ public class ASTBuilder
                     return new Asignacion(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
                     // variable + punto + LISTA_ACCESO + igual + EXPRESION + puco
-                    return new AsignacionObjeto(TipoAsignacion.AS_NORMAL, ObtenerLexema(actual, 0), (List<string>)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Asignacion(new AccesoObjeto(true, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), TipoAsignacion.AS_NORMAL, (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "CREATE_TYPE"))
@@ -320,6 +320,10 @@ public class ASTBuilder
                 {
                     return new TipoDato(TipoDato.Tipo.LIST);
                 }
+                else if (EstoyAca(actual.ChildNodes[0], "counter"))
+                {
+                    return new TipoDato(TipoDato.Tipo.COUNTER);
+                }
                 else
                 {
                     return new TipoDato(TipoDato.Tipo.OBJECT, ObtenerLexema(actual, 0));
@@ -495,24 +499,82 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "DECLARACION_FUNCION"))
         {
-            return new DeclaracionFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1), (List<ParametroFuncion>)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 2), GetColumna(actual, 2));
+            return new DeclaracionFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 2), GetColumna(actual, 2));
         }
         else if (EstoyAca(actual, "LISTA_PARAMETROS"))
         {
-            List<ParametroFuncion> lista_params = new List<ParametroFuncion>();
+            List<Parametro> lista_params = new List<Parametro>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_params.Add((ParametroFuncion)Recorrido(hijo));
+                lista_params.Add((Parametro)Recorrido(hijo));
             }
             return lista_params;
         }
         else if (EstoyAca(actual, "PARAMETRO"))
         {
-            return new ParametroFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1));
+            return new Parametro((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1));
         }
         else if (EstoyAca(actual, "LLAMADA_FUNCION"))
         {
             return new LlamadaFuncion(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+        }
+        else if (EstoyAca(actual, "DECLARACION_PROCEDIMIENTO"))
+        {
+            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]));
+        }
+        else if (EstoyAca(actual, "LLAMADA_PROCEDIMIENTO"))
+        {
+            return new LlamadaProcedimiento(ObtenerLexema(actual, 1), (List<Expresion>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_DB_CREATE"))
+        {
+            return actual.ChildNodes.Count == 4 ? new CreateDatabase(false, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0)) : new CreateDatabase(true, ObtenerLexema(actual, 5), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_DB_USE"))
+        {
+            return new UseDatabase(ObtenerLexema(actual, 1), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_DB_DROP"))
+        {
+            return new DropDatabase(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_TB_CREATE"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 7:
+                    return new CreateTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new CreateTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
+        else if (EstoyAca(actual, "LISTA_COLUMNAS"))
+        {
+            List<Columna> lista_columnas = new List<Columna>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_columnas.Add((Columna)Recorrido(hijo));
+            }
+            return lista_columnas;
+        }
+        else if (EstoyAca(actual, "COLUMNA"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 2:
+                    return new Columna(false, ObtenerLexema(actual, 0), (TipoDato)Recorrido(actual.ChildNodes[1]));
+                default:
+                    return new Columna(true, ObtenerLexema(actual, 0), (TipoDato)Recorrido(actual.ChildNodes[1]));
+            }
+        }
+        else if (EstoyAca(actual, "LISTA_IDENTIFICADORES"))
+        {
+            List<string> lista_ids = new List<string>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_ids.Add((string)Recorrido(hijo));
+            }
+            return lista_ids;
         }
 
         return new Nulo();
@@ -525,7 +587,7 @@ public class ASTBuilder
 
     static string ObtenerLexema(ParseTreeNode nodo, int num)
     {
-        return nodo.ChildNodes[num].Token.Text;
+        return nodo.ChildNodes[num].Token.Text.ToLower();
     }
 
     static int GetFila(ParseTreeNode nodo, int num)
