@@ -41,6 +41,11 @@ public class Database : InstruccionBD
     {
         ListaTablas.RemoveAll(x => x.NombreTabla.Equals(nombre_tabla));
     }
+
+    public void TruncarTabla(string nombre_tabla)
+    {
+        ObtenerTabla(nombre_tabla).Tabla.Rows.Clear();
+    }
     
     public string CrearChison()
     {

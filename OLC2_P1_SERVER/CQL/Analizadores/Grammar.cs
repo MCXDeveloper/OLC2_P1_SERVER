@@ -369,6 +369,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_TB_CREATE = new NonTerminal("SENTENCIA_TB_CREATE");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
+        NonTerminal SENTENCIA_TB_TRUNCATE = new NonTerminal("SENTENCIA_TB_TRUNCATE");
         NonTerminal LLAMADA_PROCEDIMIENTO = new NonTerminal("LLAMADA_PROCEDIMIENTO");
         NonTerminal LISTA_IDENTIFICADORES = new NonTerminal("LISTA_IDENTIFICADORES");
         NonTerminal DECLARACION_PROCEDIMIENTO = new NonTerminal("DECLARACION_PROCEDIMIENTO");
@@ -399,7 +400,10 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_TB_CREATE
             | SENTENCIA_TB_ALTER
             | SENTENCIA_TB_DROP
+            | SENTENCIA_TB_TRUNCATE
             ;
+
+        SENTENCIA_TB_TRUNCATE.Rule = r_truncate + r_table + identificador + puco;
 
         SENTENCIA_TB_DROP.Rule = r_drop + r_table + identificador + puco
             | r_drop + r_table + r_if + r_exists + identificador + puco

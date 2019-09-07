@@ -591,7 +591,6 @@ public class ASTBuilder
                 return new AlterTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
-
         else if (EstoyAca(actual, "SENTENCIA_TB_DROP"))
         {
             switch (actual.ChildNodes.Count)
@@ -601,6 +600,10 @@ public class ASTBuilder
                 default:
                     return new DropTable(true, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
             }
+        }
+        else if (EstoyAca(actual, "SENTENCIA_TB_TRUNCATE"))
+        {
+            return new TruncateTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
         }
 
         return new Nulo();
