@@ -592,6 +592,17 @@ public class ASTBuilder
             }
         }
 
+        else if (EstoyAca(actual, "SENTENCIA_TB_DROP"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 4:
+                    return new DropTable(false, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new DropTable(true, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
+
         return new Nulo();
     }
 

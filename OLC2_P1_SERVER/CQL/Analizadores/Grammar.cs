@@ -360,6 +360,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_INC_DEC = new NonTerminal("SENTENCIA_INC_DEC");
         NonTerminal LISTA_EXPRESIONES = new NonTerminal("LISTA_EXPRESIONES");
         NonTerminal SENTENCIA_DB_DROP = new NonTerminal("SENTENCIA_DB_DROP");
+        NonTerminal SENTENCIA_TB_DROP = new NonTerminal("SENTENCIA_TB_DROP");
         NonTerminal SENTENCIA_DO_WHILE = new NonTerminal("SENTENCIA_DO_WHILE");
         NonTerminal SENTENCIA_TB_ALTER = new NonTerminal("SENTENCIA_TB_ALTER");
         NonTerminal SENTENCIA_DB_CREATE = new NonTerminal("SENTENCIA_DB_CREATE");
@@ -397,6 +398,11 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_DROP
             | SENTENCIA_TB_CREATE
             | SENTENCIA_TB_ALTER
+            | SENTENCIA_TB_DROP
+            ;
+
+        SENTENCIA_TB_DROP.Rule = r_drop + r_table + identificador + puco
+            | r_drop + r_table + r_if + r_exists + identificador + puco
             ;
 
         SENTENCIA_TB_ALTER.Rule = r_alter + r_table + identificador + r_add + LISTA_COLUMNAS + puco

@@ -36,6 +36,11 @@ public class Database : InstruccionBD
     {
         return ListaTablas.Find(x => x.NombreTabla.Equals(nombre_tabla));
     }
+
+    public void EliminarTabla(string nombre_tabla)
+    {
+        ListaTablas.RemoveAll(x => x.NombreTabla.Equals(nombre_tabla));
+    }
     
     public string CrearChison()
     {
