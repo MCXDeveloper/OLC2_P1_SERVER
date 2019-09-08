@@ -605,10 +605,15 @@ public class ASTBuilder
         {
             return new TruncateTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
         }
-
         else if (EstoyAca(actual, "SENTENCIA_TB_INSERT"))
         {
-
+            switch (actual.ChildNodes.Count)
+            {
+                case 7:
+                    return new InsertTable(ObtenerLexema(actual, 2), (List<Expresion>)Recorrido(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new InsertTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), (List<Expresion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
         }
 
         return new Nulo();
