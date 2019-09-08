@@ -606,6 +606,11 @@ public class ASTBuilder
             return new TruncateTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
         }
 
+        else if (EstoyAca(actual, "SENTENCIA_TB_INSERT"))
+        {
+
+        }
+
         return new Nulo();
     }
 

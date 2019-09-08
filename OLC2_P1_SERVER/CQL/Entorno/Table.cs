@@ -20,6 +20,11 @@ public class Table : InstruccionBD
         return Tabla.Columns.Contains(colName);
     }
 
+    public Columna GetColumn(string colName)
+    {
+        return (Columna)Tabla.Columns[colName];
+    }
+
     public void AddColumn(Columna col)
     {
         col.ColumnName = col.NombreColumna;
@@ -40,6 +45,42 @@ public class Table : InstruccionBD
     public void SetPrimaryKeys(Columna[] pks)
     {
         Tabla.PrimaryKey = pks;
+    }
+
+    public int GetColumnCountWithoutCounterColumns()
+    {
+        int x = 0;
+
+        foreach (Columna col in Tabla.Columns)
+        {
+            x += (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER) ? 0 : 1);
+        }
+
+        return x;
+    }
+
+    public void AddRow(List<object> ListValues)
+    {
+        DataRow row = Tabla.NewRow();
+
+        for (int i = 0; i < Tabla.Columns.Count; i++)
+        {
+            row[((Columna)Tabla.Columns[i]).NombreColumna] = ((Columna)Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER) ? null : ListValues[i];
+        }
+
+        Tabla.Rows.Add(row);
+    }
+
+    public void AddRow(List<string> ListFields, List<object> ListValues)
+    {
+        DataRow row = Tabla.NewRow();
+
+        for (int i = 0; i < ListFields.Count; i++)
+        {
+            row[ListFields[i]] = ListValues[i];
+        }
+
+        Tabla.Rows.Add(row);
     }
 
     private Type GetTheType(TipoDato.Tipo tipo)
@@ -64,7 +105,7 @@ public class Table : InstruccionBD
                 return Type.GetType("System.Object");
         }
     }
-
+    
     public string CrearChison()
     {
         throw new NotImplementedException();
