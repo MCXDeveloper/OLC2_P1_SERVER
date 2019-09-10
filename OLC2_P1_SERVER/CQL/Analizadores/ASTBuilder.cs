@@ -226,11 +226,11 @@ public class ASTBuilder
                         {
                             if (EstoyAca(actual.ChildNodes[1], "."))
                             {
-                                return new AccesoColumna(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]));
+                                return new AccesoColumna(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                             }
                             else
                             {
-                                return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]));
+                                return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                             }
                         }
                         else
@@ -244,7 +244,7 @@ public class ASTBuilder
 
                     if (EstoyAca(actual.ChildNodes[0], "identificador"))
                     {
-                        return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]));
+                        return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
@@ -759,7 +759,26 @@ public class ASTBuilder
                     }
             }
         }
-        
+        else if (EstoyAca(actual, "LISTA_ORDER"))
+        {
+            List<Order> lista_columnas = new List<Order>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_columnas.Add((Order)Recorrido(hijo));
+            }
+            return lista_columnas;
+        }
+        else if (EstoyAca(actual, "ORDER"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 2:
+                    return new Order(ObtenerLexema(actual, 0), ObtenerLexema(actual, 1));
+                default:
+                    return new Order(ObtenerLexema(actual, 0), "");
+            }
+        }
+
         return new Nulo();
     }
 

@@ -1,6 +1,7 @@
 ﻿using OLC2_P1_SERVER.CQL.Arbol;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -33,31 +34,71 @@ public class AccesoColumna : Expresion
             if (!(CQL.TuplaEnUso is null))
             {
                 // 3. Itero sobre la lista de acceso hasta que devuelva un valor final.
-                object padre = CQL.TuplaEnUso[NombreColumna];
-
-                foreach (Expresion exp in ListaAcceso)
-                {
-                    object access_resp = ValidarAcceso(padre, exp, ent);
-
-                    if (access_resp is Nulo)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        padre = access_resp;
-                    }
-                }
-
-                return padre;
+                return ObtenerValorFinal(CQL.TuplaEnUso[NombreColumna], ent);
             }
             else
             {
                 Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
             }
         }
+        else
+        {
+            // Cuando se hace un select y en los campos viene un acceso a columna, se procede a iterar sobre cada row de la tabla correspondiente, en la
+            // columna indicada, y se le aplica lo que la lista de acceso indique.  Al final, se retorna un nuevo DataTable con esa unica columna para
+            // hacer merge con la tabla final.
+            
+            // 1. Primero valido que exista una TablaEnUso.
+            if(!(CQL.TablaEnUso is null))
+            {
+                DataTable dt = new DataTable();
+                dt.Clear();
+                dt.Columns.Add(NombreColumna);
+
+                // 2. Itero por todas las filas de la tabla devolviendo un nuevo row con el valor de la columna alterado por la lista de acceso.
+                foreach (DataRow row in CQL.TablaEnUso.Tabla.Rows)
+                {
+                    DataRow rowsito = dt.NewRow();
+
+                    object result = ObtenerValorFinal(row[NombreColumna], ent);
+
+                    if (result is Nulo)
+                    {
+                        return new Nulo();
+                    }
+                    else
+                    {
+                        rowsito[NombreColumna] = result;
+                        dt.Rows.Add(rowsito);
+                    }
+                }
+
+                return dt;
+            }
+            else
+            {
+                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tabla actual sobre la cual obtener los campos para el SELECT.", fila, columna);
+            }
+        }
 
         return new Nulo();
+    }
+
+    private object ObtenerValorFinal(object elemento, Entorno ent)
+    {
+        object padre = elemento;
+
+        foreach (Expresion exp in ListaAcceso)
+        {
+            object access_resp = ValidarAcceso(padre, exp, ent);
+            padre = access_resp;
+
+            if (access_resp is Nulo)
+            {
+                break;
+            }
+        }
+
+        return padre;
     }
 
     private object ValidarAcceso(object elemento, Expresion acceso, Entorno ent)

@@ -62,38 +62,37 @@ public class Select : Instruccion
             // 2. Valido que la tabla exista en la base de datos.
             if (CQL.ExisteTablaEnBD(NombreTabla))
             {
-                // 3. Verifico si ListaCampos es distinto de null.  Si es null, significa que el usuario utilizó un * en la sentencia 'SELECT * FROM...'.
-                if(!(ListaCampos is null))
+                // 3. Para ejecutar de forma correcta la consulta, se debe de realizar en el siguiente orden:
+                //    3.1 FROM
+                //    3.2 WHERE
+                //    3.3 SELECT
+                //    3.4 ORDER BY
+                //    3.5 LIMIT
+
+                // 3.1  FROM - Esa tabla obtenida se mantiene de forma estática para acceder a ella en la siguiente validaciones.
+                CQL.TablaEnUso = CQL.ObtenerTabla(NombreTabla);
+
+                // 3.2  WHERE - En una tabla temporal almaceno el resultado de ejecutar el where (si hubiese, de lo contrario se sigue utilizando la tabla original).
+                CQL.WhereFlag = true;
+                CQL.TuplaEnUso = null;
+                Table tablaTemp = (!(ExpresionWhere is null) ? EjecutarWhere(ent) : CQL.TablaEnUso);
+                CQL.WhereFlag = false;
+                CQL.TuplaEnUso = null;
+
+                if (!(tablaTemp is null))
                 {
-                    // 3.a  Valido que los tipos de dato sean los permitidos dentro de un select, de lo contrario, se debe mostrar un error.
-                    // 4.   En este mismo punto valido, en base al tipo de expresión, que se cumpla con las validaciones requeridas.
-                    if (ValidateFieldTypesOfSelect())
+                    // 3.3 SELECT - En una nueva tabla temporal almaceno el resultado de seleccionar solo ciertas columnas (si hubiese, de lo contrario se muestran todas).
+                    Table tablaTemp2 = !(ListaCampos is null) ? EjecutarSeleccion(tablaTemp, ent) : tablaTemp;
+
+                    if (!(tablaTemp2 is null))
                     {
-                        // 5. Para ejecutar de forma correcta la consulta, se debe de realizar en el siguiente orden:
-                        //    5.1 FROM
-                        //    5.2 WHERE
-                        //    5.3 SELECT
-                        //    5.4 ORDER BY
+                        // 3.4 ORDER BY - En una nueva tabla temporal almaceno el resultado de ordernar (si hubiese, de lo contrario, se deja la misma) la tabla resultante del select y el where.
+                        Table tablaTemp3 = !(ListaOrdenamiento is null) ? EjecutarOrderBy(tablaTemp2) : tablaTemp2;
 
-                        // 5.1 FROM - Esa tabla obtenida se mantiene de forma estática para acceder a ella en la siguiente validaciones.
-                        CQL.TablaEnUso = CQL.ObtenerTabla(NombreTabla);
+                        // 3.5 LIMIT - En una nueva tabla temporal almaceno el resultado de obtener solo la cantidad de filas especificada por la expresión (si hubiese).
+                        Table tablaTemp4 = !(ExpresionLimit is null) ? EjecutarLimit(tablaTemp3, ent) : tablaTemp3;
 
-                        // 5.2 WHERE - En una tabla temporal almaceno el resultado de ejecutar el where (si hubiese, de lo contrario se sigue utilizando la tabla original).
-                        CQL.WhereFlag = true;
-                        Table tablaTemp = (!(ExpresionWhere is null) ? EjecutarWhere(ent) : CQL.TablaEnUso);
-                        CQL.WhereFlag = false;
-                        CQL.TuplaEnUso = null;
-
-                        if (!(tablaTemp is null))
-                        {
-                            // 5.3 SELECT - En una nueva tabla temporal almaceno el resultado de seleccionar solo ciertas columnas (si hubiese, de lo contrario se muestran todas).
-                            Table tablaTemp2 = (!(ListaCampos is null) ? EjecutarSeleccion(tablaTemp, ent) : tablaTemp);
-                        }
-
-                    }
-                    else
-                    {
-                        Error.AgregarError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
+                        return tablaTemp4;
                     }
                 }
             }
@@ -258,30 +257,94 @@ public class Select : Instruccion
         // - Aquellas que retornen un valor primitivo se debe crear una nueva columna con el valor proporcionado y repetir sus valores para todas aquellas tuplas existentes dentro de la tabla.
         // - Aquellas que retornen un valor de tipo ColumnaTabla/AccesoColumna/AccesoCollection todas van a retornar su valor correspondiente en String para no tener complicaciones.
 
-        // 1. Creo una nueva tabla para almacenar el resultado del WHERE
-        Table tablaResult = new Table(CQL.GenerateName(5));
-
-        // 2. Creo un indice que me indica el nombre de la columna calculada.
-        int calCol = 0;
-
-        foreach (Expresion exp in ListaCampos)
+        // 1. Valido que los tipos de dato sean los permitidos dentro de un select, de lo contrario, se debe mostrar un error.
+        if (ValidateFieldTypesOfSelect())
         {
-            if (exp is Primitivo)
-            {
-                tablaResult.Tabla.Merge(GenerarColumnaRepetitiva(("Columna_" + calCol), exp.Ejecutar(ent), temp.Tabla.Rows.Count));
-                calCol++;
-            }
-            else if (exp is ColumnaTabla)
-            {
-                tablaResult.Tabla.Merge(new DataView(temp.Tabla).ToTable(false, new[] { ((ColumnaTabla)exp).NombreColumna }));
-            }
-            else if (exp is AccesoColumna)
-            {
+            // 2. Creo una nueva tabla para almacenar el resultado del WHERE
+            Table tablaResult = new Table(CQL.GenerateName(5));
 
+            // 3. Creo un indice que me indica el nombre de la columna calculada.
+            int calCol = 0;
+
+            foreach (Expresion exp in ListaCampos)
+            {
+                if (exp is Primitivo)
+                {
+                    tablaResult.Tabla.Merge(GenerarColumnaRepetitiva(("Columna_" + calCol), exp.Ejecutar(ent), temp.Tabla.Rows.Count));
+                    calCol++;
+                }
+                else if (exp is ColumnaTabla)
+                {
+                    tablaResult.Tabla.Merge(new DataView(temp.Tabla).ToTable(false, new[] { ((ColumnaTabla)exp).NombreColumna }));
+                }
+                else if (exp is AccesoColumna)
+                {
+                    object access_response = ((AccesoColumna)exp).Ejecutar(ent);
+
+                    if (!(access_response is Nulo))
+                    {
+                        tablaResult.Tabla.Merge((DataTable)access_response);
+                    }
+                }
+                else if (exp is AccesoCollection)
+                {
+                    object access_response = ((AccesoCollection)exp).Ejecutar(ent);
+
+                    if (!(access_response is Nulo))
+                    {
+                        tablaResult.Tabla.Merge((DataTable)access_response);
+                    }
+                }
             }
+
+            return tablaResult;
+        }
+        else
+        {
+            Error.AgregarError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
+        }
+        
+        return null;
+    }
+
+    private Table EjecutarOrderBy(Table temp)
+    {
+        // 1. Armo el string que corresponde al ordenamiento proporcionado por el usuario.
+        string ordenamiento = "";
+        
+        foreach (Order orden in ListaOrdenamiento)
+        {
+            ordenamiento += orden.NombreColumnaOrden + (orden.TipoDeOrden.Equals(String.Empty) ? " ASC" : " " + orden.TipoDeOrden.ToUpper());
+            ordenamiento += !ListaOrdenamiento.Last().Equals(orden) ? "" : ", ";
         }
 
+        // 2. Convierto la tabla recibida por parametro a un DataView para poderlo ordenar.
+        DataView dv = new DataView(temp.Tabla);
+        dv.Sort = ordenamiento;
 
+        // 3. Una vez ordenado el DataView, procedo a crear una nueva Table y le adjunto a el atributo Tabla la conversión del DataView a DataTable nuevamente.
+        Table tablaResult = new Table(CQL.GenerateName(5));
+        tablaResult.Tabla = dv.ToTable();
+
+        return tablaResult;
+    }
+
+    private Table EjecutarLimit(Table temp, Entorno ent)
+    {
+        object limite = ExpresionLimit.Ejecutar(ent);
+
+        if (limite is int)
+        {
+            Table tablita = new Table(CQL.GenerateName(5));
+            tablita.Tabla = temp.Tabla.AsEnumerable().Take((int)limite).CopyToDataTable();
+            return tablita;
+        }
+        else
+        {
+            Error.AgregarError("Semántico", "[SELECT]", "Error.  El valor correspondiente a la cláusula LIMIT debe ser de tipo entero.", fila, columna);
+        }
+
+        return null;
     }
 
     private DataTable GenerarColumnaRepetitiva(string nombre_columna, object valor, int cantidad_iteraciones)

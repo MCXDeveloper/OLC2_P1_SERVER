@@ -431,6 +431,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         ORDER.Rule = identificador + r_asc
             | identificador + r_desc
+            | identificador
             ;
 
         SENTENCIA_TB_INSERT.Rule = r_insert + r_into + identificador + r_values + par_a + LISTA_EXPRESIONES + par_c

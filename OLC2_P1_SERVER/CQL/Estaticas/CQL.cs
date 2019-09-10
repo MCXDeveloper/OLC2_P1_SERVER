@@ -38,6 +38,11 @@ public class CQL
         return tipos_a_validar.Contains(RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla).GetColumn(nombre_columna).TipoDatoColumna.GetRealTipo());
     }
 
+    public static Columna ObtenerColumnaDeTabla(string nombre_columna)
+    {
+        return CQL.TablaEnUso.GetColumn(nombre_columna);
+    }
+
     public static string GenerateName(int len)
     {
         Random r = new Random();
