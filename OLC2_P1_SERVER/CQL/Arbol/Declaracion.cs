@@ -46,14 +46,7 @@ public class Declaracion : Instruccion
 
                 if (!(simbolo is Nulo))
                 {
-                    if (nombreObj is null)
-                    {
-                        ent.Agregar(variable, new Variable(tipo, variable, new Nulo()));
-                    }
-                    else
-                    {
-                        ent.Agregar(variable, new Variable(nombreObj, variable, new Nulo()));
-                    }   
+                    ent.Agregar(variable, new Variable(tipo, variable, new Nulo()));
                 }
                 else
                 {
@@ -328,7 +321,7 @@ public class Declaracion : Instruccion
     {
         List<AtributoObjeto> listaAtrObj = new List<AtributoObjeto>();
 
-        foreach (AtributoUT ao in objeto.GetListaAtributos())
+        foreach (AtributoUT ao in objeto.ListaAtributos)
         {
             if (ao.GetTipoAtributo().Equals(TipoDato.Tipo.INT))
             {

@@ -61,7 +61,7 @@ public class LlamadaFuncion : Expresion
         return response;
     }
 
-    private bool VerificarParametros(List<ParametroFuncion> ListaParametros, Entorno ent)
+    private bool VerificarParametros(List<Parametro> ListaParametros, Entorno ent)
     {
         // 1. Primero verifico que la cantidad de parámetros en ListaParametros sea la misma que la cantidad de valores en ListaValores.
         if(ListaValores.Count == ListaParametros.Count)

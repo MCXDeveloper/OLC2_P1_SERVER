@@ -684,16 +684,52 @@ public class Operacion : Expresion
         return new Nulo();
     }
 
-    private object EjecutarDecremento(object op1)
+    private object EjecutarDecremento(object op1, Entorno ent)
     {
-        // TODO realizar funcion de incremento
-        throw new NotImplementedException();
+        if (op1 is int)
+        {
+            int temp = (int)op1;
+            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 - 1), fila, columna);
+            inc.Ejecutar(ent);
+            return temp;
+        }
+        else if (op1 is double)
+        {
+            double temp = (double)op1;
+            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 - 1), fila, columna);
+            inc.Ejecutar(ent);
+            return temp;
+        }
+        else
+        {
+            Error.AgregarError("Semántico", "[OPERACION]", "El decremento se debe hacerse a una expresión numérica.", fila, columna);
+        }
+
+        return new Nulo();
     }
 
-    private object EjecutarIncremento(object op1)
+    private object EjecutarIncremento(object op1, Entorno ent)
     {
-        // TODO realizar funcion de incremento
-        throw new NotImplementedException();
+        if (op1 is int)
+        {
+            int temp = (int)op1;
+            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 + 1), fila, columna);
+            inc.Ejecutar(ent);
+            return temp;
+        }
+        else if (op1 is double)
+        {
+            double temp = (double)op1;
+            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 + 1), fila, columna);
+            inc.Ejecutar(ent);
+            return temp;
+        }
+        else
+        {
+            Error.AgregarError("Semántico", "[OPERACION]", "El incremento se debe hacerse a una expresión numérica.", fila, columna);
+        }
+
+        return new Nulo();
     }
 
 }

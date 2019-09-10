@@ -18,27 +18,35 @@ public class Primitivo : Expresion
         return valor;
     }
 
-    public Tipo GetTipo(Entorno ent)
+    public TipoDato GetTipo(Entorno ent)
     {
         if (valor is int)
         {
-            return Tipo.INT;
+            return new TipoDato(TipoDato.Tipo.INT);
         }
         else if (valor is double)
         {
-            return Tipo.DOUBLE;
+            return new TipoDato(TipoDato.Tipo.DOUBLE);
         }
         else if (valor is string)
         {
-            return Tipo.STRING;
+            return new TipoDato(TipoDato.Tipo.STRING);
         }
         else if (valor is bool)
         {
-            return Tipo.BOOLEAN;
+            return new TipoDato(TipoDato.Tipo.BOOLEAN);
+        }
+        else if (valor is Date)
+        {
+            return new TipoDato(TipoDato.Tipo.DATE);
+        }
+        else if (valor is Time)
+        {
+            return new TipoDato(TipoDato.Tipo.TIME);
         }
         else
         {
-            return Tipo.OBJECT;
+            return new TipoDato(TipoDato.Tipo.DESCONOCIDO);
         }
     }
 }

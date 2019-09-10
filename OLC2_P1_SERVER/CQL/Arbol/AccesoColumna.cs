@@ -366,7 +366,7 @@ public class AccesoColumna : Expresion
             Objeto obj = (Objeto)elemento;
 
             // Obtengo el valor del atributo.  Si no existiese, el resultado sería Nulo().
-            response = obj.GetAtributo(IsValor, nombre_atributo);
+            response = obj.GetAtributo(true, nombre_atributo);
         }
         else
         {

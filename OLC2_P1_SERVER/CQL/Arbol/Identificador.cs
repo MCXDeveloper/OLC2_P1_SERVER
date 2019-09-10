@@ -3,51 +3,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using static Entorno;
 
 public class Identificador : Expresion
 {
-    private readonly string id;
+    public string Id { get; set; }
 
     public Identificador(string id)
     {
-        this.id = id;
+        Id = id;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        Variable sim = (Variable)ent.ObtenerVariable(id);
+        Variable sim = (Variable)ent.ObtenerVariable(Id);
         return (sim.GetValor() is Nulo) ? sim : sim.GetValor();
     }
 
-    public Tipo GetTipo(Entorno ent)
+    public TipoDato GetTipo(Entorno ent)
     {
         object valor = Ejecutar(ent);
 
         if (valor is int)
         {
-            return Tipo.INT;
+            return new TipoDato(TipoDato.Tipo.INT);
         }
         else if (valor is double)
         {
-            return Tipo.DOUBLE;
+            return new TipoDato(TipoDato.Tipo.DOUBLE);
         }
         else if (valor is string)
         {
-            return Tipo.STRING;
+            return new TipoDato(TipoDato.Tipo.STRING);
         }
         else if (valor is bool)
         {
-            return Tipo.BOOLEAN;
+            return new TipoDato(TipoDato.Tipo.BOOLEAN);
         }
-        // TODO corregir esta linea para manipular los objetos
-        else if (valor is object)
+        else if (valor is Objeto)
         {
-            return Tipo.OBJECT;
+            return new TipoDato(TipoDato.Tipo.OBJECT);
         }
         else
         {
-            return Tipo.NULO;
+            return new TipoDato(TipoDato.Tipo.NULO);
         }
 
     }

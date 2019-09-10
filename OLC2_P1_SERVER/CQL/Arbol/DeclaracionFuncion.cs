@@ -15,6 +15,8 @@ public class DeclaracionFuncion : Instruccion
     
     public DeclaracionFuncion(TipoDato tipo_dato_funcion, string nombre_funcion, List<Parametro> lista_parametros, List<Instruccion> lista_instrucciones, int fila, int columna)
     {
+        this.fila = fila;
+        this.columna = columna;
         NombreFuncion = nombre_funcion;
         ListaParametros = lista_parametros;
         TipoDatoFuncion = tipo_dato_funcion;

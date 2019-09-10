@@ -12,9 +12,9 @@ namespace OLC2_P1_SERVER.CQL.Arbol
             return new Nulo();
         }
 
-        public Entorno.Tipo GetTipo(Entorno ent)
+        public TipoDato GetTipo(Entorno ent)
         {
-            return Entorno.Tipo.NULO;
+            return new TipoDato(TipoDato.Tipo.NULO);
         }
     }
 }

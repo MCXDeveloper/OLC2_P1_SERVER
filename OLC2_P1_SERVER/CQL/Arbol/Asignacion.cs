@@ -205,7 +205,7 @@ public class Asignacion : Instruccion
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + VarType.GetRealTipo().ToString() + "'.", fila, columna);
+                    Error.AgregarError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + attrObj.Tipo.GetRealTipo().ToString() + "'.", fila, columna);
                 }
             }
             else
