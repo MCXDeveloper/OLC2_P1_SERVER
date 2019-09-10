@@ -98,37 +98,37 @@ public class Operacion : Expresion
         }
     }
 
-    public Entorno.Tipo GetTipo(Entorno ent)
+    public TipoDato GetTipo(Entorno ent)
     {
         object valor = Ejecutar(ent);
 
         if(valor is int)
         {
-            return Entorno.Tipo.INT;
+            return new TipoDato(TipoDato.Tipo.INT);
         }
         else if (valor is double)
         {
-            return Entorno.Tipo.DOUBLE;
+            return new TipoDato(TipoDato.Tipo.DOUBLE);
         }
         else if (valor is string)
         {
-            return Entorno.Tipo.STRING;
+            return new TipoDato(TipoDato.Tipo.STRING);
         }
         else if (valor is bool)
         {
-            return Entorno.Tipo.BOOLEAN;
+            return new TipoDato(TipoDato.Tipo.BOOLEAN);
         }
         else if (valor is Date)
         {
-            return Entorno.Tipo.DATE;
+            return new TipoDato(TipoDato.Tipo.DATE);
         }
         else if (valor is Time)
         {
-            return Entorno.Tipo.TIME;
+            return new TipoDato(TipoDato.Tipo.TIME);
         }
         else
         {
-            return Entorno.Tipo.DESCONOCIDO;
+            return new TipoDato(TipoDato.Tipo.DESCONOCIDO);
         }
     }
 

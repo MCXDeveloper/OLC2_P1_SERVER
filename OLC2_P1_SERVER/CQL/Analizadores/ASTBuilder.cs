@@ -189,7 +189,16 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 1:
-                    return Recorrido(actual.ChildNodes[0]);
+
+                    if (EstoyAca(actual.ChildNodes[0], "identificador"))
+                    {
+                        return new ColumnaTabla(ObtenerLexema(actual, 0), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+                    else
+                    {
+                        return Recorrido(actual.ChildNodes[0]);
+                    }
+                    
                 case 3:
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
                     {
@@ -208,9 +217,21 @@ public class ASTBuilder
                         if(EstoyAca(actual.ChildNodes[0], "today"))
                         {
                             return new Today();
-                        }else if (EstoyAca(actual.ChildNodes[0], "now"))
+                        }
+                        else if (EstoyAca(actual.ChildNodes[0], "now"))
                         {
                             return new Now();
+                        }
+                        else if (EstoyAca(actual.ChildNodes[0], "identificador"))
+                        {
+                            if (EstoyAca(actual.ChildNodes[1], "."))
+                            {
+                                return new AccesoColumna(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]));
+                            }
+                            else
+                            {
+                                return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]));
+                            }
                         }
                         else
                         {
@@ -220,7 +241,16 @@ public class ASTBuilder
                 case 2:
                     return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));
                 case 4:
-                    return new CasteoExplicito((TipoDato)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+
+                    if (EstoyAca(actual.ChildNodes[0], "identificador"))
+                    {
+                        return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]));
+                    }
+                    else
+                    {
+                        return new CasteoExplicito((TipoDato)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+
                 default:
                     return new OperadorTernario((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
@@ -615,7 +645,121 @@ public class ASTBuilder
                     return new InsertTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), (List<Expresion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
+        else if (EstoyAca(actual, "SENTENCIA_TB_SELECT"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                //r_select + por + r_from + identificador
+                //| r_select + LISTA_EXPRESIONES + r_from + identificador
+                case 4:
 
+                    if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                    {
+                        return new Select(null, ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+                    else
+                    {
+                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+
+                //| r_select + por + r_from + identificador + r_where + EXPRESION
+                //| r_select + por + r_from + identificador + r_limit + EXPRESION
+                //| r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION
+                //| r_select + LISTA_EXPRESIONES + r_from + identificador + r_limit + EXPRESION
+                case 6:
+
+                    if (EstoyAca(actual.ChildNodes[4], "where"))
+                    {
+                        if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                        {
+                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                        else
+                        {
+                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                    }
+                    else
+                    {
+                        if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                        {
+                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                        else
+                        {
+                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                    }
+                    
+                //| r_select + por + r_from + identificador + r_order + r_by + LISTA_ORDER
+                //| r_select + LISTA_EXPRESIONES + r_from + identificador + r_order + r_by + LISTA_ORDER
+                case 7:
+
+                    if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                    {
+                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+                    else
+                    {
+                        return new Select(null, ObtenerLexema(actual, 3), null, null, (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+
+                // | r_select + por + r_from + identificador + r_where + EXPRESION + r_limit + EXPRESION
+                // | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_limit + EXPRESION
+                case 8:
+
+                    if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                    {
+                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+                    else
+                    {
+                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+
+                // | r_select + por + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER
+                // | r_select + por + r_from + identificador + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+                // | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER
+                // | r_select + LISTA_EXPRESIONES + r_from + identificador + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+                case 9:
+
+                    if (EstoyAca(actual.ChildNodes[4], "where"))
+                    {
+                        if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                        {
+                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                        else
+                        {
+                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                    }
+                    else
+                    {
+                        if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                        {
+                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[8]), (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                        else
+                        {
+                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[8]), (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                        }
+                    }
+
+                // | r_select + por + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+                // | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+                default:
+                    if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
+                    {
+                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[10]), (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+                    else
+                    {
+                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[10]), (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                    }
+            }
+        }
+        
         return new Nulo();
     }
 

@@ -329,6 +329,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal TIPO = new NonTerminal("TIPO");
         NonTerminal ELSE = new NonTerminal("ELSE");
         NonTerminal CASE = new NonTerminal("CASE");
+        NonTerminal ORDER = new NonTerminal("ORDER");
         NonTerminal INICIO = new NonTerminal("INICIO");
         NonTerminal ACCESO = new NonTerminal("ACCESO");
         NonTerminal ELSE_IF = new NonTerminal("ELSE_IF");
@@ -344,6 +345,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal DECLARACION = new NonTerminal("DECLARACION");
         NonTerminal LISTA_CASES = new NonTerminal("LISTA_CASES");
         NonTerminal CREATE_TYPE = new NonTerminal("CREATE_TYPE");
+        NonTerminal LISTA_ORDER = new NonTerminal("LISTA_ORDER");
         NonTerminal SENTENCIA_IF = new NonTerminal("SENTENCIA_IF");
         NonTerminal LISTA_ACCESO = new NonTerminal("LISTA_ACCESO");
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
@@ -368,6 +370,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal DECLARACION_FUNCION = new NonTerminal("DECLARACION_FUNCION");
         NonTerminal SENTENCIA_TB_CREATE = new NonTerminal("SENTENCIA_TB_CREATE");
         NonTerminal SENTENCIA_TB_INSERT = new NonTerminal("SENTENCIA_TB_INSERT");
+        NonTerminal SENTENCIA_TB_SELECT = new NonTerminal("SENTENCIA_TB_SELECT");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
         NonTerminal SENTENCIA_TB_TRUNCATE = new NonTerminal("SENTENCIA_TB_TRUNCATE");
@@ -398,31 +401,56 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_CREATE
             | SENTENCIA_DB_USE
             | SENTENCIA_DB_DROP
-            | SENTENCIA_TB_CREATE
-            | SENTENCIA_TB_ALTER
-            | SENTENCIA_TB_DROP
-            | SENTENCIA_TB_TRUNCATE
-            | SENTENCIA_TB_INSERT
+            | SENTENCIA_TB_CREATE + puco
+            | SENTENCIA_TB_ALTER + puco
+            | SENTENCIA_TB_DROP + puco
+            | SENTENCIA_TB_TRUNCATE + puco
+            | SENTENCIA_TB_INSERT + puco
+            | SENTENCIA_TB_SELECT + puco
+            ;
+
+        SENTENCIA_TB_SELECT.Rule = r_select + por + r_from + identificador
+            | r_select + por + r_from + identificador + r_where + EXPRESION
+            | r_select + por + r_from + identificador + r_limit + EXPRESION
+            | r_select + por + r_from + identificador + r_order + r_by + LISTA_ORDER
+            | r_select + por + r_from + identificador + r_where + EXPRESION + r_limit + EXPRESION
+            | r_select + por + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER
+            | r_select + por + r_from + identificador + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+            | r_select + por + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+            | r_select + LISTA_EXPRESIONES + r_from + identificador
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_limit + EXPRESION
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_order + r_by + LISTA_ORDER
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_limit + EXPRESION
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+            | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
+            ;
+
+        LISTA_ORDER.Rule = MakePlusRule(LISTA_ORDER, coma, ORDER);
+
+        ORDER.Rule = identificador + r_asc
+            | identificador + r_desc
             ;
 
         SENTENCIA_TB_INSERT.Rule = r_insert + r_into + identificador + r_values + par_a + LISTA_EXPRESIONES + par_c
             | r_insert + r_into + identificador + par_a + LISTA_IDENTIFICADORES + par_c + r_values + par_a + LISTA_EXPRESIONES + par_c
             ;
 
-        SENTENCIA_TB_TRUNCATE.Rule = r_truncate + r_table + identificador + puco;
+        SENTENCIA_TB_TRUNCATE.Rule = r_truncate + r_table + identificador;
 
-        SENTENCIA_TB_DROP.Rule = r_drop + r_table + identificador + puco
-            | r_drop + r_table + r_if + r_exists + identificador + puco
+        SENTENCIA_TB_DROP.Rule = r_drop + r_table + identificador
+            | r_drop + r_table + r_if + r_exists + identificador
             ;
 
-        SENTENCIA_TB_ALTER.Rule = r_alter + r_table + identificador + r_add + LISTA_COLUMNAS + puco
-            | r_alter + r_table + identificador + r_drop + LISTA_IDENTIFICADORES + puco
+        SENTENCIA_TB_ALTER.Rule = r_alter + r_table + identificador + r_add + LISTA_COLUMNAS
+            | r_alter + r_table + identificador + r_drop + LISTA_IDENTIFICADORES
             ;
 
-        SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c + puco
-            | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + puco
-            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + par_c + puco
-            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + puco
+        SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c
+            | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c
+            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + par_c
+            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c
             ;
 
         LISTA_COLUMNAS.Rule = MakePlusRule(LISTA_COLUMNAS, coma, COLUMNA);
@@ -539,14 +567,17 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_INC_DEC
             | LLAMADA_FUNCION
             | LLAMADA_PROCEDIMIENTO
+            | identificador
             | r_new + TIPO
             | r_today + par_a + par_c
             | r_now + par_a + par_c
             | variable + punto + LISTA_ACCESO
+            | identificador + punto + LISTA_ACCESO
             | llave_a + LISTA_ATR_MAP + llave_c
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
             | par_a + TIPO + par_c + EXPRESION
+            | identificador + cor_a + EXPRESION + cor_c
             | EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         
