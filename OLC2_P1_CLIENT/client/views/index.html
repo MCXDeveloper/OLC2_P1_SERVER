@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>CQL Teacher - 201213177</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="javascripts/LUPBuilder.js"></script>
+        <script type="text/javascript" src="javascripts/Helper.js"></script>
+        <script type="text/javascript" src="javascripts/Loadings.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">Bienvenidos a CQL -&nbsp;Teacher</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Inicio de sesión</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="section">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h3 class="text-center"></h3>
+                                                <p class="text-center"></p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <img src="http://pingendo.github.io/pingendo-bootstrap/assets/user_placeholder.png" class="center-block img-responsive img-rounded">
+                                                <br><br>
+                                                <form role="form">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="txtUser">Usuario</label>
+                                                        <input class="form-control" id="txtUser" placeholder="Ingrese su usuario">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="txtPass">Contraseña</label>
+                                                        <input class="form-control" id="txtPass" placeholder="Ingrese su contraseña" type="password">
+                                                    </div>
+                                                    <button type="button" id="btnIniciarSesion" class="btn btn-block btn-primary">Iniciar sesión</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btnIniciarSesion').on('click', function(){
+
+                    let user = $('#txtUser').val();
+                    let pass = $('#txtPass').val();
+
+                    $.ajax({
+
+                        type: 'POST',
+                        url : "http://localhost:58899/api/CQL",
+                        data: { lup_message : LUPBuilder.BuildLogin(user, pass) },
+                        timeout: 5000,
+
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                            $.unblockUI();
+                        },
+
+                        beforeSend: function(){
+                            $.blockUI({
+                                message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                css: {
+                                    border: 'none',
+                                    padding: '15px',
+                                    backgroundColor: '#000',
+                                    '-webkit-border-radius': '10px',
+                                    '-moz-border-radius': '10px',
+                                    opacity: .5,
+                                    color: '#fff'
+                                }
+                            });
+                        },
+
+                        success: function(data){
+                            $.unblockUI();
+                        }
+
+                    });
+
+                });
+
+            });
+
+        </script>
+
+    </body>
+</html>
