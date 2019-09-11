@@ -33,4 +33,21 @@ class LUPBuilder {
 
     }
 
+    static BuildQueryPackage(content) {
+
+        let message = "";
+
+        message += "[+QUERY]\n";
+        message += "\t[+USER]\n";
+        message += "\t\t"+ this.actualUser +"\n";
+        message += "\t[-USER]\n";
+        message += "\t[+DATA]\n";
+        message += "\t\t"+ content +"\n";
+        message += "\t[-DATA]\n";
+        message += "[-QUERY]\n";
+
+        return message;
+
+    }
+
 }
