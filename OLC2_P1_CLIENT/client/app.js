@@ -12,6 +12,9 @@ var http = new _http.Server(app);
  */
 app.use(bodyparser.json());
 app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts')));
+app.use('/codemirror', express.static(path.join(__dirname, '/public/codemirror')));
+app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets')));
+app.use('/jstree', express.static(path.join(__dirname, '/public/jstree')));
 app.set("port", process.env.PORT || 3000);
 
 /**
@@ -26,7 +29,7 @@ http.listen(app.get("port"), () => {
  * Primary app routes.
  */
 app.get('/', function(req, res){
-    res.sendFile('index.html', { root: path.join(__dirname, './views') });
+    res.sendFile('ModoAvanzado.html', { root: path.join(__dirname, './views') });
 });
 
 module.exports = app;

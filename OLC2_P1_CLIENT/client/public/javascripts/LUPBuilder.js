@@ -1,5 +1,7 @@
 class LUPBuilder {
 
+    static actualUser;
+
     static BuildLogin(username, password) {
 
         let message = "";
@@ -13,7 +15,19 @@ class LUPBuilder {
         message += "\t[-PASS]\n";
         message += "[-LOGIN]\n";
 
-        //console.log(message);
+        return message;
+
+    }
+
+    static BuildLogout(username) {
+
+        let message = "";
+
+        message += "[+LOGOUT]\n";
+        message += "\t[+USER]\n";
+        message += "\t\t"+ username +"\n";
+        message += "\t[-USER]\n";
+        message += "[-LOGOUT]\n";
 
         return message;
 
