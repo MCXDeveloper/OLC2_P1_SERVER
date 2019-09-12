@@ -141,10 +141,10 @@ public class Operacion : Expresion
         switch (tipo)
         {
             case TipoOperacion.INCREMENTO:
-                respuesta = EjecutarIncremento(op1);
+                respuesta = EjecutarIncremento(op1, ent);
                 break;
             case TipoOperacion.DECREMENTO:
-                respuesta = EjecutarDecremento(op1);
+                respuesta = EjecutarDecremento(op1, ent);
                 break;
             case TipoOperacion.NEGATIVO:
                 respuesta = EjecutarNegativo(op1);

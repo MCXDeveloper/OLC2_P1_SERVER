@@ -1,5 +1,6 @@
 var util = require('util');
 var path = require('path');
+var cors = require('cors');
 var _http = require('http');
 var express = require('express');
 var bodyparser = require('body-parser');
@@ -11,7 +12,8 @@ var http = new _http.Server(app);
 /**
  * Express configuration.
  */
-app.use(bodyparser.json());
+app.use(bodyparser.urlencoded());
+app.use(cors({origin: '*'}));
 app.use(session({secret: 'ocl2-p1-client'}));
 app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts')));
 app.use('/codemirror', express.static(path.join(__dirname, '/public/codemirror')));
@@ -20,7 +22,7 @@ app.use('/jstree', express.static(path.join(__dirname, '/public/jstree')));
 app.use('/grammar', express.static(path.join(__dirname, '/public/analizadores')));
 app.set("port", process.env.PORT || 3000);
 
-var sess;
+let sess;
 
 /**
  * Start Express server.
@@ -41,9 +43,27 @@ app.get('/', function(req, res){
     res.sendFile('index.html', { root: path.join(__dirname, './views') });
 });
 
-app.post('/login',(req,res) => {
+app.get('/getActualUser', function(req, res){
     sess = req.session;
-    sess.user_name = req.body.user;
+    res.end(sess.user_name);
+});
+
+app.post('/login',(req,res) => {
+
+    sess = req.session;
+    sess.user_name = req.body.userx;
+
+    if(sess.user_name) {
+        res.end('done');
+    }else{
+        res.end('nah');
+    }
+
+});
+
+app.get('/logout',(req,res) => {
+    sess = req.session;
+    sess.user_name = undefined;
     res.end('done');
 });
 

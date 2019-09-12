@@ -9,7 +9,6 @@ public class Declaracion : Instruccion
     private readonly int fila;
     private readonly int columna;
     private readonly TipoDato tipo;
-    private readonly string nombreObj;
     private readonly Expresion valor;
     private readonly List<string> lista_variables;
     
@@ -17,7 +16,6 @@ public class Declaracion : Instruccion
     {
         this.tipo = tipo;
         this.fila = fila;
-        this.nombreObj = null;
         this.columna = columna;
         this.valor = new Nulo();
         this.lista_variables = lista_variables;
@@ -28,7 +26,6 @@ public class Declaracion : Instruccion
         this.tipo = tipo;
         this.fila = fila;
         this.valor = valor;
-        this.nombreObj = null;
         this.columna = columna;
         this.lista_variables = lista_variables;
     }

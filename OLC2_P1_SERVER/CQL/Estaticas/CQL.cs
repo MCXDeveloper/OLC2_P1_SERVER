@@ -12,6 +12,17 @@ public class CQL
     public static DataRow TuplaEnUso { get; set; }
     public static string BaseDatosEnUso { get; set; }
     public static string UsuarioLogueado { get; set; }
+    public static List<Usuario> ListaUsuariosDisponibles { get; set; }
+
+    public static bool ExisteUsuarioLogueado()
+    {
+        return (UsuarioLogueado is null || !UsuarioLogueado.Equals(String.Empty));
+    }
+
+    public static bool ValidarLogin(string user, string pass)
+    {
+        return ListaUsuariosDisponibles.Any(x => (x.NombreUsuario.Equals(user) && x.PasswordUsuario.Equals(pass)));
+    }
     
     public static bool ExisteBaseDeDatosEnUso()
     {

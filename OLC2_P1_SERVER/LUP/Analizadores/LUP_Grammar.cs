@@ -14,26 +14,23 @@ namespace OLC2_P1_SERVER.LUP.Analizadores
 
             #region PALABRAS_RESERVADAS
 
-            KeyTerm r_open_login = ToTerm("[+LOGIN]"),
-            r_close_login = ToTerm("[-LOGIN]"),
-            r_open_logout = ToTerm("[+LOGOUT]"),
-            r_close_logout = ToTerm("[-LOGOUT]"),
-            r_open_user = ToTerm("[+USER]"),
-            r_close_user = ToTerm("[-USER]"),
-            r_open_pass = ToTerm("[+PASS]"),
-            r_close_pass = ToTerm("[-PASS]"),
-            r_open_query = ToTerm("[+QUERY]"),
-            r_close_query = ToTerm("[-QUERY]"),
-            r_open_data = ToTerm("[+DATA]"),
-            r_close_data = ToTerm("[-DATA]");
+            KeyTerm r_open_login = ToTerm("[+LOGIN]");
+            KeyTerm r_close_login = ToTerm("[-LOGIN]");
+            KeyTerm r_open_logout = ToTerm("[+LOGOUT]");
+            KeyTerm r_close_logout = ToTerm("[-LOGOUT]");
+            KeyTerm r_open_query = ToTerm("[+QUERY]");
+            KeyTerm r_close_query = ToTerm("[-QUERY]");
 
-            MarkReservedWords("[+LOGIN]", "[-LOGIN]", "[+LOGOUT]", "[-LOGOUT]", "[+USER]", "[-USER]", "[+PASS]", "[-PASS]", "[+QUERY]", "[-QUERY]", "[+DATA]", "[-DATA]");
+            MarkReservedWords("[+LOGIN]", "[-LOGIN]", "[+LOGOUT]", "[-LOGOUT]", "[+QUERY]", "[-QUERY]");
 
             #endregion
 
             #region REGEX_TERMINALS
 
-            RegexBasedTerminal contenido = new RegexBasedTerminal("contenido", "[^.]*");
+            RegexBasedTerminal user_block = new RegexBasedTerminal("user_block", "\\[\\+USER\\](.|\\n)*\\[-USER\\]");
+            RegexBasedTerminal pass_block = new RegexBasedTerminal("pass_block", "\\[\\+PASS\\](.|\\n)*\\[-PASS\\]");
+            RegexBasedTerminal data_block = new RegexBasedTerminal("data_block", "\\[\\+DATA\\](.|\\n)*\\[-DATA\\]");
+
 
             #endregion
 
@@ -48,9 +45,9 @@ namespace OLC2_P1_SERVER.LUP.Analizadores
 
             INICIO.Rule = SENTENCIAS;
 
-            SENTENCIAS.Rule = r_open_login + r_open_user + contenido + r_close_user + r_open_pass + contenido + r_close_pass + r_close_login
-                | r_open_logout + r_open_user + contenido + r_close_user + r_close_logout
-                | r_open_query + r_open_user + contenido + r_close_user + r_open_data + contenido + r_close_data + r_close_query
+            SENTENCIAS.Rule = r_open_login + user_block + pass_block + r_close_login
+                | r_open_logout + user_block + r_close_logout
+                | r_open_query + user_block + data_block + r_close_query
                 ;
 
             #endregion

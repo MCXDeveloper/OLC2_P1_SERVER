@@ -6,12 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="codemirror/lib/codemirror.js" type="text/javascript"></script>
-        <script src="codemirror/mode/sql/sql.js" type="text/javascript"></script>
-        <script src="codemirror/mode/clike/clike.js" type="text/javascript"></script>
-        <script src="codemirror/addon/edit/closebrackets.js" type="text/javascript"></script>
-        <script src="jstree/dist/jstree.min.js"></script>
-        <script src="grammar/LUPGrammar.js"></script>
+        <script type="text/javascript" src="codemirror/lib/codemirror.js"></script>
+        <script type="text/javascript" src="codemirror/mode/sql/sql.js"></script>
+        <script type="text/javascript" src="codemirror/mode/clike/clike.js"></script>
+        <script type="text/javascript" src="codemirror/addon/edit/closebrackets.js"></script>
+        <script type="text/javascript" src="jstree/dist/jstree.min.js"></script>
+        <script type="text/javascript" src="javascripts/LUPBuilder.js"></script>
+        <script type="text/javascript" src="javascripts/Helper.js"></script>
+        <script type="text/javascript" src="javascripts/Loadings.js"></script>
+        <script type="text/javascript" src="javascripts/abstracto/AST.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/DataPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
+        <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="codemirror/lib/codemirror.css" type="text/css" rel="stylesheet">
@@ -42,15 +50,13 @@
             .scroller {
                 max-height:300px;
             }
-            .tab-content {
-                height: 400px;
-            }
-            #consola-de-salida {
-                background-color: #000;
-                border: 1px solid #000;
-                color: #00ff00;
+            .consolita {
+                background-color: #000 !important;
+                border: 1px solid #000 !important;
+                color: #00ff00 !important;
                 padding: 8px;
                 font-family: courier new;
+                resize: none;
             }
             a {
                 cursor:pointer;
@@ -72,7 +78,7 @@
                 <div class="collapse navbar-collapse" id="navbar-ex-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">Cerrar sesión</a>
+                            <a id="btn-cerrar-sesion">Cerrar sesión</a>
                         </li>
                     </ul>
                 </div>
@@ -133,8 +139,16 @@
                                     <h3 class="panel-title">Consola de salida</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <textarea class="form-control" rows="10" id="consola-de-salida" disabled>>> que rollo bandera
-                                    </textarea>
+                                    <div id="tab-holder-2">
+                                        <ul id="ul-tab-2" class="tab2">
+                                            <li><a href="#Console">Console</a></li>
+                                        </ul>
+                                        <div id="div-tab-2" class="tabContainer">
+                                            <div id="Console" class="tabContent2">
+                                                <textarea class="form-control consolita" rows="10" id="consola-de-salida_1" disabled></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +228,68 @@
 
             }
 
+        </script>
 
+        <script type="text/javascript">
+
+            // Variable donde almacenare las instancias de textarea que genera CodeMirror para poder acceder al texto después.
+            let consoleblocks = [];
+
+            $(document).ready(function(){
+                //hiding tab content except first one
+                $(".tabContent2").not(":first").hide();
+                // adding Active class to first selected tab and show
+                $("ul.tab2 li:first").addClass("active").show();
+                // set editor
+                setConsole(document.getElementById('consola-de-salida_1'), 'Console');
+                createNewConsole();
+            });
+
+            function setConsole(element, idTab) {
+                consoleblocks.push({
+                    id: idTab,
+                    instancia: element
+                });
+            }
+
+            function createNewConsole() {
+
+                let id = 'Console' + getRandomNumber();
+                let idArea = 'consola-de-salida_' + getRandomNumber();
+
+                $('#ul-tab-2').append(
+                    $('<li>').append(
+                        $('<a>').attr('href', '#' + id).append(id)
+                    )
+                );
+
+                $('#div-tab-2').append(
+                    $('<div>').attr('id', id).attr('class', 'tabContent2').attr('style', 'display:none;').append(
+                        $('<textarea>').attr('id', idArea).attr('class', 'form-control consolita').attr('rows', 10).prop('disabled', true)
+                    )
+                );
+
+                // Click event on tab
+                $("ul.tab2 li").click(function() {
+
+                    // Removing class of Active tab
+                    $("ul.tab2 li.active").removeClass("active");
+                    $("ul.tab2 li").removeClass("colorz");
+                    // Adding Active class to Clicked tab
+                    $(this).addClass("active");
+                    $("ul.tab2 li").not( $(this) ).addClass("colorz");
+                    // hiding all the tab contents
+                    $(".tabContent2").hide();
+                    // showing the clicked tab's content using fading effect
+                    $($('a',this).attr("href")).show();
+
+                    return false;
+
+                });
+
+                setConsole(document.getElementById(idArea), id);
+
+            }
 
         </script>
 
@@ -258,6 +333,90 @@
                     });
 
                     setCodeEditorArea(document.getElementById(idArea), id);
+
+                });
+
+            });
+
+        </script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btn-cerrar-sesion').on('click', function(){
+
+                    $.get("/getActualUser", function(usuario){
+
+                        if(usuario) {
+
+                            let lupito = LUPBuilder.BuildLogout(usuario);
+
+                            $.ajax({
+
+                                type: 'POST',
+                                url : "http://localhost:58899/api/CQL",
+                                data: { LUPMessage : lupito },
+                                timeout: 5000,
+
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                    $.unblockUI();
+                                },
+
+                                beforeSend: function(){
+                                    alert("Paquete a enviar: \n\n" + lupito);
+                                    $.blockUI({
+                                        message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                },
+
+                                success: function(data){
+
+                                    if (data != "") {
+
+                                        // Parseo el mensaje de LUP que debería de venir en data.
+                                        let ast = LUPGrammar.parse(data);
+
+                                        ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
+
+                                            if (finalLogin) {
+
+                                                $.get("/logout", function(datax){
+                                                    if(datax === 'done') {
+                                                        window.location.href = "/";
+                                                    }
+                                                });
+
+                                            }else{
+                                                alert("Error. No se puede desloguear del sistema.");
+                                            }
+
+                                        });
+
+                                    }else{
+                                        alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Logout.");
+                                    }
+
+                                    $.unblockUI();
+                                }
+
+                            });
+
+                        }else{
+                            alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                        }
+
+                    });
 
                 });
 

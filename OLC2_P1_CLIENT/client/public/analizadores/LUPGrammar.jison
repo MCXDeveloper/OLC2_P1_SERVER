@@ -1,15 +1,3 @@
-/* Funciones utilizadas dentro del parser */
-%{
-
-    const path = require('path');
-    let AST = require(path.resolve(__dirname, '../../abstracto/AST')).AST;
-    let DataPackage = require(path.resolve(__dirname, '../../arbol/DataPackage')).DataPackage;
-    let ErrorPackage = require(path.resolve(__dirname, '../../arbol/ErrorPackage')).ErrorPackage;
-    let LoginPackage = require(path.resolve(__dirname, '../../arbol/LoginPackage')).LoginPackage;
-    let MessagePackage = require(path.resolve(__dirname, '../../arbol/MessagePackage')).MessagePackage;
-
-%}
-
 /* Definición Léxica */
 %lex
 
@@ -30,6 +18,7 @@
 \[\+DATA\](.*)\[\-DATA\]            return 'data_package';
 \[\+MESSAGE\](.*)\[\-MESSAGE\]      return 'message_package';
 \[\+LOGIN\](.*)\[\-LOGIN\]          return 'login_package';
+\[\+LOGOUT\](.*)\[\-LOGOUT\]        return 'logout_package';
 <<EOF>>                             return 'eof';
 .                                   { console.log('Error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 /lex
@@ -40,7 +29,7 @@
 %%
 
 INICIO
-	: LISTA_INSTRUCCIONES eof                                                           { $$ = new AST($1); }
+	: LISTA_INSTRUCCIONES eof                                                           { $$ = new AST($1); return $$; }
 ;
 
 LISTA_INSTRUCCIONES
@@ -53,5 +42,6 @@ INSTRUCCION
 	: data_package                                                                      { $$ = new DataPackage($1.replace(/\[\+DATA]|\[\-DATA]/g, "")); }
 	| message_package                                                                   { $$ = new MessagePackage($1.replace(/\[\+MESSAGE]|\[\-MESSAGE]/g, "")); }
 	| login_package                                                                     { $$ = new LoginPackage($1.replace(/\[\+LOGIN]|\[\-LOGIN]/g, "")); }
+	| logout_package                                                                    { $$ = new LoginPackage($1.replace(/\[\+LOGOUT]|\[\-LOGOUT]/g, "")); }
 	| open_error error_line error_column error_type error_description close_error       { $$ = new ErrorPackage({ fila: $2.replace(/\[\+LINE]|\[\-LINE]/g, ""), columna: $3.replace(/\[\+LINE]|\[\-LINE]/g, ""), tipo_error: $4.replace(/\[\+TYPE]|\[\-TYPE]/g, ""), descripcion: $5.replace(/\[\+DESC]|\[\-DESC]/g, "") }); }
 ;

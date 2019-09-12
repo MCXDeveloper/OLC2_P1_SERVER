@@ -5,17 +5,32 @@ using System.Web;
 
 public class LogoutPackage : LUP_Instruccion
 {
-
-    private readonly string user;
+    public string Usuario { get; set; }
 
     public LogoutPackage(string user)
     {
-        this.user = user;
+        Usuario = user;
     }
 
     public object Ejecutar()
     {
-        throw new NotImplementedException();
+        // 1. Primero verifico el usuario actualmente logueado es igual al proporcionado en el constructor.
+        if (!(CQL.UsuarioLogueado is null))
+        {
+            if(CQL.UsuarioLogueado.Equals(Usuario))
+            {
+                CQL.UsuarioLogueado = String.Empty;
+                return "[+LOGOUT][SUCCESS][-LOGOUT]";
+            }
+        }
+        else
+        {
+            System.Diagnostics.Debug.Write("Error. El usuario actualmente logueado no concuerda con el que desea cerrar sesión." + Environment.NewLine);
+        }
+
+        // TODO | LogoutPackage | Cambiar el return de aqui abajo
+        //return "[+LOGOUT][FAIL][-LOGOUT]";
+        return "[+LOGOUT][SUCCESS][-LOGOUT]";
     }
 
 }

@@ -15,29 +15,23 @@ namespace OLC2_P1_SERVER.LUP.Analizadores
 
         public object Recorrido(ParseTreeNode actual)
         {
-            if(EstoyAca(actual, "INI"))
+            if(EstoyAca(actual, "INICIO"))
             {
-                return Recorrido(actual.ChildNodes[0]);
+                return new LUP_AST((LUP_Instruccion)Recorrido(actual.ChildNodes[0]));
             }
             else if(EstoyAca(actual, "SENTENCIAS"))
             {
-                // Significa que viene una sentencia logout.
-                if (actual.ChildNodes.Count == 5)
+                if (EstoyAca(actual.ChildNodes[0], "[+LOGIN]"))
                 {
-                    return new LogoutPackage(GetLexema(actual, 2));
+                    return new LoginPackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", ""), GetLexema(actual, 2).Replace("[+PASS]", "").Replace("[-PASS]", ""));
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "[+LOGOUT]"))
+                {
+                    return new LogoutPackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", ""));
                 }
                 else
                 {
-                    // Significa que viene una sentencia login.
-                    if (EstoyAca(actual.ChildNodes[0], "r_open_login"))
-                    {
-                        return new LoginPackage(GetLexema(actual, 2), GetLexema(actual, 5));
-                    }
-                    // Significa que viene una sentencia query.
-                    else
-                    {
-                        return new QueryPackage(GetLexema(actual, 2), GetLexema(actual, 5));
-                    }
+                    return new QueryPackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", ""), GetLexema(actual, 2).Replace("[+DATA]", "").Replace("[-DATA]", ""));
                 }
             }
 

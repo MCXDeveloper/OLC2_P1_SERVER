@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
 class MessagePackage {
 
     constructor(message) {
@@ -12,5 +9,3 @@ class MessagePackage {
     }
 
 }
-
-exports.MessagePackage = MessagePackage;

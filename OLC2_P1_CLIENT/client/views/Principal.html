@@ -6,8 +6,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="javascripts/LUPBuilder.js"></script>
+        <script type="text/javascript" src="javascripts/Helper.js"></script>
+        <script type="text/javascript" src="javascripts/Loadings.js"></script>
+        <script type="text/javascript" src="javascripts/abstracto/AST.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/DataPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
+        <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+        <style type="text/css">
+            a{
+                cursor:pointer;
+            }
+        </style>
     </head>
     <body>
         <div class="navbar navbar-default navbar-static-top">
@@ -24,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbar-ex-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">Cerrar sesión</a>
+                            <a id="btn-cerrar-sesion">Cerrar sesión</a>
                         </li>
                     </ul>
                 </div>
@@ -50,19 +64,19 @@
                                         <i class="fa fa-5x fa-cubes fa-fw text-info" style="display:block; margin: 0 auto;"></i>
                                         <h2 class="text-center">PRINCIPIANTE</h2>
                                         <p class="text-justify">El modo principiante contará con un sistema de bloques de código CQL que podrán arrastrarse hacia el área de edición por medio de drag-and-drop. Este contará con una opción para poder eliminar los bloques que no estemos utilizando y también con un botón que nos permita ejecutar las consultas</p>
-                                        <a class="btn btn-block btn-info btn-lg">Ir a modo Principiante</a>
+                                        <a class="btn btn-block btn-info btn-lg" href="/ModoPrincipiante">Ir a modo Principiante</a>
                                     </div>
                                     <div class="col-md-4">
                                         <i class="fa fa-5x fa-codepen fa-fw text-success" style="display:block; margin: 0 auto;"></i>
                                         <h2 class="text-center">INTERMEDIO</h2>
                                         <p class="text-justify">El modo intermedio, además de incorporar una mayor cantidad de bloques, tales como sentencias de control, sentencias de transferencia, declaración de variables, entre otras; permite visualizar en un área contigua el editor de bloques, mostrando la construcción del código de alto nivel conforme se va armando la entrada.&nbsp;</p>
-                                        <a class="btn btn-block btn-lg btn-success">Ir a modo Intermedio</a>
+                                        <a class="btn btn-block btn-lg btn-success" href="/ModoIntermedio">Ir a modo Intermedio</a>
                                     </div>
                                     <div class="col-md-4">
                                         <i class="fa fa-5x fa-diamond fa-fw text-danger" style="display:block; margin: 0 auto;"></i>
                                         <h2 class="text-center">AVANZADO</h2>
                                         <p class="text-justify">El modo avanzado es un editor de texto sin restricciones desde el cual el usuario podrá ingresar cualquier sentencia CQL. Además de esto, se desea que el editor cuente múltiples pestañas y las opciones de guardar archivo, abrir archivo, ejecutar el script completamente o solo las instrucciones seleccionadas.</p>
-                                        <a class="btn btn-block btn-danger btn-lg">Ir a modo Avanzado</a>
+                                        <a class="btn btn-block btn-danger btn-lg" href="/ModoAvanzado">Ir a modo Avanzado</a>
                                     </div>
                                 </div>
                             </div>
@@ -71,5 +85,90 @@
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btn-cerrar-sesion').on('click', function(){
+
+                    $.get("/getActualUser", function(usuario){
+
+                        if(usuario) {
+
+                            let lupito = LUPBuilder.BuildLogout(usuario);
+
+                            $.ajax({
+
+                                type: 'POST',
+                                url : "http://localhost:58899/api/CQL",
+                                data: { LUPMessage : lupito },
+                                timeout: 5000,
+
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                    $.unblockUI();
+                                },
+
+                                beforeSend: function(){
+                                    alert("Paquete a enviar: \n\n" + lupito);
+                                    $.blockUI({
+                                        message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                },
+
+                                success: function(data){
+
+                                    if (data != "") {
+
+                                        // Parseo el mensaje de LUP que debería de venir en data.
+                                        let ast = LUPGrammar.parse(data);
+
+                                        ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
+
+                                            if (finalLogin) {
+
+                                                $.get("/logout", function(datax){
+                                                    if(datax === 'done') {
+                                                        window.location.href = "/";
+                                                    }
+                                                });
+
+                                            }else{
+                                                alert("Error. No se puede desloguear del sistema.");
+                                            }
+
+                                        });
+
+                                    }else{
+                                        alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Logout.");
+                                    }
+
+                                    $.unblockUI();
+                                }
+
+                            });
+
+                        }else{
+                            alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                        }
+
+                    });
+
+                });
+
+            });
+
+        </script>
+
     </body>
 </html>
