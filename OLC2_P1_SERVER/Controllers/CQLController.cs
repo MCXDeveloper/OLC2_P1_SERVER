@@ -9,6 +9,11 @@ using Irony.Parsing;
 
 namespace OLC2_P1_SERVER.Controllers
 {
+    public class LUPackage
+    {
+        public string LUPMessage { get; set; }
+    }
+
     public class CQLController : ApiController
     {
         // GET: api/CQL
@@ -62,10 +67,5 @@ namespace OLC2_P1_SERVER.Controllers
         public void Delete(int id)
         {
         }
-    }
-
-    public class LUPackage
-    {
-        public string LUPMessage { get; set; }
     }
 }

@@ -54,6 +54,21 @@ public class CQL
         return CQL.TablaEnUso.GetColumn(nombre_columna);
     }
 
+    public static string BuildLUPMessage(string message)
+    {
+        return "[+MESSAGE]"+ message +"[-MESSAGE]" + Environment.NewLine;
+    }
+
+    public static string BuildLUPData(string content)
+    {
+        return "[+DATA]" + content + "[-DATA]";
+    }
+
+    public static string BuildLUPError(string line, string column, string type, string description)
+    {
+        return "[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+DESC]" + description + "[-DESC][-ERROR]";
+    }
+
     public static string GenerateName(int len)
     {
         Random r = new Random();

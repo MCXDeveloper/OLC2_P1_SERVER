@@ -779,7 +779,7 @@ public class ASTBuilder
             }
         }
 
-        return new Nulo();
+        return null;
     }
 
     static bool EstoyAca(ParseTreeNode nodo, string nombre)

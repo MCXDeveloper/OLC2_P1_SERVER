@@ -57,6 +57,8 @@
                 padding: 8px;
                 font-family: courier new;
                 resize: none;
+                white-space: pre;
+                overflow-x: auto;
             }
             a {
                 cursor:pointer;
@@ -115,8 +117,8 @@
                                         <a id="btn-crear-tab"><i class="-open fa fa-2x fa-fw fa-plus text-danger"></i></a>
                                         <a href="#"><i class="fa fa-2x fa-folder-open fa-fw text-info"></i></a>
                                         <a href="#"><i class="-open fa fa-2x fa-fw fa-save text-inverse"></i></a>
-                                        <a href="#"><i class="fa fa-2x fa-fw fa-play text-success"></i></a>
-                                        <a href="#"><i class="fa fa-2x fa-bolt fa-fw text-warning"></i></a>
+                                        <a id="btn-ejecutar"><i class="fa fa-2x fa-fw fa-play text-success"></i></a>
+                                        <a id="btn-ejecutar-seleccion"><i class="fa fa-2x fa-bolt fa-fw text-warning"></i></a>
                                     </div>
                                 </div>
                                 <div class="panel-body">
@@ -419,6 +421,75 @@
                     });
 
                 });
+
+            });
+
+        </script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btn-ejecutar').on('click', function(){
+                    let ActiveTab = $("ul.tabs li.active");
+                    let IdDiv = ActiveTab.find('a').attr('href').substr(1);
+                    let Input = codeblocks.find(x => x.id === IdDiv).instancia.getValue();
+                    SendToServer(Input);
+                });
+
+
+                $('#btn-ejecutar-seleccion').on('click', function(){
+                    let ActiveTab = $("ul.tabs li.active");
+                    let IdDiv = ActiveTab.find('a').attr('href').substr(1);
+                    let Input = codeblocks.find(x => x.id === IdDiv).instancia.getSelection();
+                    SendToServer(Input);
+                });
+
+                function SendToServer(input) {
+
+                    $.get("/getActualUser", function(usuario){
+
+                        if(usuario) {
+
+                            let lupito = LUPBuilder.BuildQueryPackage(usuario, input);
+
+                            $.ajax({
+                                type: 'POST',
+                                url : "http://localhost:58899/api/CQL",
+                                data: { LUPMessage : lupito },
+                                timeout: 50000,
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                    $.unblockUI();
+                                },
+                                beforeSend: function(){
+                                    alert("Paquete a enviar: \n\n" + lupito);
+                                    $.blockUI({
+                                        message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                },
+                                success: function(data){
+                                    console.log(data);
+                                    $.unblockUI();
+                                }
+                            });
+
+                        }else{
+                            alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                        }
+
+                    });
+
+                }
 
             });
 

@@ -37,6 +37,7 @@ public class LoginPackage : LUP_Instruccion
 
         // TODO | LoginPackage | Cambiar el return de aqui abajo
         //return "[+LOGIN][FAIL][-LOGIN]";
+        CQL.UsuarioLogueado = Usuario;
         return "[+LOGIN][SUCCESS][-LOGIN]";
     }
 

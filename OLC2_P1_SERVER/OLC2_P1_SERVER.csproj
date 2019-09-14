@@ -257,6 +257,7 @@
     <Compile Include="CQL\Entorno\Usuario.cs" />
     <Compile Include="CQL\Entorno\Variable.cs" />
     <Compile Include="CQL\Estaticas\CQL.cs" />
+    <Compile Include="CQL\Manejadores\AsciiTableGenerator.cs" />
     <Compile Include="CQL\Manejadores\Error.cs" />
     <Compile Include="CQL\Manejadores\TError.cs" />
     <Compile Include="Global.asax.cs">

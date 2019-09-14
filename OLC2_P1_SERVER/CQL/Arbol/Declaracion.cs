@@ -58,7 +58,7 @@ public class Declaracion : Instruccion
                 string nombre_variable = lista_variables.ElementAt(i);
                 object simbolo = ent.ObtenerVariable(nombre_variable);
 
-                if (!(simbolo is Nulo))
+                if (simbolo is Nulo)
                 {
                     // Valido que tipo de declaración viene.  Existen 3 tipos:
                     // 1. Expresion

@@ -6,27 +6,27 @@ using System.Web;
 
 public class AST : Instruccion
 {
-    private List<Instruccion> instrucciones;
+    public static Entorno global;
+    public List<Instruccion> Instrucciones { get; set; }
 
     public AST(List<Instruccion> instrucciones)
     {
-        this.instrucciones = instrucciones;
+        Instrucciones = instrucciones;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        /*foreach (Instruccion ins in instrucciones)
+        global = ent;
+
+        foreach (Instruccion ins in Instrucciones)
         {
             if(ins is Declaracion)
             {
-
+                Declaracion d = (Declaracion)ins;
+                d.Ejecutar(ent);
             }
-        }*/
-
-        // TODO Ejecutar todos los elementos del arbol
-
-        System.Diagnostics.Debug.Write("Aquí debería de ejecutar los elementos del árbol");
-
+        }
+        
         return new Nulo();
     }
 }
