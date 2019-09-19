@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 public class LlamadaFuncion : Expresion
@@ -19,87 +20,114 @@ public class LlamadaFuncion : Expresion
         NombreFuncion = nombre_funcion;
     }
 
-    public TipoDato GetTipo(Entorno ent)
-    {
-        throw new NotImplementedException();
-    }
-
     public object Ejecutar(Entorno ent)
     {
-        object response = new Nulo();
-        
-        // 1. Primero genero la llave única que representa la llamada a esta función.
-        string key = GenerateUniqueKey(ent);
+        string id = GenerarIdentificadorFuncion(ent);
+        object func = ent.ObtenerFuncion(id);
 
-        // 2. Luego, verifico que la función, en base a su llave única, exista en el entorno.
-        object simbolo = ent.ObtenerFuncion(key);
-
-        if(!(simbolo is Nulo))
+        if (!(func is Nulo))
         {
-            Funcion func = (Funcion)simbolo;
-            Entorno local = new Entorno(ent);
+            Funcion f = (Funcion)func;
+            Entorno local = new Entorno(AST.global);
 
-            if(VerificarParametros(func.ListaParametros, local))
+            if (ListaValores.Count == f.ListaParametros.Count)
             {
-                foreach (Instruccion ins in func.ListaInstrucciones)
+                for (int i = 0; i < ListaValores.Count; i++)
                 {
-                    object exec = ins.Ejecutar(local);
-                    
-                    if (exec is Return)
+                    object valorVariable = ListaValores[i].Ejecutar(ent);
+                    string nombreVariable = f.ListaParametros[i].NombreParametro;
+                    TipoDato tipoVariable = f.ListaParametros[i].TipoDatoParametro;
+                    local.Agregar(nombreVariable, new Variable(tipoVariable, nombreVariable, valorVariable));
+                }
+
+                foreach (Instruccion ins in f.ListaInstrucciones)
+                {
+                    object result = ins.Ejecutar(local);
+
+                    if (result is Return)
                     {
-                        return ((Return)exec).Ejecutar(local);
+                        return ((Return)result).Ejecutar(local);
                     }
-
                 }
             }
-        }
-        else
-        {
-            Error.AgregarError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '"+ NombreFuncion +"' (Key: "+ key +") en el entorno.", fila, columna);
-        }
-
-        return response;
-    }
-
-    private bool VerificarParametros(List<Parametro> ListaParametros, Entorno ent)
-    {
-        // 1. Primero verifico que la cantidad de parámetros en ListaParametros sea la misma que la cantidad de valores en ListaValores.
-        if(ListaValores.Count == ListaParametros.Count)
-        {
-            // 2. Por cada uno de los de los parámetros en ListaParametros se va a verificar si el tipo coincide con el tipo del valor correspondiente a su posición en ListaValores.
-            for(int i = 0; i < ListaParametros.Count; i++)
+            else
             {
-                // 3. Si el tipo de dato del parámetro coincide con el tipo de dato del valor, se registra en un nuevo entorno.
-                if (ListaParametros[i].TipoDatoParametro.Equals(ListaValores[i].GetTipo(ent)))
-                {
-                    ent.Agregar(ListaParametros[i].NombreParametro, new Variable(ListaParametros[i].TipoDatoParametro, ListaParametros[i].NombreParametro, ListaValores[i].Ejecutar(ent)));
-                }
-                else
-                {
-                    Error.AgregarError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '" + NombreFuncion + "'.  El tipo de los parámetros no coincide con el valor correspondiente utilizado en la llamada.  Parámetro: "+ ListaParametros[i].NombreParametro + ".", fila, columna);
-                }
+                CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '" + NombreFuncion + "'.  La cantidad de parámetros no coincide.", fila, columna);
             }
-
-            return true;
-
         }
         else
         {
-            Error.AgregarError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '"+ NombreFuncion +"'.  La cantidad de parámetros no coincide.", fila, columna);
+            CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '" + NombreFuncion + "' (Key: " + id + ") en el entorno.", fila, columna);
         }
 
-        return false;
+        return new Nulo();
     }
 
-    private string GenerateUniqueKey(Entorno ent)
+    public TipoDato GetTipo(Entorno ent)
     {
-        string key = NombreFuncion + "_";
+        Funcion func = (Funcion)ent.ObtenerFuncion(GenerarIdentificadorFuncion(ent));
+        return func.TipoDatoFuncion;
+    }
 
-        foreach (Expresion val in ListaValores)
+    public string GenerarIdentificadorFuncion(Entorno ent)
+    {
+        string id = "_" + NombreFuncion + "(";
+
+        foreach (Expresion exp in ListaValores)
         {
-            key += (ListaValores.Last().Equals(val) ? val.GetTipo(ent).GetRealTipo().ToString() : val.GetTipo(ent).GetRealTipo().ToString() + "_");
+            if (exp is LlamadaFuncion)
+            {
+                id += "_" + ((LlamadaFuncion)exp).GetTipo(ent).GetRealTipo();
+            }
+            else
+            {
+                object resultado = exp.Ejecutar(ent);
+
+                if (resultado is int)
+                {
+                    id += "_" + TipoDato.Tipo.INT;
+                }
+                else if (resultado is double)
+                {
+                    id += "_" + TipoDato.Tipo.DOUBLE;
+                }
+                else if (resultado is string)
+                {
+                    id += "_" + TipoDato.Tipo.STRING;
+                }
+                else if (resultado is bool)
+                {
+                    id += "_" + TipoDato.Tipo.BOOLEAN;
+                }
+                else if (resultado is Date)
+                {
+                    id += "_" + TipoDato.Tipo.DATE;
+                }
+                else if (resultado is Time)
+                {
+                    id += "_" + TipoDato.Tipo.TIME;
+                }
+                else if (resultado is Map)
+                {
+                    id += "_" + TipoDato.Tipo.MAP;
+                }
+                else if (resultado is XList)
+                {
+                    id += "_" + TipoDato.Tipo.LIST;
+                }
+                else if (resultado is XSet)
+                {
+                    id += "_" + TipoDato.Tipo.SET;
+                }
+                else if (resultado is Objeto)
+                {
+                    id += "_" + TipoDato.Tipo.OBJECT + "_" + (string)((Objeto)resultado).TipoDatoObjeto.GetElemento();
+                }
+            }
         }
 
-        return key;
+        id += ")";
+
+        return id;
     }
 }

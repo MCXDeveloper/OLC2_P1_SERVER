@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static TipoDato;
 
 public class AtributoUT
 {
@@ -14,8 +15,8 @@ public class AtributoUT
         Identificador = identificador;
     }
 
-    public TipoDato.Tipo GetTipoAtributo()
+    public override string ToString()
     {
-        return Tipo.GetRealTipo();
+        return "{ Tipo_Dato : "+ Tipo.GetRealTipo().ToString() +" | Elemento : "+ Identificador +"}";
     }
 }

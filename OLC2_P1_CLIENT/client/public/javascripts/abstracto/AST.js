@@ -8,13 +8,15 @@ class AST {
 
         let finalData = [];
         let finalLogin = "";
+        let finalErrors = [];
         let finalMessages = "";
-        let finalErrors = '<table class="table table-bordered"><thead><tr><th>Fila</th><th>Columna</th><th>Tipo</th><th>Descripcion</th></tr></thead><tbody>';
+
+        finalErrors.push(["Tipo", "Ubicacion", "Descripcion", "Fila", "Columna"]);
 
         this.ListaInstrucciones.forEach(obj => {
 
             if (obj instanceof ErrorPackage) {
-                finalErrors += obj.ejecutar();
+                finalErrors.push(obj.ejecutar());
             }
             else if (obj instanceof MessagePackage) {
                 finalMessages += obj.ejecutar();
@@ -27,8 +29,6 @@ class AST {
             }
 
         });
-
-        finalErrors = "</tbody></table>";
 
         callback(finalMessages, finalErrors, finalData, finalLogin);
 

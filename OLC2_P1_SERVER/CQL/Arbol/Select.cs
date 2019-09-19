@@ -98,12 +98,12 @@ public class Select : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[SELECT]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
 
         return new Nulo();
@@ -155,7 +155,7 @@ public class Select : Instruccion
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
         }
 
         return false;
@@ -173,12 +173,12 @@ public class Select : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' debe ser de tipo Objeto (UserType) para intentar acceder a sus propiedades.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' debe ser de tipo Objeto (UserType) para intentar acceder a sus propiedades.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
         }
         
         return false;
@@ -197,12 +197,12 @@ public class Select : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' debe ser de tipo Objeto (UserType) para intentar acceder a sus propiedades.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' debe ser de tipo Objeto (UserType) para intentar acceder a sus propiedades.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  La columna '"+ exp.NombreColumna +"' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '"+ exp.NombreColumna +"' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
         }
 
         return false;
@@ -243,7 +243,7 @@ public class Select : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[SELECT]", "Error.  La operación WHERE en la consulta a la tabla '" + NombreTabla + "' no retorna un valor booleano.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La operación WHERE en la consulta a la tabla '" + NombreTabla + "' no retorna un valor booleano.", fila, columna);
                 return null;
             }
         }
@@ -301,7 +301,7 @@ public class Select : Instruccion
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
         }
         
         return null;
@@ -341,7 +341,7 @@ public class Select : Instruccion
         }
         else
         {
-            Error.AgregarError("Semántico", "[SELECT]", "Error.  El valor correspondiente a la cláusula LIMIT debe ser de tipo entero.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  El valor correspondiente a la cláusula LIMIT debe ser de tipo entero.", fila, columna);
         }
 
         return null;

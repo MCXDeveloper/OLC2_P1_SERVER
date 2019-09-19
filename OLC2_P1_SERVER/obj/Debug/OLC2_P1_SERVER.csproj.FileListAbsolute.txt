@@ -74,7 +74,6 @@ Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\bin\Antlr3.Runtime.pdb
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\bin\System.Diagnostics.DiagnosticSource.xml
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\obj\Debug\OLC2_P1_SERVER.csprojAssemblyReference.cache
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\obj\Debug\OLC2_P1_SERVER.csproj.CoreCompileInputs.cache
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\obj\Debug\OLC2_P1_SERVER.csproj.CopyComplete
 Z:\Marvin\source\repos\OLC2_P1_SERVER\OLC2_P1_SERVER\obj\Debug\OLC2_P1_SERVER.dll

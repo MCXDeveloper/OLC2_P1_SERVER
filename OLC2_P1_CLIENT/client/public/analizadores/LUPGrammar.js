@@ -75,9 +75,9 @@ var LUPGrammar = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[5,7,8,9,10,11];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"LISTA_INSTRUCCIONES":4,"eof":5,"INSTRUCCION":6,"data_package":7,"message_package":8,"login_package":9,"logout_package":10,"open_error":11,"error_line":12,"error_column":13,"error_type":14,"error_description":15,"close_error":16,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"eof",7:"data_package",8:"message_package",9:"login_package",10:"logout_package",11:"open_error",12:"error_line",13:"error_column",14:"error_type",15:"error_description",16:"close_error"},
-productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,1],[6,1],[6,1],[6,1],[6,6]],
+symbols_: {"error":2,"INICIO":3,"LISTA_INSTRUCCIONES":4,"eof":5,"INSTRUCCION":6,"data_package":7,"message_package":8,"login_package":9,"logout_package":10,"open_error":11,"error_line":12,"error_column":13,"error_type":14,"error_location":15,"error_description":16,"close_error":17,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"eof",7:"data_package",8:"message_package",9:"login_package",10:"logout_package",11:"open_error",12:"error_line",13:"error_column",14:"error_type",15:"error_location",16:"error_description",17:"close_error"},
+productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,1],[6,1],[6,1],[6,1],[6,7]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -108,11 +108,11 @@ case 8:
  this.$ = new LoginPackage($$[$0].replace(/\[\+LOGOUT]|\[\-LOGOUT]/g, "")); 
 break;
 case 9:
- this.$ = new ErrorPackage({ fila: $$[$0-4].replace(/\[\+LINE]|\[\-LINE]/g, ""), columna: $$[$0-3].replace(/\[\+LINE]|\[\-LINE]/g, ""), tipo_error: $$[$0-2].replace(/\[\+TYPE]|\[\-TYPE]/g, ""), descripcion: $$[$0-1].replace(/\[\+DESC]|\[\-DESC]/g, "") }); 
+ this.$ = new ErrorPackage({ fila: $$[$0-5].replace(/\[\+LINE]|\[\-LINE]/g, ""), columna: $$[$0-4].replace(/\[\+COLUMN]|\[\-COLUMN]/g, ""), tipo_error: $$[$0-3].replace(/\[\+TYPE]|\[\-TYPE]/g, ""), ubicacion: $$[$0-2].replace(/\[\+LOCATION]|\[\-LOCATION]/g, ""), descripcion: $$[$0-1].replace(/\[\+DESC]|\[\-DESC]/g, "") }); 
 break;
 }
 },
-table: [{2:[1,4],3:1,4:2,6:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},{1:[3]},{5:[1,10],6:11,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},o($V5,[2,3]),o($V5,[2,4]),o($V5,[2,5]),o($V5,[2,6]),o($V5,[2,7]),o($V5,[2,8]),{12:[1,12]},{1:[2,1]},o($V5,[2,2]),{13:[1,13]},{14:[1,14]},{15:[1,15]},{16:[1,16]},o($V5,[2,9])],
+table: [{2:[1,4],3:1,4:2,6:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},{1:[3]},{5:[1,10],6:11,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},o($V5,[2,3]),o($V5,[2,4]),o($V5,[2,5]),o($V5,[2,6]),o($V5,[2,7]),o($V5,[2,8]),{12:[1,12]},{1:[2,1]},o($V5,[2,2]),{13:[1,13]},{14:[1,14]},{15:[1,15]},{16:[1,16]},{17:[1,17]},o($V5,[2,9])],
 defaultActions: {10:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -695,32 +695,34 @@ case 1:
 break;
 case 2:return 11;
 break;
-case 3:return 16;
+case 3:return 17;
 break;
 case 4:return 12;
 break;
 case 5:return 13;
 break;
-case 6:return 14;
+case 6:return 15;
 break;
-case 7:return 15;
+case 7:return 14;
 break;
-case 8:return 7;
+case 8:return 16;
 break;
-case 9:return 8;
+case 9:return 7;
 break;
-case 10:return 9;
+case 10:return 8;
 break;
-case 11:return 10;
+case 11:return 9;
 break;
-case 12:return 5;
+case 12:return 10;
 break;
-case 13: console.log('Error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
+case 13:return 5;
+break;
+case 14: console.log('Error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\](.*)\[-DATA\])/i,/^(?:\[\+MESSAGE\](.*)\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+LOCATION\](.*)\[-LOCATION\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\](.*)\[-DATA\])/i,/^(?:\[\+MESSAGE\][^\[]*\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"inclusive":true}}
 });
 return lexer;
 })();

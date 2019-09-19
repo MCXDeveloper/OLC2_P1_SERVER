@@ -13,7 +13,7 @@ public class Else : Instruccion
 
     public Else(List<Instruccion> sentencias)
     {
-        this.IsElse = false;
+        this.IsElse = true;
         this.Condicion = new Nulo();
         this.Sentencias = sentencias;
     }
@@ -35,9 +35,9 @@ public class Else : Instruccion
 
             foreach(Instruccion ins in Sentencias)
             {
-                if (ins is Return)
+                if (ins is Return || ins is Break || ins is Continue)
                 {
-                    return ins.Ejecutar(local);
+                    return ins;
                 }
                 else
                 {

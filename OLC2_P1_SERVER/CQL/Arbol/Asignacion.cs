@@ -83,73 +83,53 @@ public class Asignacion : Instruccion
         if (!(simbolo is Nulo))
         {
             Variable elemento = (Variable)simbolo;
-            TipoDato ValorType = Valor.GetTipo(ent);
+            TipoDato ValorType = ObtenerTipoDatoDeValor(elemento, ent);
 
-            // 2. Verifico que el tipo de dato de la variable concuerde con el tipo de dato de la expresión.
-            if (elemento.GetTipo().Equals(ValorType.GetRealTipo()))
+            if (elemento.GetTipo().Equals(TipoDato.Tipo.STRING) || elemento.GetTipo().Equals(TipoDato.Tipo.MAP) || elemento.GetTipo().Equals(TipoDato.Tipo.SET) || elemento.GetTipo().Equals(TipoDato.Tipo.LIST) || elemento.GetTipo().Equals(TipoDato.Tipo.OBJECT))
             {
-                // 3. Verifico que el tipo de asignación, si es diferente de igual, se aplique únicamente a valores numéricos.
-                switch (TipoAsig)
+                if (ValorType.GetRealTipo().Equals(elemento.GetTipo()) || ValorType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
                 {
-                    case TipoAsignacion.AS_NORMAL:
-                        ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, Valor.Ejecutar(ent)));
-                        break;
-                    default:
-                        if (elemento.GetTipo().Equals(TipoDato.Tipo.INT) || elemento.GetTipo().Equals(TipoDato.Tipo.DOUBLE))
-                        {
-                            if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
-                            {
-                                ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.SUMA, fila, columna).Ejecutar(ent)));
-                            }
-                            else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
-                            {
-                                ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.RESTA, fila, columna).Ejecutar(ent)));
-                            }
-                            else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
-                            {
-                                ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.MULTIPLICACION, fila, columna).Ejecutar(ent)));
-                            }
-                            else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
-                            {
-                                ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.DIVISION, fila, columna).Ejecutar(ent)));
-                            }
-                        }
-                        else
-                        {
-                            Error.AgregarError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
-                        }
-                        break;
+                    RealizarAsignacion(elemento, ValorType, ent);
                 }
-
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                }
             }
             else
             {
-                Error.AgregarError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '"+ ValorType.GetRealTipo().ToString() +"' no puede ser asignado a una variable de tipo '"+ elemento.GetTipo().ToString() +"'.", fila, columna);
+                if (ValorType.GetRealTipo().Equals(elemento.GetTipo()))
+                {
+                    RealizarAsignacion(elemento, ValorType, ent);
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                }
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a la variable '" + Variable + "', la cual no existe en el entorno.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a la variable '" + Variable + "', la cual no existe en el entorno.", fila, columna);
         }
     }
 
     private void AsignacionAccesoObjeto(Entorno ent)
     {
-        // 1. Verifico que la variable proporcionada exista en el entorno.
-        object simbolo = ent.ObtenerVariable(Variable);
+        object VarAccess = ListaAcceso.Ejecutar(ent);
 
-        if (!(simbolo is Nulo))
+        // 1. Verifico que el acceso retorne un valor válido para asignarle un valor.
+        if (!(VarAccess is Nulo))
         {
             TipoDato ValorType = Valor.GetTipo(ent);
-            object VarAccess = ListaAcceso.Ejecutar(ent);
 
-            // 2. Verifico que VarAcces sea de tipo AtributoObjeto, ya que dentro éste, se encuentra el valor que queremos cambiar.
-            if(VarAccess is AtributoObjeto)
+            // 2. Verifico que VarAccess sea de tipo AtributoObjeto, ya que dentro éste, se encuentra el valor que queremos cambiar.
+            if (VarAccess is AtributoObjeto)
             {
                 AtributoObjeto attrObj = (AtributoObjeto)VarAccess;
 
                 // 3. Verifico que el tipo de dato del elemento concuerde con el tipo de dato de la expresión.
-                if (ValorType.Equals(attrObj.Tipo))
+                if (ValorType.GetRealTipo().Equals(attrObj.Tipo.GetRealTipo()))
                 {
                     // 4. Verifico que el tipo de asignación, si es diferente de igual, se aplique únicamente a valores numéricos.
                     switch (TipoAsig)
@@ -198,24 +178,80 @@ public class Asignacion : Instruccion
                             }
                             else
                             {
-                                Error.AgregarError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
+                                CQL.AddLUPError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
                             }
                             break;
                     }
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + attrObj.Tipo.GetRealTipo().ToString() + "'.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + attrObj.Tipo.GetRealTipo().ToString() + "'.", fila, columna);
                 }
             }
             else
             {
-                Error.AgregarError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a la variable '" + Variable + "', la cual no existe en el entorno.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a un acceso a objeto que retornó un valor nulo.", fila, columna);
+        }
+    }
+
+    private TipoDato ObtenerTipoDatoDeValor(Variable elemento, Entorno ent)
+    {
+        if (elemento.GetTipo().Equals(TipoDato.Tipo.LIST) && Valor is CollectionValue)
+        {
+            CollectionValue cv = (CollectionValue)Valor;
+            cv.IsList = true;
+            return cv.GetTipo(ent);
+        }
+        else if (elemento.GetTipo().Equals(TipoDato.Tipo.SET) && Valor is CollectionValue)
+        {
+            CollectionValue cv = (CollectionValue)Valor;
+            cv.IsList = false;
+            return cv.GetTipo(ent);
+        }
+        else
+        {
+            return Valor.GetTipo(ent);
+        }
+    }
+
+    private void RealizarAsignacion(Variable elemento, TipoDato ValorType, Entorno ent)
+    {
+        // Verifico que el tipo de asignación, si es diferente de igual, se aplique únicamente a valores numéricos.
+        switch (TipoAsig)
+        {
+            case TipoAsignacion.AS_NORMAL:
+                ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, Valor.Ejecutar(ent)));
+                break;
+            default:
+                if (elemento.GetTipo().Equals(TipoDato.Tipo.INT) || elemento.GetTipo().Equals(TipoDato.Tipo.DOUBLE))
+                {
+                    if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
+                    {
+                        ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.SUMA, fila, columna).Ejecutar(ent)));
+                    }
+                    else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
+                    {
+                        ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.RESTA, fila, columna).Ejecutar(ent)));
+                    }
+                    else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
+                    {
+                        ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.MULTIPLICACION, fila, columna).Ejecutar(ent)));
+                    }
+                    else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
+                    {
+                        ent.ReemplazarVariable(Variable, new Variable(ValorType, Variable, new Operacion(new Identificador(Variable), Valor, Operacion.TipoOperacion.DIVISION, fila, columna).Ejecutar(ent)));
+                    }
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
+                }
+                break;
         }
     }
 }

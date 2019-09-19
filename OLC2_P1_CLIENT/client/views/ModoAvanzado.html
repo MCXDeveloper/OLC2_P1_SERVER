@@ -60,6 +60,26 @@
                 white-space: pre;
                 overflow-x: auto;
             }
+            .errorcito {
+                background-color: #ffffff !important;
+                border: 1px solid #000 !important;
+                color: #ff050f !important;
+                padding: 8px;
+                font-family: courier new;
+                resize: none;
+                white-space: pre;
+                overflow-x: auto;
+            }
+            .consultita {
+                background-color: #000 !important;
+                border: 1px solid #000 !important;
+                color: #17daff !important;
+                padding: 8px;
+                font-family: courier new;
+                resize: none;
+                white-space: pre;
+                overflow-x: auto;
+            }
             a {
                 cursor:pointer;
             }
@@ -143,11 +163,11 @@
                                 <div class="panel-body">
                                     <div id="tab-holder-2">
                                         <ul id="ul-tab-2" class="tab2">
-                                            <li><a href="#Console">Console</a></li>
+                                            <li><a href="#Console">Consola de Salida</a></li>
                                         </ul>
                                         <div id="div-tab-2" class="tabContainer">
                                             <div id="Console" class="tabContent2">
-                                                <textarea class="form-control consolita" rows="10" id="consola-de-salida_1" disabled></textarea>
+                                                <textarea class="form-control consolita" rows="10" id="consola-de-salida" disabled></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -243,8 +263,8 @@
                 // adding Active class to first selected tab and show
                 $("ul.tab2 li:first").addClass("active").show();
                 // set editor
-                setConsole(document.getElementById('consola-de-salida_1'), 'Console');
-                createNewConsole();
+                setConsole(document.getElementById('consola-de-salida'), 'Console');
+                createNewConsole('Errores', 'consola-de-errores', 'errorcito');
             });
 
             function setConsole(element, idTab) {
@@ -254,10 +274,11 @@
                 });
             }
 
-            function createNewConsole() {
+            function createNewConsole(_id, _idArea, _typeForm) {
 
-                let id = 'Console' + getRandomNumber();
-                let idArea = 'consola-de-salida_' + getRandomNumber();
+                let id = (_id === null) ? 'Consulta' + getRandomNumber() : _id;
+                let idArea = (_idArea === null) ? 'consola-de-salida_' + getRandomNumber() : _idArea;
+                let typeForm = (_typeForm === null) ? 'consultita' : _typeForm;
 
                 $('#ul-tab-2').append(
                     $('<li>').append(
@@ -267,7 +288,7 @@
 
                 $('#div-tab-2').append(
                     $('<div>').attr('id', id).attr('class', 'tabContent2').attr('style', 'display:none;').append(
-                        $('<textarea>').attr('id', idArea).attr('class', 'form-control consolita').attr('rows', 10).prop('disabled', true)
+                        $('<textarea>').attr('id', idArea).attr('class', 'form-control ' + typeForm).attr('rows', 10).prop('disabled', true)
                     )
                 );
 
@@ -290,6 +311,8 @@
                 });
 
                 setConsole(document.getElementById(idArea), id);
+
+                return id;
 
             }
 
@@ -447,6 +470,9 @@
 
                 function SendToServer(input) {
 
+                    $('#consola-de-salida').val("");
+                    $('#consola-de-errores').val("");
+
                     $.get("/getActualUser", function(usuario){
 
                         if(usuario) {
@@ -478,7 +504,48 @@
                                     });
                                 },
                                 success: function(data){
-                                    console.log(data);
+
+                                    alert(data);
+
+                                    if (data != "") {
+
+                                        // Parseo el mensaje de LUP que debería de venir en data.
+                                        let ast = LUPGrammar.parse(data);
+
+                                        ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
+
+                                            console.log(finalMessages);
+                                            console.log(finalErrors);
+                                            console.log(finalData);
+                                            console.log(finalLogin);
+
+                                            // Agrego los mensajes en la pestaña de Consola de Salida.
+                                            if(finalMessages) {
+                                                let consola = $('#consola-de-salida');
+                                                consola.val(consola.val() + finalMessages);
+                                            }
+
+                                            // Agrego las consultas en nuevas consolas.
+                                            if(finalData.length != 0) {
+                                                finalData.foreach(function(item, index){
+                                                    let _id_ = createNewConsole(null, null, null);
+                                                    $('#' + _id_).val(item);
+                                                });
+                                            }
+
+                                            // Agrego los errores en la pestaña de errores.
+                                            if(finalErrors) {
+                                                $.post("/buildTable", {querydata:finalErrors}, function(datax){
+                                                    $('#consola-de-errores').val(datax);
+                                                });
+                                            }
+
+                                        });
+
+                                    }else{
+                                        alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Query.");
+                                    }
+
                                     $.unblockUI();
                                 }
                             });

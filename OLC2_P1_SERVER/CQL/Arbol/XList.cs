@@ -28,7 +28,7 @@ public class XList
         }
         else
         {
-            Error.AgregarError("Semántico", "[LIST]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[LIST]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -42,7 +42,7 @@ public class XList
         }
         else
         {
-            Error.AgregarError("Semántico", "[LIST]", "No se puede obtener un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[LIST]", "No se puede obtener un elemento en una posición inexistente.", fila, columna);
         }
 
         return new Nulo();
@@ -59,12 +59,12 @@ public class XList
             }
             else
             {
-                Error.AgregarError("Semántico", "[LIST]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
+                CQL.AddLUPError("Semántico", "[LIST]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoList.GetRealTipo().ToString() + ")", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[LIST]", "No se puede actualizar un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[LIST]", "No se puede actualizar un elemento en una posición inexistente.", fila, columna);
         }
 
         return false;
@@ -79,7 +79,7 @@ public class XList
         }
         else
         {
-            Error.AgregarError("Semántico", "[LIST]", "No se puede eliminar un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[LIST]", "No se puede eliminar un elemento en una posición inexistente.", fila, columna);
         }
 
         return false;
@@ -102,46 +102,46 @@ public class XList
 
     private bool ValidarTipoElemento(object elemento)
     {
-        if (TipoDatoList.Equals(TipoDato.Tipo.INT))
+        if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.INT))
         {
             return (elemento is int);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.DOUBLE))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
         {
             return (elemento is double);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.STRING))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.STRING))
         {
             return (elemento is string);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.BOOLEAN))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
         {
             return (elemento is bool);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.DATE))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.DATE))
         {
             return (elemento is Date);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.TIME))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.TIME))
         {
             return (elemento is Time);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.MAP))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.MAP))
         {
             //TODO | XList | validar los tipos internos del valor cuando es MAP
             return (elemento is Map);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.SET))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.SET))
         {
             //TODO | XList | validar los tipos internos del valor cuando es SET
             return (elemento is XSet);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.LIST))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.LIST))
         {
             //TODO | XList | validar los tipos internos del valor cuando es LIST
             return (elemento is XList);
         }
-        else if (TipoDatoList.Equals(TipoDato.Tipo.OBJECT))
+        else if (TipoDatoList.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
         {
             //TODO | XList | validar los tipos internos del valor cuando es OBJECT
             return (elemento is Objeto);

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Irony.Parsing;
+using System.Web.Http.Cors;
 
 namespace OLC2_P1_SERVER.Controllers
 {
@@ -14,6 +15,7 @@ namespace OLC2_P1_SERVER.Controllers
         public string LUPMessage { get; set; }
     }
 
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CQLController : ApiController
     {
         // GET: api/CQL

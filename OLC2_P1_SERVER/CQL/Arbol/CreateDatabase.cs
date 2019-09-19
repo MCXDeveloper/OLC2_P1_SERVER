@@ -31,7 +31,7 @@ public class CreateDatabase : Instruccion
         {
             if(!ExistsFlag)
             {
-                Error.AgregarError("Semántico", "[CREATE_DATABASE]", "Error.  No se pudo crear la base de datos ya que existe una actualmente con el mismo nombre.", fila, columna);
+                CQL.AddLUPError("Semántico", "[CREATE_DATABASE]", "Error.  No se pudo crear la base de datos ya que existe una actualmente con el mismo nombre.", fila, columna);
             }
         }
 

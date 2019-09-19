@@ -11,6 +11,7 @@ public class Grammar : Irony.Parsing.Grammar
         #region PALABRAS_RESERVADAS
 
         KeyTerm r_if = ToTerm("if");
+        KeyTerm r_as = ToTerm("as");
         KeyTerm r_do = ToTerm("do");
         KeyTerm r_on = ToTerm("on");
         KeyTerm r_by = ToTerm("by");
@@ -131,6 +132,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         MarkReservedWords(
             "if",
+            "as",
             "do",
             "on",
             "by",
@@ -314,11 +316,9 @@ public class Grammar : Irony.Parsing.Grammar
         NumberLiteral numero = new NumberLiteral("numero");
         IdentifierTerminal identificador = new IdentifierTerminal("identificador");
         StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.AllowsAllEscapes);
-
-        RegexBasedTerminal decima = new RegexBasedTerminal("decima", "[0-9]+(.[0-9][0-9]?)?");
         RegexBasedTerminal variable = new RegexBasedTerminal("variable", "@[a-zA-Z]([a-zA-Z]|_|[0-9]+)*");
-        RegexBasedTerminal fecha = new RegexBasedTerminal("fecha", "((0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-[12][0-9]{3})");
-        RegexBasedTerminal hora = new RegexBasedTerminal("hora", "(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])");
+        RegexBasedTerminal fecha = new RegexBasedTerminal("fecha", "'\\d{4}-((0\\d)|(1[012]))-(([012]\\d)|3[01])'");
+        RegexBasedTerminal hora = new RegexBasedTerminal("hora", "'(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])'");
 
         #endregion
 
@@ -355,7 +355,9 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal LLAMADA_FUNCION = new NonTerminal("LLAMADA_FUNCION");
+        NonTerminal SENTENCIA_WHILE = new NonTerminal("SENTENCIA_WHILE");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
+        NonTerminal SENTENCIA_ACCESO = new NonTerminal("SENTENCIA_ACCESO");
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
         NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
         NonTerminal SENTENCIA_DB_USE = new NonTerminal("SENTENCIA_DB_USE");
@@ -378,6 +380,11 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_IDENTIFICADORES = new NonTerminal("LISTA_IDENTIFICADORES");
         NonTerminal DECLARACION_PROCEDIMIENTO = new NonTerminal("DECLARACION_PROCEDIMIENTO");
 
+        NonTerminal SENTENCIA_BREAK = new NonTerminal("SENTENCIA_BREAK");
+        NonTerminal SENTENCIA_RETURN = new NonTerminal("SENTENCIA_RETURN");
+        NonTerminal SENTENCIA_CONTINUE = new NonTerminal("SENTENCIA_CONTINUE");
+        NonTerminal SENTENCIA_FOR = new NonTerminal("SENTENCIA_FOR");
+
         #endregion
 
         #region GRAMATICA
@@ -386,17 +393,20 @@ public class Grammar : Irony.Parsing.Grammar
 
         LISTA_INSTRUCCIONES.Rule = MakePlusRule(LISTA_INSTRUCCIONES, INSTRUCCION);
 
-        INSTRUCCION.Rule = DECLARACION
-            | ASIGNACION
+        INSTRUCCION.Rule = DECLARACION + puco
+            | SENTENCIA_ACCESO + puco
+            | ASIGNACION + puco
             | LOG
-            | CREATE_TYPE
+            | CREATE_TYPE + puco
             | SENTENCIA_IF
             | SENTENCIA_SWITCH
+            | SENTENCIA_WHILE
+            | SENTENCIA_FOR
             | SENTENCIA_DO_WHILE
-            | SENTENCIA_INC_DEC
+            | SENTENCIA_INC_DEC + puco
             | DECLARACION_FUNCION
             | DECLARACION_PROCEDIMIENTO
-            | LLAMADA_FUNCION
+            | LLAMADA_FUNCION + puco
             | LLAMADA_PROCEDIMIENTO
             | SENTENCIA_DB_CREATE
             | SENTENCIA_DB_USE
@@ -407,6 +417,9 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_TB_TRUNCATE + puco
             | SENTENCIA_TB_INSERT + puco
             | SENTENCIA_TB_SELECT + puco
+            | SENTENCIA_BREAK + puco
+            | SENTENCIA_RETURN + puco
+            | SENTENCIA_CONTINUE + puco
             ;
 
         SENTENCIA_TB_SELECT.Rule = r_select + por + r_from + identificador
@@ -426,6 +439,12 @@ public class Grammar : Irony.Parsing.Grammar
             | r_select + LISTA_EXPRESIONES + r_from + identificador + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
             | r_select + LISTA_EXPRESIONES + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER + r_limit + EXPRESION
             ;
+
+        SENTENCIA_BREAK.Rule = r_break;
+
+        SENTENCIA_RETURN.Rule = r_return + EXPRESION;
+
+        SENTENCIA_CONTINUE.Rule = r_continue;
 
         LISTA_ORDER.Rule = MakePlusRule(LISTA_ORDER, coma, ORDER);
 
@@ -474,7 +493,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         LLAMADA_PROCEDIMIENTO.Rule = r_call + identificador + par_a + LISTA_EXPRESIONES + par_c;
 
-        LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c + puco;
+        LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c;
 
         DECLARACION_FUNCION.Rule = TIPO + identificador + par_a + LISTA_PARAMETROS + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
 
@@ -482,20 +501,20 @@ public class Grammar : Irony.Parsing.Grammar
 
         PARAMETRO.Rule = TIPO + variable;
 
-        CREATE_TYPE.Rule = r_create + r_type + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
-            | r_create + r_type + r_if + r_not + r_exists + identificador + par_a + LISTA_ATR_TYPE + par_c + puco
+        CREATE_TYPE.Rule = r_create + r_type + identificador + par_a + LISTA_ATR_TYPE + par_c
+            | r_create + r_type + r_if + r_not + r_exists + identificador + par_a + LISTA_ATR_TYPE + par_c
             ;
 
         LISTA_ATR_TYPE.Rule = MakePlusRule(LISTA_ATR_TYPE, coma, ATR_TYPE);
 
         ATR_TYPE.Rule = identificador + TIPO;
 
-        DECLARACION.Rule = TIPO + LISTA_VARIABLES + puco
-            | TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
+        DECLARACION.Rule = TIPO + LISTA_VARIABLES
+            | TIPO + LISTA_VARIABLES + igual + EXPRESION
             ;
 
-        ASIGNACION.Rule = variable + TIPO_ASIGNACION + EXPRESION + puco
-            | variable + punto + LISTA_ACCESO + TIPO_ASIGNACION + EXPRESION + puco
+        ASIGNACION.Rule = variable + TIPO_ASIGNACION + EXPRESION
+            | variable + punto + LISTA_ACCESO + TIPO_ASIGNACION + EXPRESION
             ;
 
         LISTA_ATR_MAP.Rule = MakePlusRule(LISTA_ATR_MAP, coma, ATR_MAP);
@@ -531,7 +550,15 @@ public class Grammar : Irony.Parsing.Grammar
 
         LOG.Rule = r_log + par_a + EXPRESION + par_c + puco;
 
+        SENTENCIA_WHILE.Rule = r_while + par_a + EXPRESION + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
+
         SENTENCIA_DO_WHILE.Rule = r_do + llave_a + LISTA_INSTRUCCIONES + llave_c + r_while + par_a + EXPRESION + par_c + puco;
+
+        SENTENCIA_FOR.Rule = r_for + par_a + DECLARACION + puco + EXPRESION + puco + ASIGNACION + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c
+            | r_for + par_a + ASIGNACION + puco + EXPRESION + puco + ASIGNACION + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c
+            | r_for + par_a + DECLARACION + puco + EXPRESION + puco + SENTENCIA_INC_DEC + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c
+            | r_for + par_a + ASIGNACION + puco + EXPRESION + puco + SENTENCIA_INC_DEC + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c
+            ;
 
         SENTENCIA_IF.Rule = IF
             | IF + LISTA_ELSE_IF
@@ -555,6 +582,8 @@ public class Grammar : Irony.Parsing.Grammar
 
         LISTA_EXPRESIONES.Rule = MakePlusRule(LISTA_EXPRESIONES, coma, EXPRESION);
 
+        SENTENCIA_ACCESO.Rule = variable + punto + LISTA_ACCESO;
+
         SENTENCIA_INC_DEC.Rule = variable + inc
             | variable + dec
             | variable + punto + LISTA_ACCESO + inc
@@ -569,16 +598,18 @@ public class Grammar : Irony.Parsing.Grammar
             | LLAMADA_FUNCION
             | LLAMADA_PROCEDIMIENTO
             | identificador
+            | r_null
             | r_new + TIPO
             | r_today + par_a + par_c
             | r_now + par_a + par_c
-            | variable + punto + LISTA_ACCESO
+            | SENTENCIA_ACCESO
             | identificador + punto + LISTA_ACCESO
             | llave_a + LISTA_ATR_MAP + llave_c
             | llave_a + LISTA_EXPRESIONES + llave_c
             | par_a + EXPRESION + par_c
             | par_a + TIPO + par_c + EXPRESION
             | identificador + cor_a + EXPRESION + cor_c
+            | llave_a + LISTA_EXPRESIONES + llave_c + r_as + identificador
             | EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         
@@ -606,7 +637,6 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         PRIMITIVO.Rule = numero
-            | decima
             | cadena
             | fecha
             | hora
@@ -642,7 +672,5 @@ public class Grammar : Irony.Parsing.Grammar
         this.Root = INICIO;
 
         #endregion
-
-
     }
 }

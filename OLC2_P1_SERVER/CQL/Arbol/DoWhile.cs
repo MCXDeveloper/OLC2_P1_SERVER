@@ -17,16 +17,31 @@ public class DoWhile : Instruccion
 
     public object Ejecutar(Entorno ent)
     {
-        do
+        init_while:
+        while ((bool)Condicion.Ejecutar(ent))
         {
             Entorno local = new Entorno(ent);
-            
-            foreach(Instruccion ins in ListaInstrucciones)
+
+            foreach (Instruccion ins in ListaInstrucciones)
             {
-                ins.Ejecutar(local);
+                object result = ins.Ejecutar(local);
+
+                if (result is Return)
+                {
+                    return ((Return)result).Ejecutar(local);
+                }
+                else if (result is Break)
+                {
+                    return result;
+                }
+                else if (result is Continue)
+                {
+                    goto init_while;
+                }
+
             }
 
-        } while ((bool)Condicion.Ejecutar(ent));
+        }
 
         return new Nulo();
     }

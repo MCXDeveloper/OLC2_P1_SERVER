@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class Operacion : Expresion
+public class Operacion : Expresion, Instruccion
 {
     public enum TipoOperacion
     {
@@ -35,6 +35,7 @@ public class Operacion : Expresion
     private readonly Expresion opDer;
     private readonly int fila;
     private readonly int columna;
+    private bool typeFlag = false; //Esta bandera me sirve para determinar si se esta obteniendo el tipo del resultado para que en las instrucciones inc/dec no las cambie en el entorno.
 
     public Operacion(Expresion opIzq, TipoOperacion tipo, int fila, int columna)
     {
@@ -100,8 +101,9 @@ public class Operacion : Expresion
 
     public TipoDato GetTipo(Entorno ent)
     {
+        typeFlag = true;
         object valor = Ejecutar(ent);
-
+        
         if(valor is int)
         {
             return new TipoDato(TipoDato.Tipo.INT);
@@ -213,7 +215,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación XOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación XOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -227,7 +229,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "El operador NOT debe hacerse a una expresión booleana.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "El operador NOT debe hacerse a una expresión booleana.", fila, columna);
         }
 
         return new Nulo();
@@ -241,7 +243,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación OR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación OR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -255,7 +257,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación AND no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación AND no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -289,7 +291,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación DIFERENTE QUE no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación DIFERENTE QUE no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -323,7 +325,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación IGUAL QUE no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación IGUAL QUE no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -357,7 +359,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MENOR IGUAL no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MENOR IGUAL no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -391,7 +393,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MAYOR IGUAL no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MAYOR IGUAL no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -425,7 +427,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MENOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MENOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -459,7 +461,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MAYOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MAYOR no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -485,7 +487,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MODULO no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MODULO no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -511,7 +513,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación POTENCIA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación POTENCIA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -521,7 +523,7 @@ public class Operacion : Expresion
     {
         if(Math.Round(Convert.ToDouble(op2.ToString())) == 0)
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "No se puede realizar una división entre 0.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "No se puede realizar una división entre 0.", fila, columna);
         }
         else
         {
@@ -543,7 +545,7 @@ public class Operacion : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[OPERACION]", "La operación DIVISION no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+                CQL.AddLUPError("Semántico", "[OPERACION]", "La operación DIVISION no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
             }
         }
 
@@ -570,7 +572,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación MULTIPLICACION no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación MULTIPLICACION no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -596,7 +598,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación RESTA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación RESTA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -664,7 +666,7 @@ public class Operacion : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "La operación SUMA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "La operación SUMA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.", fila, columna);
         }
 
         return new Nulo();
@@ -672,13 +674,17 @@ public class Operacion : Expresion
 
     private object EjecutarNegativo(object op1)
     {
-        if (op1 is bool)
+        if (op1 is int)
         {
-            return !(bool)op1;
+            return (int)op1 * -1;
+        }
+        else if (op1 is double)
+        {
+            return (double)op1 * -1;
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "El operador negativo debe aplicarse a un booleano.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "El operador negativo debe aplicarse a un valor numérico.", fila, columna);
         }
 
         return new Nulo();
@@ -689,20 +695,28 @@ public class Operacion : Expresion
         if (op1 is int)
         {
             int temp = (int)op1;
-            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 - 1), fila, columna);
-            inc.Ejecutar(ent);
+            if (!typeFlag)
+            {
+                Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 - 1), fila, columna);
+                inc.Ejecutar(ent);
+                typeFlag = false;
+            }
             return temp;
         }
         else if (op1 is double)
         {
             double temp = (double)op1;
-            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 - 1), fila, columna);
-            inc.Ejecutar(ent);
+            if (!typeFlag)
+            {
+                Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 - 1), fila, columna);
+                inc.Ejecutar(ent);
+                typeFlag = false;
+            }
             return temp;
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "El decremento se debe hacerse a una expresión numérica.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "El decremento se debe hacerse a una expresión numérica.", fila, columna);
         }
 
         return new Nulo();
@@ -713,20 +727,28 @@ public class Operacion : Expresion
         if (op1 is int)
         {
             int temp = (int)op1;
-            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 + 1), fila, columna);
-            inc.Ejecutar(ent);
+            if (!typeFlag)
+            {
+                Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((int)op1 + 1), fila, columna);
+                inc.Ejecutar(ent);
+                typeFlag = false;
+            }
             return temp;
         }
         else if (op1 is double)
         {
             double temp = (double)op1;
-            Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 + 1), fila, columna);
-            inc.Ejecutar(ent);
+            if (!typeFlag)
+            {
+                Asignacion inc = new Asignacion(((Identificador)opIzq).Id, Asignacion.TipoAsignacion.AS_NORMAL, new Primitivo((double)op1 + 1), fila, columna);
+                inc.Ejecutar(ent);
+                typeFlag = false;
+            }
             return temp;
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERACION]", "El incremento se debe hacerse a una expresión numérica.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERACION]", "El incremento se debe hacerse a una expresión numérica.", fila, columna);
         }
 
         return new Nulo();

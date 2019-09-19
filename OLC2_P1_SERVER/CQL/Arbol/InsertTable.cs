@@ -80,12 +80,12 @@ public class InsertTable : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.", fila, columna);
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
 
         return new Nulo();
@@ -103,12 +103,12 @@ public class InsertTable : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.", fila, columna);
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.", fila, columna);
         }
 
         return false;
@@ -132,22 +132,22 @@ public class InsertTable : Instruccion
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
                     }
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  No se puede insertar un valor en una columna de tipo COUNTER.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  No se puede insertar un valor en una columna de tipo COUNTER.", fila, columna);
                 }
             }
             else
             {
-                Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  Alguno de los campos proporcionados en la lista de campos no existe.", fila, columna);
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Alguno de los campos proporcionados en la lista de campos no existe.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas.", fila, columna);
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas.", fila, columna);
         }
 
         return false;

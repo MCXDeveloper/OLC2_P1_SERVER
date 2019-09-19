@@ -2,6 +2,7 @@ var util = require('util');
 var path = require('path');
 var cors = require('cors');
 var _http = require('http');
+var table = require('markdown-table');
 var express = require('express');
 var bodyparser = require('body-parser');
 const session = require('express-session');
@@ -12,8 +13,12 @@ var http = new _http.Server(app);
 /**
  * Express configuration.
  */
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(bodyparser.urlencoded());
-app.use(cors({origin: '*'}));
 app.use(session({secret: 'ocl2-p1-client'}));
 app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts')));
 app.use('/codemirror', express.static(path.join(__dirname, '/public/codemirror')));
@@ -59,6 +64,11 @@ app.post('/login',(req,res) => {
         res.end('nah');
     }
 
+});
+
+app.post('/buildTable', function(req, res){
+    let content = req.body.querydata;
+    res.end(table(content));
 });
 
 app.get('/logout',(req,res) => {

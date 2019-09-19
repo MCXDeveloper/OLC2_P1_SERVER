@@ -31,7 +31,14 @@ public class For : Instruccion
 
             foreach (Instruccion ins in lista_instrucciones)
             {
-                ins.Ejecutar(ent);
+                if (ins is Return || ins is Break || ins is Continue)
+                {
+                    return ins;
+                }
+                else
+                {
+                    ins.Ejecutar(ent);
+                }
             }
 
         }

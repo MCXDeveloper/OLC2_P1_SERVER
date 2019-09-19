@@ -51,12 +51,12 @@ public class CasteoExplicito : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[CASTEO_EXPLICITO]", "Error de tipos.  El casteo solo puede hacerse entre tipos de datos primitivos.", fila, columna);
+            CQL.AddLUPError("Semántico", "[CASTEO_EXPLICITO]", "Error de tipos.  El casteo solo puede hacerse entre tipos de datos primitivos.", fila, columna);
         }
 
         if(result is Nulo)
         {
-            Error.AgregarError("Semántico", "[CASTEO_EXPLICITO]", "Error al intentar realizar casteo.  Se intentó castear un valor de tipo '"+ ValorType.GetRealTipo().ToString() +"' a un tipo '"+ TipoCasteo.GetRealTipo().ToString() + "', lo cual no está permitido.", fila, columna);
+            CQL.AddLUPError("Semántico", "[CASTEO_EXPLICITO]", "Error al intentar realizar casteo.  Se intentó castear un valor de tipo '"+ ValorType.GetRealTipo().ToString() +"' a un tipo '"+ TipoCasteo.GetRealTipo().ToString() + "', lo cual no está permitido.", fila, columna);
         }
 
         return result;
@@ -123,7 +123,7 @@ public class CasteoExplicito : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[CASTEO_EXPLICITO]", "Error de formato.  El valor proporcionado como fecha no cumple con el formato yyyy-MM-dd.", fila, columna);
+                CQL.AddLUPError("Semántico", "[CASTEO_EXPLICITO]", "Error de formato.  El valor proporcionado como fecha no cumple con el formato yyyy-MM-dd.", fila, columna);
             }
         }
         else if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.DATE))
@@ -136,7 +136,7 @@ public class CasteoExplicito : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[CASTEO_EXPLICITO]", "Error de formato.  El valor proporcionado como hora no cumple con el formato hh:mm:ss.", fila, columna);
+                CQL.AddLUPError("Semántico", "[CASTEO_EXPLICITO]", "Error de formato.  El valor proporcionado como hora no cumple con el formato hh:mm:ss.", fila, columna);
             }
         }
 

@@ -38,12 +38,12 @@ public class TruncateTable : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[TRUNCATE_TABLE]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual, por lo tanto, no se puede truncar.", fila, columna);
+                CQL.AddLUPError("Semántico", "[TRUNCATE_TABLE]", "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual, por lo tanto, no se puede truncar.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[TRUNCATE_TABLE]", "Error.  No se puede truncar una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[TRUNCATE_TABLE]", "Error.  No se puede truncar una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
 
         return new Nulo();

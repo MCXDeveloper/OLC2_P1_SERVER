@@ -42,7 +42,7 @@ public class If : Instruccion
         {
             object response = ins.Ejecutar(ent);
             
-            if(response is Return)
+            if(response is Return || response is Break || response is Continue)
             {
                 return response;
             }

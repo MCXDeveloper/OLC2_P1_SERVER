@@ -1,33 +1,125 @@
-﻿using System;
+﻿using OLC2_P1_SERVER.CQL.Arbol;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 public class CollectionValue : Expresion
 {
+    private readonly int fila;
+    private readonly int columna;
+    public bool IsList { get; set; } // Bandera que me indica si el valor a retornar debería de ser una List (true) o un Set (false).
     public List<AtributosMap> MapArray { get; set; }
     public List<Expresion> ListSetArray { get; set; }
 
-    public CollectionValue(List<AtributosMap> map_array)
+    public CollectionValue(List<AtributosMap> map_array, int fila, int columna)
     {
+        this.fila = fila;
         ListSetArray = null;
         MapArray = map_array;
+        this.columna = columna;
     }
 
-    public CollectionValue(List<Expresion> list_set_array)
+    public CollectionValue(List<Expresion> list_set_array, int fila, int columna)
     {
         MapArray = null;
+        this.fila = fila;
+        this.columna = columna;
         ListSetArray = list_set_array;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        throw new NotImplementedException();
+        if (!(MapArray is null))
+        {
+            // 1. Verifico que todas y cada una de las validaciones correspondientes a Map sean satisfactorias.
+            if (ValidarTiposDeMap(MapArray, ent, fila, columna))
+            {
+                // 2. Si todo se cumple, procedo a armar la Collection Map y lo retorno.
+                MapType tipoMap = ObtenerMapType(ent);
+                Map mapita = new Map(tipoMap.TipoIzq, tipoMap.TipoDer, fila, columna);
+
+                foreach (AtributosMap amap in MapArray)
+                {
+                    mapita.Insert(amap.Key.Ejecutar(ent), amap.Value.Ejecutar(ent));
+                }
+
+                return mapita;
+            }
+            else
+            {
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  El arreglo que representa el valor de la declaración del MAP difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+            }
+        }
+        else if (!(ListSetArray is null))
+        {
+            if(IsList)
+            {
+                if (ValidarTiposList(ListSetArray, ent, fila, columna))
+                {
+                    ListType tipoList = ObtenerListType(ent);
+                    XList listita = new XList(tipoList.TipoDatoList, fila, columna);
+
+                    foreach (Expresion ex in ListSetArray)
+                    {
+                        listita.Insert(ex.Ejecutar(ent));
+                    }
+
+                    return listita;
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  El arreglo que representa el valor de la declaración del LIST difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+                }
+            }
+            else
+            {
+                if (ValidarTiposSet(ListSetArray, ent, fila, columna))
+                {
+                    SetType tipoSet = ObtenerSetType(ent);
+                    XSet setsito = new XSet(tipoSet.TipoDatoSet, fila, columna);
+
+                    foreach (Expresion ex in ListSetArray)
+                    {
+                        setsito.Insert(ex.Ejecutar(ent));
+                    }
+
+                    return setsito;
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  El arreglo que representa el valor de la declaración del SET difiere en los tipos de dato de los elementos que contiene.", fila, columna);
+                }
+            }
+        }
+        else
+        {
+            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error. No se especificó el tipo de CollectionValue a definir.", fila, columna);
+        }
+
+        return new Nulo();
     }
 
     public TipoDato GetTipo(Entorno ent)
     {
-        throw new NotImplementedException();
+        object valor = Ejecutar(ent);
+
+        if (valor is Map)
+        {
+            return new TipoDato(TipoDato.Tipo.MAP);
+        }
+        else if (valor is XList)
+        {
+            return new TipoDato(TipoDato.Tipo.LIST);
+        }
+        else if (valor is XSet)
+        {
+            return new TipoDato(TipoDato.Tipo.SET);
+        }
+        else
+        {
+            return new TipoDato(TipoDato.Tipo.NULO);
+        }
     }
 
     // El primer atributo de 'ValidarTiposDeMap', map_elements, es exactamente igual a MapArray.  Se 
@@ -85,7 +177,7 @@ public class CollectionValue : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción LIST.", fila, columna);
+            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción LIST.", fila, columna);
         }
 
         return false;
@@ -108,12 +200,12 @@ public class CollectionValue : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes dentro de la colección SET no se pueden repetir.", fila, columna);
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes dentro de la colección SET no se pueden repetir.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción LIST.", fila, columna);
+            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción SET.", fila, columna);
         }
 
         return false;
@@ -142,17 +234,17 @@ public class CollectionValue : Expresion
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes a las 'claves' dentro de la colección MAP no se pueden repetir.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes a las 'claves' dentro de la colección MAP no se pueden repetir.", fila, columna);
                 }
             }
             else
             {
-                Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes a la 'clave' deben ser del mismo tipo en la instrucción MAP.", fila, columna);
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes a la 'clave' deben ser del mismo tipo en la instrucción MAP.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  El atributo clave de una colección MAP debe ser de tipo primitivo.  El valor que actualmente tiene es: '" + KeyType.GetRealTipo().ToString() + "'.", fila, columna);
+            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  El atributo clave de una colección MAP debe ser de tipo primitivo.  El valor que actualmente tiene es: '" + KeyType.GetRealTipo().ToString() + "'.", fila, columna);
         }
 
         return false;
@@ -203,7 +295,7 @@ public class CollectionValue : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes a los 'values' dentro de la colección MAP no pueden ser de diferentes tipos.", fila, columna);
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes a los 'values' dentro de la colección MAP no pueden ser de diferentes tipos.", fila, columna);
             }
         }
         
@@ -233,26 +325,26 @@ public class CollectionValue : Expresion
 
     private bool MAP_ValidateSameKeyType(List<AtributosMap> RepresentacionMap, TipoDato FirstKeyDataType, Entorno ent)
     {
-        return !(RepresentacionMap.Any(rm => !rm.Key.GetTipo(ent).Equals(FirstKeyDataType)));
+        return !(RepresentacionMap.Any(rm => !rm.Key.GetTipo(ent).GetRealTipo().Equals(FirstKeyDataType.GetRealTipo())));
     }
 
     private bool MAP_ValidateSameValueType(List<AtributosMap> RepresentacionMap, TipoDato FirstValueDataType, Entorno ent)
     {
-        return !(RepresentacionMap.Any(rm => !rm.Value.GetTipo(ent).Equals(FirstValueDataType)));
+        return !(RepresentacionMap.Any(rm => !rm.Value.GetTipo(ent).GetRealTipo().Equals(FirstValueDataType.GetRealTipo())));
     }
 
     private bool MAP_ValidateUniqueKeyValues(List<AtributosMap> RepresentacionMap, object FirstKeyValue, Entorno ent)
     {
-        return !(RepresentacionMap.Any(rm => !rm.Key.Ejecutar(ent).Equals(FirstKeyValue)));
+        return !RepresentacionMap.GroupBy(x => x.Key.Ejecutar(ent)).Any(e => e.Count() > 1);
     }
 
     private bool ValidateSameType(List<Expresion> RepresentacionListSet, TipoDato FirstElementDataType, Entorno ent)
     {
-        return !(RepresentacionListSet.Any(rm => !rm.GetTipo(ent).Equals(FirstElementDataType)));
+        return !(RepresentacionListSet.Any(rm => !rm.GetTipo(ent).GetRealTipo().Equals(FirstElementDataType.GetRealTipo())));
     }
 
     private bool ValidateUniqueValues(List<Expresion> RepresentacionListSet, object FirstElementDataValue, Entorno ent)
     {
-        return !(RepresentacionListSet.Any(rm => !rm.Ejecutar(ent).Equals(FirstElementDataValue)));
+        return !RepresentacionListSet.GroupBy(x => x.Ejecutar(ent)).Any(e => e.Count() > 1);
     }
 }

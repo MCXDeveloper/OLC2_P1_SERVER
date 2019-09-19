@@ -5,7 +5,7 @@ class MessagePackage {
     }
 
     ejecutar() {
-        return this.message + "\n";
+        return this.message.replace('\"', '"') + String.fromCharCode(13) + String.fromCharCode(10);
     }
 
 }

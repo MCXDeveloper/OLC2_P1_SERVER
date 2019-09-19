@@ -30,7 +30,7 @@ public class ColumnaTabla : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[COLUMNA_TABLA]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
+                CQL.AddLUPError("Semántico", "[COLUMNA_TABLA]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
             }
         }
         else

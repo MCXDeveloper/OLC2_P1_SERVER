@@ -9,18 +9,18 @@ public class Log : Instruccion
     
     private readonly int fila;
     private readonly int columna;
-    private readonly Instruccion elemento;
+    public Expresion Elemento { get; set; }
 
-    public Log(Instruccion elemento, int fila, int columna)
+    public Log(Expresion elemento, int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;
-        this.elemento = elemento;
+        Elemento = elemento;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        object ob = elemento.Ejecutar(ent);
+        object ob = Elemento.Ejecutar(ent);
 
         string salida = "Error <<<>>> Se intentó imprimir una expresión nula.";
 
@@ -28,12 +28,22 @@ public class Log : Instruccion
         {
             if (!(ob is Nulo))
             {
-                salida = ob.ToString();
+                if (ob is Date)
+                {
+                    salida = ((Date)ob).Fecha;
+                }
+                else if (ob is Time)
+                {
+                    salida = ((Time)ob).Tiempo;
+                }
+                else
+                {
+                    salida = ob.ToString();
+                }
             }
         }
 
-        /* Esta linea debe de ser reemplazada por un paquete de LUP de tipo MESSAGE */
-        System.Diagnostics.Debug.Write(salida);
+        CQL.AddLUPMessage(salida);
 
         return new Nulo();
         

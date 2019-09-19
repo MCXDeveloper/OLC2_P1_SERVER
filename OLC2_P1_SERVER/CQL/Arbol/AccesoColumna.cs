@@ -38,7 +38,7 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
             }
         }
         else
@@ -76,7 +76,7 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tabla actual sobre la cual obtener los campos para el SELECT.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error.  No existe una tabla actual sobre la cual obtener los campos para el SELECT.", fila, columna);
             }
         }
 
@@ -171,7 +171,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  El tipo de dato '" + acceso.GetType().ToString() + "' no es permitido en el acceso a elementos.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  El tipo de dato '" + acceso.GetType().ToString() + "' no es permitido en el acceso a elementos.", fila, columna);
         }
 
         return response;
@@ -187,7 +187,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetSeconds' solo es válida cuando el elemento es de tipo Time.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetSeconds' solo es válida cuando el elemento es de tipo Time.", fila, columna);
         }
 
         return response;
@@ -203,7 +203,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetMinutes' solo es válida cuando el elemento es de tipo Time.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetMinutes' solo es válida cuando el elemento es de tipo Time.", fila, columna);
         }
 
         return response;
@@ -219,7 +219,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetHour' solo es válida cuando el elemento es de tipo Time.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetHour' solo es válida cuando el elemento es de tipo Time.", fila, columna);
         }
 
         return response;
@@ -235,7 +235,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetYear' solo es válida cuando el elemento es de tipo Date.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetYear' solo es válida cuando el elemento es de tipo Date.", fila, columna);
         }
 
         return response;
@@ -251,7 +251,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetMonth' solo es válida cuando el elemento es de tipo Date.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetMonth' solo es válida cuando el elemento es de tipo Date.", fila, columna);
         }
 
         return response;
@@ -267,7 +267,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetDay' solo es válida cuando el elemento es de tipo Date.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'GetDay' solo es válida cuando el elemento es de tipo Date.", fila, columna);
         }
 
         return response;
@@ -283,7 +283,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isUpper ? "ToUpperCase" : "ToLowerCase") + "' solo es válida cuando el elemento es de tipo String.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isUpper ? "ToUpperCase" : "ToLowerCase") + "' solo es válida cuando el elemento es de tipo String.", fila, columna);
         }
 
         return response;
@@ -304,12 +304,12 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Substring' necesita que sus dos parámetos (posicion y cantidad) sean de tipo entero.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Substring' necesita que sus dos parámetos (posicion y cantidad) sean de tipo entero.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Substring' solo es válida cuando el elemento es de tipo String.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Substring' solo es válida cuando el elemento es de tipo String.", fila, columna);
         }
 
         return response;
@@ -325,7 +325,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Length' solo es válida cuando el elemento es de tipo String.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función 'Length' solo es válida cuando el elemento es de tipo String.", fila, columna);
         }
 
         return response;
@@ -345,12 +345,12 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isStarts ? "StartsWith" : "EndsWith") + "' necesita que su parámeto sea de tipo String.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isStarts ? "StartsWith" : "EndsWith") + "' necesita que su parámeto sea de tipo String.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isStarts ? "StartsWith" : "EndsWith") + "' solo es válida cuando el elemento es de tipo String.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  La función '" + (isStarts ? "StartsWith" : "EndsWith") + "' solo es válida cuando el elemento es de tipo String.", fila, columna);
         }
 
         return response;
@@ -370,7 +370,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  No se puede acceder a un atributo si el elemento no es de tipo Objeto.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  No se puede acceder a un atributo si el elemento no es de tipo Objeto.", fila, columna);
         }
 
         return response;
@@ -397,7 +397,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  No se puede aplicar la función Contains a un elemento que no es de tipo Collection.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  No se puede aplicar la función Contains a un elemento que no es de tipo Collection.", fila, columna);
         }
 
         return response;
@@ -423,7 +423,7 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  La función Get para una colección de tipo List debe ser de tipo entero.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  La función Get para una colección de tipo List debe ser de tipo entero.", fila, columna);
             }
         }
         else if (elemento is XSet)
@@ -437,12 +437,12 @@ public class AccesoColumna : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  La función Get para una colección de tipo Set debe ser de tipo entero.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error en acceso.  La función Get para una colección de tipo Set debe ser de tipo entero.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  No se puede aplicar la función Get a un elemento que no sea de tipo Collection.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  No se puede aplicar la función Get a un elemento que no sea de tipo Collection.", fila, columna);
         }
 
         return response;
@@ -469,7 +469,7 @@ public class AccesoColumna : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  No se puede aplicar la función Size a un elemento que no sea de tipo Collection.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ACCESO_COLUMNA]", "Error de acceso.  No se puede aplicar la función Size a un elemento que no sea de tipo Collection.", fila, columna);
         }
 
         return response;

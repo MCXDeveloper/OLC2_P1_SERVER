@@ -6,16 +6,16 @@ using System.Web;
 
 public class Case : Instruccion
 {
-    private readonly Instruccion condicion;
+    private readonly Expresion condicion;
     private readonly List<Instruccion> sentencias;
 
-    public Case(Instruccion condicion, List<Instruccion> sentencias)
+    public Case(Expresion condicion, List<Instruccion> sentencias)
     {
         this.condicion = condicion;
         this.sentencias = sentencias;
     }
 
-    public Instruccion GetCondicion()
+    public Expresion GetCondicion()
     {
         return condicion;
     }

@@ -30,7 +30,7 @@ public class Map
         }
         else
         {
-            Error.AgregarError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: "+ clave.GetType().FullName +" | Declarado: "+ TipoDatoClave.GetRealTipo().ToString() +")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: "+ clave.GetType().FullName +" | Declarado: "+ TipoDatoClave.GetRealTipo().ToString() +")", fila, columna);
         }
 
         return false;
@@ -46,12 +46,12 @@ public class Map
             }
             else
             {
-                Error.AgregarError("Semántico", "[MAP]", "No se pudo obtener la clave especificada ya que no existe en la colección.", fila, columna);
+                CQL.AddLUPError("Semántico", "[MAP]", "No se pudo obtener la clave especificada ya que no existe en la colección.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return new Nulo();
@@ -69,12 +69,12 @@ public class Map
             }
             else
             {
-                Error.AgregarError("Semántico", "[MAP]", "No se pudo actualizar el valor de la clave ya que no existe en la colección.", fila, columna);
+                CQL.AddLUPError("Semántico", "[MAP]", "No se pudo actualizar el valor de la clave ya que no existe en la colección.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -91,12 +91,12 @@ public class Map
             }
             else
             {
-                Error.AgregarError("Semántico", "[MAP]", "No se pudo remover la clave especificada ya que no existe en la colección.", fila, columna);
+                CQL.AddLUPError("Semántico", "[MAP]", "No se pudo remover la clave especificada ya que no existe en la colección.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -120,7 +120,7 @@ public class Map
         }
         else
         {
-            Error.AgregarError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -128,27 +128,27 @@ public class Map
 
     private bool ValidarTipoDatoClave(object key)
     {
-        if(TipoDatoClave.Equals(TipoDato.Tipo.INT))
+        if(TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.INT))
         {
             return (key is int);
         }
-        else if (TipoDatoClave.Equals(TipoDato.Tipo.DOUBLE))
+        else if (TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
         {
             return (key is double);
         }
-        else if (TipoDatoClave.Equals(TipoDato.Tipo.STRING))
+        else if (TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.STRING))
         {
             return (key is string);
         }
-        else if (TipoDatoClave.Equals(TipoDato.Tipo.BOOLEAN))
+        else if (TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
         {
             return (key is bool);
         }
-        else if (TipoDatoClave.Equals(TipoDato.Tipo.DATE))
+        else if (TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.DATE))
         {
             return (key is Date);
         }
-        else if (TipoDatoClave.Equals(TipoDato.Tipo.TIME))
+        else if (TipoDatoClave.GetRealTipo().Equals(TipoDato.Tipo.TIME))
         {
             return (key is Time);
         }
@@ -158,46 +158,46 @@ public class Map
 
     private bool ValidarTipoDatoValor(object val)
     {
-        if (TipoDatoValor.Equals(TipoDato.Tipo.INT))
+        if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
         {
             return (val is int);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.DOUBLE))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
         {
             return (val is double);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.STRING))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.STRING))
         {
             return (val is string);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.BOOLEAN))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
         {
             return (val is bool);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.DATE))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.DATE))
         {
             return (val is Date);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.TIME))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.TIME))
         {
             return (val is Time);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.MAP))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.MAP))
         {
             //TODO validar los tipos internos del valor cuando es MAP
             return (val is Map);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.SET))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.SET))
         {
             //TODO validar los tipos internos del valor cuando es SET
             return (val is XSet);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.LIST))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.LIST))
         {
             //TODO validar los tipos internos del valor cuando es LIST
             return (val is XList);
         }
-        else if (TipoDatoValor.Equals(TipoDato.Tipo.OBJECT))
+        else if (TipoDatoValor.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
         {
             //TODO validar los tipos internos del valor cuando es OBJECT
             return (val is Objeto);

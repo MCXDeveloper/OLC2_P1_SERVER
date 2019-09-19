@@ -12,7 +12,7 @@ public class DeclaracionFuncion : Instruccion
     public TipoDato TipoDatoFuncion { get; set; }
     public List<Parametro> ListaParametros { get; set; }
     public List<Instruccion> ListaInstrucciones { get; set; }
-    
+
     public DeclaracionFuncion(TipoDato tipo_dato_funcion, string nombre_funcion, List<Parametro> lista_parametros, List<Instruccion> lista_instrucciones, int fila, int columna)
     {
         this.fila = fila;
@@ -43,14 +43,14 @@ public class DeclaracionFuncion : Instruccion
         // 2. Valido que la llave única generada no exista en el entorno de funciones.
         object simbolo = ent.ObtenerFuncion(key);
 
-        if(!(simbolo is Nulo))
+        if (simbolo is Nulo)
         {
             // 3. Agrego el símbolo de función en el entorno.
             ent.Agregar(key, new Funcion(TipoDatoFuncion, NombreFuncion, ListaParametros, ListaInstrucciones));
         }
         else
         {
-            Error.AgregarError("Semántico", "[DECLARACION_FUNCION]", "Se intentó declarar una función con el nombre de '"+ key +"'.  Una con el mismo nombre ya existe en el entorno.", fila, columna);
+            CQL.AddLUPError("Semántico", "[DECLARACION_FUNCION]", "Se intentó declarar una función con el nombre de '" + key + "'.  Una con el mismo nombre ya existe en el entorno.", fila, columna);
         }
 
         return new Nulo();
@@ -58,13 +58,21 @@ public class DeclaracionFuncion : Instruccion
 
     private string GenerateUniqueKey()
     {
-        string key = NombreFuncion + "_";
+        string id = "_" + NombreFuncion + "(";
 
-        foreach (Parametro param in ListaParametros)
+        foreach (Parametro p in ListaParametros)
         {
-            key += (ListaParametros.Last().Equals(param) ? param.TipoDatoParametro.GetRealTipo().ToString() : param.TipoDatoParametro.GetRealTipo().ToString() + "_");
+            TipoDato.Tipo type = p.TipoDatoParametro.GetRealTipo();
+            id += "_" + type.ToString();
+
+            if (type.Equals(TipoDato.Tipo.OBJECT))
+            {
+                 id += "_" + (string)p.TipoDatoParametro.GetElemento();
+            }
         }
 
-        return key;
+        id += ")";
+
+        return id;
     }
 }

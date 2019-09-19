@@ -64,7 +64,7 @@ public class AlterTable : Instruccion
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden agregar columnas que ya existen en la tabla ni columnas que sean de tipo COUNTER.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden agregar columnas que ya existen en la tabla ni columnas que sean de tipo COUNTER.", fila, columna);
                     }
                 }
                 else
@@ -77,18 +77,18 @@ public class AlterTable : Instruccion
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden eliminar columnas que no existen dentro de la tabla.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden eliminar columnas que no existen dentro de la tabla.", fila, columna);
                     }
                 }
             }
             else
             {
-                Error.AgregarError("Semántico", "[ALTER_TABLE]", "Error.  La tabla especificada '"+ NombreTabla +"' no existe en la base de datos actual.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  La tabla especificada '"+ NombreTabla +"' no existe en la base de datos actual.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[ALTER_TABLE]", "Error.  No se puede alterar una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  No se puede alterar una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
 
         return new Nulo();

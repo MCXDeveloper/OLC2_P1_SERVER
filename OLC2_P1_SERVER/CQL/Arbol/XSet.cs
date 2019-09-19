@@ -31,12 +31,12 @@ public class XSet
             }
             else
             {
-                Error.AgregarError("Semántico", "[SET]", "Error de colección. No es permitido insertar valores repetidos en una colección de tipo SET.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SET]", "Error de colección. No es permitido insertar valores repetidos en una colección de tipo SET.", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto SET (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -50,7 +50,7 @@ public class XSet
         }
         else
         {
-            Error.AgregarError("Semántico", "[SET]", "No se puede obtener un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SET]", "No se puede obtener un elemento en una posición inexistente.", fila, columna);
         }
 
         return new Nulo();
@@ -70,17 +70,17 @@ public class XSet
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[SET]", "Error de colección. No es permitido insertar valores repetidos en una colección de tipo SET.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[SET]", "Error de colección. No es permitido insertar valores repetidos en una colección de tipo SET.", fila, columna);
                 }
             }
             else
             {
-                Error.AgregarError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
+                CQL.AddLUPError("Semántico", "[SET]", "Error de tipos.  El tipo del elemento a insertar no corresponde con el tipo con el que fue declarado el objeto LIST (Recibido: " + valor.GetType().FullName + " | Declarado: " + TipoDatoSet.GetRealTipo().ToString() + ")", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[SET]", "No se puede actualizar un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SET]", "No se puede actualizar un elemento en una posición inexistente.", fila, columna);
         }
 
         return false;
@@ -96,7 +96,7 @@ public class XSet
         }
         else
         {
-            Error.AgregarError("Semántico", "[SET]", "No se puede eliminar un elemento en una posición inexistente.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SET]", "No se puede eliminar un elemento en una posición inexistente.", fila, columna);
         }
 
         return false;
@@ -119,46 +119,46 @@ public class XSet
 
     private bool ValidarTipoElemento(object elemento)
     {
-        if (TipoDatoSet.Equals(TipoDato.Tipo.INT))
+        if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.INT))
         {
             return (elemento is int);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.DOUBLE))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
         {
             return (elemento is double);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.STRING))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.STRING))
         {
             return (elemento is string);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.BOOLEAN))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
         {
             return (elemento is bool);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.DATE))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.DATE))
         {
             return (elemento is Date);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.TIME))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.TIME))
         {
             return (elemento is Time);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.MAP))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.MAP))
         {
             //TODO | XSet | validar los tipos internos del valor cuando es MAP
             return (elemento is Map);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.SET))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.SET))
         {
             //TODO | XSet | validar los tipos internos del valor cuando es SET
             return (elemento is XSet);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.LIST))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.LIST))
         {
             //TODO | XSet | validar los tipos internos del valor cuando es LIST
             return (elemento is XList);
         }
-        else if (TipoDatoSet.Equals(TipoDato.Tipo.OBJECT))
+        else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
         {
             //TODO | XSet | validar los tipos internos del valor cuando es OBJECT
             return (elemento is Objeto);

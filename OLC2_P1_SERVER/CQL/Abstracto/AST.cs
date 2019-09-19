@@ -18,15 +18,119 @@ public class AST : Instruccion
     {
         global = ent;
 
-        foreach (Instruccion ins in Instrucciones)
+        // Este for representa las iteraciones por las que pasa el intérprete.  En la primera se reconocen
+        // funciones y en la segunda todo lo demás.
+
+        for (int i = 0; i < 2; i++)
         {
-            if(ins is Declaracion)
+            if (i == 0)
             {
-                Declaracion d = (Declaracion)ins;
-                d.Ejecutar(ent);
+                EjecutarFunciones(ent);
+            }
+            else
+            {
+                EjecutarNormal(ent);
             }
         }
-        
+
+        //System.Diagnostics.Debug.Write(CQL.TransformEntornoToTable(ent));
+        //System.Diagnostics.Debug.Write(CQL.ObtenerListaUserTypesEnString());
+
         return new Nulo();
     }
+
+    private void EjecutarFunciones(Entorno ent)
+    {
+        foreach (Instruccion ins in Instrucciones)
+        {
+            if (ins is DeclaracionFuncion)
+            {
+                DeclaracionFuncion x = (DeclaracionFuncion)ins;
+                x.Ejecutar(ent);
+            }
+        }
+    }
+
+    private void EjecutarNormal(Entorno ent)
+    {
+        foreach (Instruccion ins in Instrucciones)
+        {
+            if (ins is Declaracion)
+            {
+                Declaracion x = (Declaracion)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Asignacion)
+            {
+                Asignacion x = (Asignacion)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Log)
+            {
+                Log x = (Log)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is CreateDatabase)
+            {
+                CreateDatabase x = (CreateDatabase)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is UseDatabase)
+            {
+                UseDatabase x = (UseDatabase)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is CreateUserType)
+            {
+                CreateUserType x = (CreateUserType)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is AccesoObjeto)
+            {
+                AccesoObjeto x = (AccesoObjeto)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is If)
+            {
+                If x = (If)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Else)
+            {
+                Else x = (Else)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is While)
+            {
+                While x = (While)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is For)
+            {
+                For x = (For)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Switch)
+            {
+                Switch x = (Switch)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is DoWhile)
+            {
+                DoWhile x = (DoWhile)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Break)
+            {
+                Break x = (Break)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Return)
+            {
+                Return x = (Return)ins;
+                x.Ejecutar(ent);
+            }
+        }
+    }
+
 }

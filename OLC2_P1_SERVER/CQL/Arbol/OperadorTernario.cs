@@ -32,7 +32,7 @@ public class OperadorTernario : Expresion
         }
         else
         {
-            Error.AgregarError("Semántico", "[OPERADOR_TERNARIO]", "En la operacion ternaria se espera a que el resultado de la condición sea un valor booleano.", fila, columna);
+            CQL.AddLUPError("Semántico", "[OPERADOR_TERNARIO]", "En la operacion ternaria se espera a que el resultado de la condición sea un valor booleano.", fila, columna);
         }
 
         return response;

@@ -26,17 +26,15 @@ public class While : Instruccion
             {
                 object result = ins.Ejecutar(local);
 
-                if (!(result is Nulo))
+                if (result is Return)
+                {
+                    return ((Return)result).Ejecutar(local);
+                }
+                else if (result is Break)
                 {
                     return result;
                 }
-
-                if (result is Break)
-                {
-                    return new Nulo();
-                }
-                
-                if (result is Continue)
+                else if (result is Continue)
                 {
                     goto init_while;
                 }

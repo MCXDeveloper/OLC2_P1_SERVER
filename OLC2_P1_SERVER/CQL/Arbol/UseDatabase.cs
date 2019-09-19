@@ -27,7 +27,7 @@ public class UseDatabase : Instruccion
         }
         else
         {
-            Error.AgregarError("Semántico", "[USE_DATABASE]", "Error.  La base de datos que se desea utilizar ("+ NombreBD +") no existe en el sistema.", fila, columna);
+            CQL.AddLUPError("Semántico", "[USE_DATABASE]", "Error.  La base de datos que se desea utilizar ("+ NombreBD +") no existe en el sistema.", fila, columna);
         }
 
         return new Nulo();

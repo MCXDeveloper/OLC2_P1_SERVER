@@ -30,12 +30,12 @@ public class DropDatabase : Instruccion
             }
             else
             {
-                Error.AgregarError("Semántico", "[USE_DATABASE]", "Error.  El usuario ("+ CQL.UsuarioLogueado +") no tiene permisos para eliminar la base de datos (" + NombreBD + ").", fila, columna);
+                CQL.AddLUPError("Semántico", "[USE_DATABASE]", "Error.  El usuario ("+ CQL.UsuarioLogueado +") no tiene permisos para eliminar la base de datos (" + NombreBD + ").", fila, columna);
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[USE_DATABASE]", "Error.  La base de datos que se desea eliminar (" + NombreBD + ") no existe en el sistema.", fila, columna);
+            CQL.AddLUPError("Semántico", "[USE_DATABASE]", "Error.  La base de datos que se desea eliminar (" + NombreBD + ") no existe en el sistema.", fila, columna);
         }
 
         return new Nulo();

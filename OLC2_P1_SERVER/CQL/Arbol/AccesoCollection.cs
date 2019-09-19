@@ -33,7 +33,7 @@ public class AccesoCollection : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLLECTION]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLLECTION]", "Error.  No existe una tupla actual sobre la cual validar su expresión.", fila, columna);
             }
         }
         else
@@ -70,7 +70,7 @@ public class AccesoCollection : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLLECTION]", "Error.  No existe una tabla actual sobre la cual obtener los campos para el SELECT.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLLECTION]", "Error.  No existe una tabla actual sobre la cual obtener los campos para el SELECT.", fila, columna);
             }
         }
 
@@ -96,7 +96,7 @@ public class AccesoCollection : Expresion
             }
             else
             {
-                Error.AgregarError("Semántico", "[ACCESO_COLLECTION]", "Error.  El valor de la posición para acceder a un elemento de la lista/set debe ser de tipo entero.", fila, columna);
+                CQL.AddLUPError("Semántico", "[ACCESO_COLLECTION]", "Error.  El valor de la posición para acceder a un elemento de la lista/set debe ser de tipo entero.", fila, columna);
             }
 
         }

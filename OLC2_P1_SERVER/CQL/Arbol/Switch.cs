@@ -58,14 +58,14 @@ public class Switch : Instruccion
                         break;
                     }
                     else if (resp is Return) {
-                        return ((Return)resp).GetExpVal();
+                        return ((Return)resp).Ejecutar(ent);
                     }
                 }
 
             }
             else
             {
-                Error.AgregarError("Semántico", "[SWITCH]", "No se puede evaluar una sentencia que no sea un Case dentro de la sentencia Switch.", fila, columna);
+                CQL.AddLUPError("Semántico", "[SWITCH]", "No se puede evaluar una sentencia que no sea un Case dentro de la sentencia Switch.", fila, columna);
             }
         }
 

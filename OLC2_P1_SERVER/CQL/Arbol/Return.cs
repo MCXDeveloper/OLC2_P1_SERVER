@@ -6,36 +6,20 @@ using System.Web;
 
 public class Return : Instruccion
 {
-    private object exp_val;
-    private Instruccion valor;
-
+    public Expresion Valor { get; set; }
+    
     public Return()
     {
-        this.valor = new Nulo();
-        this.exp_val = new Nulo();
+        Valor = new Nulo();
     }
 
-    public Return(Instruccion valor)
+    public Return(Expresion valor)
     {
-        this.valor = valor;
-        this.exp_val = new Nulo();
-    }
-
-    public object GetExpVal()
-    {
-        return exp_val;
+        Valor = valor;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        if(!(valor is Nulo))
-        {
-            this.exp_val = valor.Ejecutar(ent);
-            return this;
-        }
-        else
-        {
-            return new Nulo();
-        }
+        return (Valor is Nulo) ? Valor : Valor.Ejecutar(ent);
     }
 }

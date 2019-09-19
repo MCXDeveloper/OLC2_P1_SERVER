@@ -25,4 +25,17 @@ public class UserType : InstruccionBD
         // TODO | UserType | Escribir función de CrearPaqueteLup.
         throw new NotImplementedException();
     }
+
+    public override string ToString()
+    {
+        string response = "{ UserType : "+ Identificador +" | Lista_de_atributos : ";
+
+        foreach (AtributoUT aut in ListaAtributos)
+        {
+            response += aut.ToString();
+            response += ListaAtributos.Last().Equals(aut) ? "" : " , ";
+        }
+
+        return response + " }";
+    }
 }

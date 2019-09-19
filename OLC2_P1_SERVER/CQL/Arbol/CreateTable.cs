@@ -75,13 +75,13 @@ public class CreateTable : Instruccion
             {
                 if (!IsExists)
                 {
-                    Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | Tabla: " + NombreTabla + ").", fila, columna);
+                    CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | Tabla: " + NombreTabla + ").", fila, columna);
                 }
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  No se puede crear una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  No se puede crear una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
         
         return new Nulo();
@@ -113,7 +113,7 @@ public class CreateTable : Instruccion
                             }
                             else
                             {
-                                Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo de tipo COUNTER como PK.  Eso requiere que todos los campos sean de tipo COUNTER.", fila, columna);
+                                CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo de tipo COUNTER como PK.  Eso requiere que todos los campos sean de tipo COUNTER.", fila, columna);
                             }
                         }
                         // 5. Si no existe un campo de tipo COUNTER en la lista de llaves primarias compuestas, procedo a validar que todos los campos
@@ -124,17 +124,17 @@ public class CreateTable : Instruccion
                         }
                         else
                         {
-                            Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo como PK que no es de tipo primitivo ni de tipo counter.", fila, columna);
+                            CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo como PK que no es de tipo primitivo ni de tipo counter.", fila, columna);
                         }
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo en la lista de llaves primarias compuestas que no existe en la declaración.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Se indicó un campo en la lista de llaves primarias compuestas que no existe en la declaración.", fila, columna);
                     }
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Al estar definida la cláusula de llaves primarias compuestas no puede venir un campo que sea PK.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Al estar definida la cláusula de llaves primarias compuestas no puede venir un campo que sea PK.", fila, columna);
                 }
             }
             else
@@ -151,7 +151,7 @@ public class CreateTable : Instruccion
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  La columna definida como PRIMARY KEY no es de tipo primitivo.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  La columna definida como PRIMARY KEY no es de tipo primitivo.", fila, columna);
                     }
                 }
                 else if (validate_pk.Equals(0))
@@ -162,18 +162,18 @@ public class CreateTable : Instruccion
                     }
                     else
                     {
-                        Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  No se puede definir campos de tipo COUNTER si no se especifíca la cláusula PRIMARY KEY.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  No se puede definir campos de tipo COUNTER si no se especifíca la cláusula PRIMARY KEY.", fila, columna);
                     }
                 }
                 else
                 {
-                    Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  Únicamente debe existir una o ninguna columna de tipo PRIMARY KEY.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Únicamente debe existir una o ninguna columna de tipo PRIMARY KEY.", fila, columna);
                 }
             }
         }
         else
         {
-            Error.AgregarError("Semántico", "[CREATE_TABLE]", "Error.  No se puede crear una tabla con nombres de columna repetidos.", fila, columna);
+            CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  No se puede crear una tabla con nombres de columna repetidos.", fila, columna);
         }
 
         return false;

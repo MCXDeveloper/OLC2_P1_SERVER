@@ -12,6 +12,8 @@ public class RaizBD : InstruccionBD
         ListaDatabase = new Dictionary<string, Database>();
     }
 
+    #region FUNCIONES_DE_BD
+
     public Database GetDatabase(string nombre_bd)
     {
         return ListaDatabase[nombre_bd];
@@ -36,6 +38,8 @@ public class RaizBD : InstruccionBD
     {
         ListaDatabase.Remove(NombreBD);
     }
+
+    #endregion
 
     public string CrearChison()
     {
