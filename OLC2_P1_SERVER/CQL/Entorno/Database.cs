@@ -27,7 +27,7 @@ public class Database : InstruccionBD
 
     public bool ExisteTabla(string nombre_tabla)
     {
-        return ListaTablas.Any(tab => tab.NombreTabla.Equals(nombre_tabla));
+        return ListaTablas.Any(tab => tab.NombreTabla.Equals(nombre_tabla, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public void RegistrarTabla(Table tabla)
@@ -37,12 +37,12 @@ public class Database : InstruccionBD
 
     public Table ObtenerTabla(string nombre_tabla)
     {
-        return ListaTablas.Find(x => x.NombreTabla.Equals(nombre_tabla));
+        return ListaTablas.Find(x => x.NombreTabla.Equals(nombre_tabla, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public void EliminarTabla(string nombre_tabla)
     {
-        ListaTablas.RemoveAll(x => x.NombreTabla.Equals(nombre_tabla));
+        ListaTablas.RemoveAll(x => x.NombreTabla.Equals(nombre_tabla, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public void TruncarTabla(string nombre_tabla)
@@ -69,12 +69,12 @@ public class Database : InstruccionBD
 
     public object ObtenerUserType(string nombre_user_type)
     {
-        return ListaUserTypes.Find(x => x.Identificador.Equals(nombre_user_type));
+        return ListaUserTypes.Find(x => x.Identificador.Equals(nombre_user_type, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public bool ExisteUserType(string nombre_user_type)
     {
-        return ListaUserTypes.Any(ut => ut.Identificador.Equals(nombre_user_type));
+        return ListaUserTypes.Any(ut => ut.Identificador.Equals(nombre_user_type, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public void RegistrarUserType(UserType item)

@@ -29,6 +29,14 @@ public class Table : InstruccionBD
     {
         col.ColumnName = col.NombreColumna;
         col.DataType = GetTheType(col.TipoDatoColumna.GetRealTipo());
+
+        if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
+        {
+            col.AutoIncrement = true;
+            col.AutoIncrementSeed = 1;
+            col.AutoIncrementStep = 1;
+        }
+
         Tabla.Columns.Add(col);
     }
     

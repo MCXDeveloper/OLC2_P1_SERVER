@@ -50,12 +50,12 @@ public class InsertTable : Instruccion
         // +---------------------------------------------------------------------------------------------------------+
 
         // 1. Procedo a verificar si existe alguna base de datos en uso, de lo contrario, se reporta el error.
-        if (!CQL.BaseDatosEnUso.Equals(String.Empty))
+        if (CQL.ExisteBaseDeDatosEnUso())
         {
             // 2. Procedo a verificar que la tabla exista en la base de datos.
-            if (CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ExisteTabla(NombreTabla))
+            if (CQL.ExisteTablaEnBD(NombreTabla))
             {
-                Table tablita = CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla);
+                Table tablita = CQL.ObtenerTabla(NombreTabla);
 
                 // 3. Procedo a validar el tipo de insert que se desea realizar.  Si ListaCampos es igual a null
                 // significa que viene una inserción normal, de lo contrario, será una inserción especial.
@@ -157,13 +157,34 @@ public class InsertTable : Instruccion
     {
         for (int i = 0; i < tablita.Tabla.Columns.Count; i++)
         {
-            if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
+            TipoDato.Tipo colType = ((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo();
+            TipoDato.Tipo valType = ListaValores[i].GetTipo(ent).GetRealTipo();
+
+            if (!colType.Equals(TipoDato.Tipo.COUNTER))
+            {
+                if (colType.Equals(TipoDato.Tipo.STRING) || colType.Equals(TipoDato.Tipo.DATE) || colType.Equals(TipoDato.Tipo.TIME) || colType.Equals(TipoDato.Tipo.MAP) || colType.Equals(TipoDato.Tipo.SET) || colType.Equals(TipoDato.Tipo.LIST) || colType.Equals(TipoDato.Tipo.OBJECT))
+                {
+                    if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!valType.Equals(colType))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            /*if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
             {
                 if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(ListaValores[i].GetTipo(ent).GetRealTipo()))
                 {
                     return false;
                 }
-            }
+            }*/
         }
 
         return true;
@@ -173,9 +194,22 @@ public class InsertTable : Instruccion
     {
         for (int i = 0; i < ListaCampos.Count; i++)
         {
-            if(!tablita.GetColumn(ListaCampos[i]).TipoDatoColumna.GetRealTipo().Equals(ListaValores[i].GetTipo(ent).GetRealTipo()))
+            TipoDato.Tipo colType = tablita.GetColumn(ListaCampos[i]).TipoDatoColumna.GetRealTipo();
+            TipoDato.Tipo valType = ListaValores[i].GetTipo(ent).GetRealTipo();
+
+            if (colType.Equals(TipoDato.Tipo.STRING) || colType.Equals(TipoDato.Tipo.DATE) || colType.Equals(TipoDato.Tipo.TIME) || colType.Equals(TipoDato.Tipo.MAP) || colType.Equals(TipoDato.Tipo.SET) || colType.Equals(TipoDato.Tipo.LIST) || colType.Equals(TipoDato.Tipo.OBJECT))
             {
-                return false;
+                if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (!valType.Equals(colType))
+                {
+                    return false;
+                }
             }
         }
 
@@ -219,4 +253,5 @@ public class InsertTable : Instruccion
 
         return list;
     }
+
 }

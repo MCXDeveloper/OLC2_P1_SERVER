@@ -16,7 +16,7 @@
 \[\+LOCATION]\](.*)\[\-LOCATION]\]  return 'error_location';
 \[\+TYPE]\](.*)\[\-TYPE]\]          return 'error_type';
 \[\+DESC]\](.*)\[\-DESC]\]          return 'error_description';
-\[\+DATA\](.*)\[\-DATA\]            return 'data_package';
+"[+DATA]"[^\[]*"[-DATA]"            return 'data_package';
 "[+MESSAGE]"[^\[]*"[-MESSAGE]"      return 'message_package';
 \[\+LOGIN\](.*)\[\-LOGIN\]          return 'login_package';
 \[\+LOGOUT\](.*)\[\-LOGOUT\]        return 'logout_package';

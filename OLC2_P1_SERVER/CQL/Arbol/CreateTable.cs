@@ -60,15 +60,15 @@ public class CreateTable : Instruccion
         // +----------------------------------------------------------------------------------------------+
         
         // 1. Procedo a verificar si existe alguna base de datos en uso, de lo contrario, se reporta el error.
-        if (!CQL.BaseDatosEnUso.Equals(String.Empty))
+        if (CQL.ExisteBaseDeDatosEnUso())
         {
             // 2. Procedo a validar que la tabla que desea crear no exista una con el mismo nombre en la base de datos.
-            if (!CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ExisteTabla(NombreTabla))
+            if (!CQL.ExisteTablaEnBD(NombreTabla))
             {
                 // 3. Se realiza de forma exhaustiva la validación de columnas posteriormente a realizar la creación de la tabla.
                 if (ValidateColumns())
                 {
-                    CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).RegistrarTabla(BuildTable());
+                    CQL.RegistrarTabla(BuildTable());
                 }
             }
             else
@@ -262,9 +262,9 @@ public class CreateTable : Instruccion
 
         foreach (var list in nuevaLista)
         {
-            if (list.PKey.Equals("true"))
+            if (list.PKey.Equals(true))
             {
-                response = (list.Count > 1) ? -1 : 1;
+                response = (list.Count == 1) ? 1 : -1;
                 break;
             }
         }

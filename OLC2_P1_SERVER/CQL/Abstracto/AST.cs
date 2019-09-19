@@ -85,6 +85,28 @@ public class AST : Instruccion
                 CreateUserType x = (CreateUserType)ins;
                 x.Ejecutar(ent);
             }
+
+            else if (ins is CreateTable)
+            {
+                CreateTable x = (CreateTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is AlterTable)
+            {
+                AlterTable x = (AlterTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is InsertTable)
+            {
+                InsertTable x = (InsertTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Select)
+            {
+                Select x = (Select)ins;
+                x.Ejecutar(ent);
+            }
+
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;

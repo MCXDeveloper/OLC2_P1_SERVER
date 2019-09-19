@@ -721,7 +721,7 @@ case 14: console.log('Error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yy
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+LOCATION\](.*)\[-LOCATION\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\](.*)\[-DATA\])/i,/^(?:\[\+MESSAGE\][^\[]*\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+LOCATION\](.*)\[-LOCATION\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\][^\[]*\[-DATA\])/i,/^(?:\[\+MESSAGE\][^\[]*\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"inclusive":true}}
 });
 return lexer;

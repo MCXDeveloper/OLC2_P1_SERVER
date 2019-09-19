@@ -440,6 +440,7 @@ public class ASTBuilder
                 aux = aux.Replace("\\n", "\n");
                 aux = aux.Replace("\\t", "\t");
                 aux = aux.Replace("\\r", "\r");
+                aux = aux.Replace("\"", "\"");
                 aux = aux.Substring(1, aux.Length - 2);
                 return new Primitivo(aux);
             }
@@ -554,7 +555,7 @@ public class ASTBuilder
             {
                 return new FuncionGetHour(GetFila(actual, 0), GetColumna(actual, 0));
             }
-            else if (EstoyAca(actual.ChildNodes[0], "getminutes"))
+            else if (EstoyAca(actual.ChildNodes[0], "getminuts"))
             {
                 return new FuncionGetMinutes(GetFila(actual, 0), GetColumna(actual, 0));
             }
@@ -612,14 +613,14 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
-                case 7:
+                case 6:
                     return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
-                case 10:
-                    return new CreateTable(true, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
-                case 12:
-                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+                case 9:
+                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), GetFila(actual, 0), GetColumna(actual, 0));
+                case 11:
+                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new CreateTable(true, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), (List<string>)Recorrido(actual.ChildNodes[12]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_COLUMNAS"))
@@ -646,7 +647,7 @@ public class ASTBuilder
             List<string> lista_ids = new List<string>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_ids.Add((string)Recorrido(hijo));
+                lista_ids.Add(hijo.Token.Text);
             }
             return lista_ids;
         }
@@ -668,7 +669,7 @@ public class ASTBuilder
                 case 4:
                     return new DropTable(false, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new DropTable(true, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new DropTable(true, ObtenerLexema(actual, 4), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "SENTENCIA_TB_TRUNCATE"))
@@ -695,11 +696,11 @@ public class ASTBuilder
 
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new Select(null, ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
-                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select(null, ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
                     }
 
                 //| r_select + por + r_from + identificador + r_where + EXPRESION

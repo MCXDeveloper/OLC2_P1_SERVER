@@ -51,6 +51,26 @@ public class CQL
         return RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla);
     }
 
+    public static void RegistrarTabla(Table tabla)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).RegistrarTabla(tabla);
+    }
+
+    public static bool VerificarSiColumnaEsPK(string nombre_tabla, string nombre_columna)
+    {
+        return RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla).IsPrimaryKeyColumn(nombre_columna);
+    }
+
+    public static void AgregarColumnaEnTabla(string nombre_tabla, Columna col)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla).AddColumn(col);
+    }
+
+    public static void EliminarColumnaDeTabla(string nombre_tabla, string nombre_columna)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla).DeleteColumn(nombre_columna);
+    }
+
     public static bool ExisteColumnaEnTabla(string nombre_tabla, string nombre_columna)
     {
         return RootBD.GetDatabase(BaseDatosEnUso).ObtenerTabla(nombre_tabla).ExistsColumn(nombre_columna);

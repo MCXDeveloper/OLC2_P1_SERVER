@@ -276,8 +276,9 @@
 
             function createNewConsole(_id, _idArea, _typeForm) {
 
-                let id = (_id === null) ? 'Consulta' + getRandomNumber() : _id;
-                let idArea = (_idArea === null) ? 'consola-de-salida_' + getRandomNumber() : _idArea;
+                let num = getRandomNumber();
+                let id = (_id === null) ? 'Consulta' + num : _id;
+                let idArea = (_idArea === null) ? 'consola-de-salida_' + num : _idArea;
                 let typeForm = (_typeForm === null) ? 'consultita' : _typeForm;
 
                 $('#ul-tab-2').append(
@@ -312,7 +313,7 @@
 
                 setConsole(document.getElementById(idArea), id);
 
-                return id;
+                return idArea;
 
             }
 
@@ -483,7 +484,7 @@
                                 type: 'POST',
                                 url : "http://localhost:58899/api/CQL",
                                 data: { LUPMessage : lupito },
-                                timeout: 50000,
+                                timeout: 300000,
                                 error: function(jqXHR, textStatus, errorThrown) {
                                     alert(Helper.GetErrorMessage(jqXHR, textStatus))
                                     $.unblockUI();
@@ -527,9 +528,9 @@
 
                                             // Agrego las consultas en nuevas consolas.
                                             if(finalData.length != 0) {
-                                                finalData.foreach(function(item, index){
+                                                $.each(finalData, function( key, value ) {
                                                     let _id_ = createNewConsole(null, null, null);
-                                                    $('#' + _id_).val(item);
+                                                    $('#' + _id_).val(value);
                                                 });
                                             }
 

@@ -92,7 +92,8 @@ public class Select : Instruccion
                         // 3.5 LIMIT - En una nueva tabla temporal almaceno el resultado de obtener solo la cantidad de filas especificada por la expresión (si hubiese).
                         Table tablaTemp4 = !(ExpresionLimit is null) ? EjecutarLimit(tablaTemp3, ent) : tablaTemp3;
 
-                        return tablaTemp4;
+                        // Agrego a la pila de respuestas el resultado del select.
+                        CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
                     }
                 }
             }
@@ -103,7 +104,7 @@ public class Select : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  No se puede seleccionar de una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
         }
 
         return new Nulo();
@@ -275,7 +276,10 @@ public class Select : Instruccion
                 }
                 else if (exp is ColumnaTabla)
                 {
-                    tablaResult.Tabla.Merge(new DataView(temp.Tabla).ToTable(false, new[] { ((ColumnaTabla)exp).NombreColumna }));
+                    DataTable dtAll = temp.Tabla.Copy();
+                    DataView dv = new DataView(dtAll);
+                    DataTable dtCalc = dv.ToTable(false, ((ColumnaTabla)exp).NombreColumna);
+                    tablaResult.Tabla.Merge(dtCalc);
                 }
                 else if (exp is AccesoColumna)
                 {
@@ -361,5 +365,35 @@ public class Select : Instruccion
         }
 
         return dt;
+    }
+
+    private string GetSelectInAscii(Table t)
+    {
+        DataTable dt = new DataTable();
+        dt.Clear();
+
+        // Defino las columnas del DataTable
+        foreach (Columna col in t.Tabla.Columns)
+        {
+            dt.Columns.Add(col.NombreColumna);
+        }
+
+        // Por cada fila en la tabla de la BD, creo una nueva fila y para cada columna le agrego su valor en string.
+        foreach (DataRow row in t.Tabla.Rows)
+        {
+            DataRow r = dt.NewRow();
+
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                object rowVal = row.ItemArray[i];
+                r[dt.Columns[i].ColumnName] = (rowVal.Equals("OLC2_P1_SERVER.CQL.Arbol.Nulo")) ? "NULL" : rowVal.ToString();
+            }
+
+            dt.Rows.Add(r);
+        }
+
+        // Una vez tenemos el DataTable completamente en String retornamos la tabla generada en ASCII.
+
+        return AsciiTableGenerator.CreateAsciiTableFromDataTable(dt).ToString();
     }
 }

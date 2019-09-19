@@ -48,13 +48,13 @@ public class AlterTable : Instruccion
         // +------------------------------------------------------------------------------------------------+
 
         // 1. Procedo a verificar si existe alguna base de datos en uso, de lo contrario, se reporta el error.
-        if (!CQL.BaseDatosEnUso.Equals(String.Empty))
+        if (CQL.ExisteBaseDeDatosEnUso())
         {
             // 2. Procedo a verificar que la tabla que se desea alterar exista en la base de datos.
-            if (CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ExisteTabla(NombreTabla))
+            if (CQL.ExisteTablaEnBD(NombreTabla))
             {
                 // 3. Procedo a validar si la acción que se desea realizar es un ADD o un DROP.
-                if (ListaColumnasAdd is null)
+                if (ListaColumnasAdd != null)
                 {
                     // 4. Procedo a realizar una validación exhaustiva para ver si se cumple o no el agregar columnas.
                     if (ValidateAddingColumns())
@@ -70,14 +70,19 @@ public class AlterTable : Instruccion
                 else
                 {
                     // 4. Procedo a realizar una validación exhaustiva para ver si se cumple o no el eliminar columnas.
-                    if (ValidateDeletingColumns())
+                    int valDelCol = ValidateDeletingColumns();
+                    if (valDelCol.Equals(1))
                     {
                         // 5. Si la validación de columnas es correcta, procedo a eliminarlas.
                         DeleteColumns();
                     }
-                    else
+                    else if (valDelCol.Equals(0))
                     {
                         CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden eliminar columnas que no existen dentro de la tabla.", fila, columna);
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  No se pueden eliminar columnas que son llave primaria.", fila, columna);
                     }
                 }
             }
@@ -99,7 +104,7 @@ public class AlterTable : Instruccion
         // 1. Primero valido que no exista una columna con el mismo nombre dentro de la tabla.
         foreach (Columna col in ListaColumnasAdd)
         {
-            if(CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla).ExistsColumn(col.NombreColumna))
+            if(CQL.ExisteColumnaEnTabla(NombreTabla, col.NombreColumna))
             {
                 return false;
             }
@@ -116,31 +121,31 @@ public class AlterTable : Instruccion
         return true;
     }
 
-    private bool ValidateDeletingColumns()
+    private int ValidateDeletingColumns()
     {
         foreach (string col in ListaColumnasDrop)
         {
             // 1. Valido que las columnas que se desean eliminar existan en la tabla
-            if (!CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla).ExistsColumn(col))
+            if (!CQL.ExisteColumnaEnTabla(NombreTabla, col))
             {
-                return false;
+                return 0;
             }
             else
             {
                 // 2. Valido que la columna que se desea eliminar, no sea PK.
                 if (ValidateIfColumnIsPK(col))
                 {
-                    return false;
+                    return -1;
                 }
             }
         }
 
-        return true;
+        return 1;
     }
 
     private bool ValidateIfColumnIsPK(string colName)
     {
-        return CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla).IsPrimaryKeyColumn(colName);
+        return CQL.VerificarSiColumnaEsPK(NombreTabla, colName);
     }
 
     private bool ValidateIfColumnIsCounter(Columna col)
@@ -152,7 +157,7 @@ public class AlterTable : Instruccion
     {
         foreach (Columna col in ListaColumnasAdd)
         {
-            CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla).AddColumn(col);
+            CQL.AgregarColumnaEnTabla(NombreTabla, col);
         }
     }
 
@@ -160,7 +165,7 @@ public class AlterTable : Instruccion
     {
         foreach (string col in ListaColumnasDrop)
         {
-            CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ObtenerTabla(NombreTabla).DeleteColumn(col);
+            CQL.EliminarColumnaDeTabla(NombreTabla, col);
         }
     }
 

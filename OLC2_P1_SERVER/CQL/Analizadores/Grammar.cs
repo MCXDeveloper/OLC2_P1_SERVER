@@ -107,7 +107,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_tolower = ToTerm("tolowercase");
         KeyTerm r_substring = ToTerm("substring");
         KeyTerm r_startswith = ToTerm("startswith");
-        KeyTerm r_getminutes = ToTerm("getminutes");
+        KeyTerm r_getminutes = ToTerm("getminuts");
         KeyTerm r_getseconds = ToTerm("getseconds");
         KeyTerm r_bddontexists = ToTerm("bddontexists");
         KeyTerm r_typedontexists = ToTerm("typedontexists");
@@ -226,7 +226,7 @@ public class Grammar : Irony.Parsing.Grammar
             "procedure",
             "substring",
             "startswith",
-            "getminutes",
+            "getminuts",
             "getseconds",
             "touppercase",
             "tolowercase",
