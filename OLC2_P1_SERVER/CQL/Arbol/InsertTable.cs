@@ -1,5 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -197,19 +196,9 @@ public class InsertTable : Instruccion
             TipoDato.Tipo colType = tablita.GetColumn(ListaCampos[i]).TipoDatoColumna.GetRealTipo();
             TipoDato.Tipo valType = ListaValores[i].GetTipo(ent).GetRealTipo();
 
-            if (colType.Equals(TipoDato.Tipo.STRING) || colType.Equals(TipoDato.Tipo.DATE) || colType.Equals(TipoDato.Tipo.TIME) || colType.Equals(TipoDato.Tipo.MAP) || colType.Equals(TipoDato.Tipo.SET) || colType.Equals(TipoDato.Tipo.LIST) || colType.Equals(TipoDato.Tipo.OBJECT))
+            if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
             {
-                if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (!valType.Equals(colType))
-                {
-                    return false;
-                }
+                return false;
             }
         }
 

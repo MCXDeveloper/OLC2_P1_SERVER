@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using Irony.Parsing;
-using OLC2_P1_SERVER.CQL.Arbol;
 using static Asignacion;
 
 public class ASTBuilder
@@ -651,6 +650,10 @@ public class ASTBuilder
             }
             return lista_ids;
         }
+        else if (EstoyAca(actual, "SENTENCIA_CREATE_USER"))
+        {
+            return new CreateUser(ObtenerLexema(actual, 2), ObtenerLexema(actual, 5).Replace("\"", ""), GetFila(actual, 0), GetColumna(actual, 0));
+        }
         else if (EstoyAca(actual, "SENTENCIA_TB_ALTER"))
         {
             if (EstoyAca(actual.ChildNodes[3], "add"))
@@ -666,7 +669,7 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
-                case 4:
+                case 3:
                     return new DropTable(false, ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
                     return new DropTable(true, ObtenerLexema(actual, 4), GetFila(actual, 0), GetColumna(actual, 0));
@@ -800,6 +803,16 @@ public class ASTBuilder
                     }
             }
         }
+        else if (EstoyAca(actual, "SENTENCIA_TB_DELETE"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 3:
+                    return new DeleteTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new DeleteTable(ObtenerLexema(actual, 2), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
         else if (EstoyAca(actual, "LISTA_ORDER"))
         {
             List<Order> lista_columnas = new List<Order>();
@@ -834,6 +847,33 @@ public class ASTBuilder
         else if (EstoyAca(actual, "SENTENCIA_FOR"))
         {
             return new For((Instruccion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), (Instruccion)Recorrido(actual.ChildNodes[6]), (List<Instruccion>)Recorrido(actual.ChildNodes[9]));
+        }
+        else if (EstoyAca(actual, "FUNCION_AGREGACION"))
+        {
+            return new FuncionAgregacion((TipoFuncionAgregacion)Recorrido(actual.ChildNodes[0]), (Select)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+        }
+        else if (EstoyAca(actual, "TIPO_FUN_AGG"))
+        {
+            if (EstoyAca(actual.ChildNodes[0], "count"))
+            {
+                return TipoFuncionAgregacion.COUNT;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "min"))
+            {
+                return TipoFuncionAgregacion.MIN;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "max"))
+            {
+                return TipoFuncionAgregacion.MAX;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "sum"))
+            {
+                return TipoFuncionAgregacion.SUM;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "avg"))
+            {
+                return TipoFuncionAgregacion.AVG;
+            }
         }
 
         return null;

@@ -68,7 +68,7 @@
                 font-family: courier new;
                 resize: none;
                 white-space: pre;
-                overflow-x: auto;
+                overflow: auto;
             }
             .consultita {
                 background-color: #000 !important;
@@ -155,20 +155,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Consola de salida</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div id="tab-holder-2">
-                                        <ul id="ul-tab-2" class="tab2">
-                                            <li><a href="#Console">Consola de Salida</a></li>
-                                        </ul>
-                                        <div id="div-tab-2" class="tabContainer">
-                                            <div id="Console" class="tabContent2">
-                                                <textarea class="form-control consolita" rows="10" id="consola-de-salida" disabled></textarea>
-                                            </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Consola de salida</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="tab-holder-2">
+                                    <ul id="ul-tab-2" class="tab2">
+                                        <li><a href="#Console">Consola de Salida</a></li>
+                                    </ul>
+                                    <div id="div-tab-2" class="tabContainer">
+                                        <div id="Console" class="tabContent2">
+                                            <textarea class="form-control consolita" rows="10" id="consola-de-salida" readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +289,7 @@
 
                 $('#div-tab-2').append(
                     $('<div>').attr('id', id).attr('class', 'tabContent2').attr('style', 'display:none;').append(
-                        $('<textarea>').attr('id', idArea).attr('class', 'form-control ' + typeForm).attr('rows', 10).prop('disabled', true)
+                        $('<textarea>').attr('id', idArea).attr('class', 'form-control ' + typeForm).attr('rows', 10).prop('readonly', true)
                     )
                 );
 

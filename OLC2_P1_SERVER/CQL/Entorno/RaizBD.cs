@@ -23,12 +23,7 @@ public class RaizBD : InstruccionBD
     {
         return ListaDatabase.ContainsKey(NombreBD);
     }
-
-    public bool HasPermissions(string NombreUsuario, string NombreBD)
-    {
-        return ListaDatabase[NombreBD].ListaUsuariosConPermisos.Contains(NombreUsuario) || ListaDatabase[NombreBD].UsuarioCreador.Equals(NombreUsuario);
-    }
-
+    
     public void InsertDatabase(string NombreBD, Database BD)
     {
         ListaDatabase.Add(NombreBD, BD);

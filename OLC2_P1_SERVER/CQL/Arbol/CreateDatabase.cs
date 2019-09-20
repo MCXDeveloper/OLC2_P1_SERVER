@@ -1,4 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +22,10 @@ public class CreateDatabase : Instruccion
     public object Ejecutar(Entorno ent)
     {
         // 1. Primero valido que la base de datos que se desea crear no exista en el sistema.
-        if (!CQL.RootBD.ExistsDatabase(NombreBD))
+        if (!CQL.ExisteBaseDeDatos(NombreBD))
         {
             // 2. Registro la base de datos en el sistema.
-            CQL.RootBD.InsertDatabase(NombreBD, new Database(NombreBD));
+            CQL.RegistrarBaseDeDatos(NombreBD);
         }
         else
         {

@@ -1,5 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +9,7 @@ public class Database : InstruccionBD
     public string UsuarioCreador { get; set; }
     public List<Table> ListaTablas { get; set; }
     public List<UserType> ListaUserTypes { get; set; }
-    public List<string> ListaUsuariosConPermisos { get; set; }
+    public List<Usuario> ListaUsuariosConPermisos { get; set; }
     public List<Procedimiento> ListaProcedimientos { get; set; }
 
     public Database(string nombre_bd)
@@ -19,9 +18,34 @@ public class Database : InstruccionBD
         ListaTablas = new List<Table>();
         UsuarioCreador = CQL.UsuarioLogueado;
         ListaUserTypes = new List<UserType>();
-        ListaUsuariosConPermisos = new List<string>();
+        ListaUsuariosConPermisos = new List<Usuario>();
         ListaProcedimientos = new List<Procedimiento>();
     }
+
+    #region FUNCIONES_DE_BD
+
+    public bool ExisteUsuarioEnBD(string nombre_usuario)
+    {
+        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario));
+    }
+
+    public bool TieneUsuarioPermisosEnBD(string nombre_usuario)
+    {
+        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario)) || UsuarioCreador.Equals(nombre_usuario) || nombre_usuario.Equals("admin");
+    }
+    
+    #endregion
+
+    #region FUNCIONES_DE_USUARIO
+
+    public Usuario RegistrarUsuario(string nombre_usuario, string password)
+    {
+        Usuario user = new Usuario(nombre_usuario, password);
+        ListaUsuariosConPermisos.Add(user);
+        return user;
+    }
+
+    #endregion
 
     #region FUNCIONES_DE_TABLAS
 
@@ -46,6 +70,11 @@ public class Database : InstruccionBD
     }
 
     public void TruncarTabla(string nombre_tabla)
+    {
+        ObtenerTabla(nombre_tabla).Tabla.Clear();
+    }
+
+    public void EliminarTodosLosRegistros(string nombre_tabla)
     {
         ObtenerTabla(nombre_tabla).Tabla.Rows.Clear();
     }

@@ -29,6 +29,7 @@ public class Table : InstruccionBD
     {
         col.ColumnName = col.NombreColumna;
         col.DataType = GetTheType(col.TipoDatoColumna.GetRealTipo());
+        col.AllowDBNull = true;
 
         if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
         {
@@ -85,13 +86,13 @@ public class Table : InstruccionBD
 
         for (int i = 0; i < ListFields.Count; i++)
         {
-            row[ListFields[i]] = ListValues[i];
+            row[ListFields[i]] = (ListValues[i] is Nulo) ? DBNull.Value : ListValues[i];
         }
 
         Tabla.Rows.Add(row);
     }
 
-    private Type GetTheType(TipoDato.Tipo tipo)
+    public static Type GetTheType(TipoDato.Tipo tipo)
     {
         switch (tipo)
         {

@@ -1,5 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,17 +9,19 @@ public class Select : Instruccion
     private readonly int fila;
     private readonly int columna;
     public string NombreTabla { get; set; }
+    public bool IsFuncionAgregacion { get; set; }
     public Expresion ExpresionWhere { get; set; }
     public Expresion ExpresionLimit { get; set; }
     public List<Expresion> ListaCampos { get; set; }
     public List<Order> ListaOrdenamiento { get; set; }
-
+    
     public Select(List<Expresion> lista_campos, string nombre_tabla, Expresion valor_where, Expresion valor_limit, List<Order> lista_ordenamiento, int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;
         ListaCampos = lista_campos;
         NombreTabla = nombre_tabla;
+        IsFuncionAgregacion = false;
         ExpresionWhere = valor_where;
         ExpresionLimit = valor_limit;
         ListaOrdenamiento = lista_ordenamiento;
@@ -75,14 +76,18 @@ public class Select : Instruccion
                 // 3.2  WHERE - En una tabla temporal almaceno el resultado de ejecutar el where (si hubiese, de lo contrario se sigue utilizando la tabla original).
                 CQL.WhereFlag = true;
                 CQL.TuplaEnUso = null;
-                Table tablaTemp = (!(ExpresionWhere is null) ? EjecutarWhere(ent) : CQL.TablaEnUso);
+                Table tablaTemp = (!(ExpresionWhere is null) ? EjecutarWhere(CQL.TablaEnUso.Tabla, ent) : CQL.TablaEnUso);
                 CQL.WhereFlag = false;
                 CQL.TuplaEnUso = null;
 
                 if (!(tablaTemp is null))
                 {
                     // 3.3 SELECT - En una nueva tabla temporal almaceno el resultado de seleccionar solo ciertas columnas (si hubiese, de lo contrario se muestran todas).
+                    CQL.SelectFlag = true;
+                    CQL.TuplaEnUso = null;
                     Table tablaTemp2 = !(ListaCampos is null) ? EjecutarSeleccion(tablaTemp, ent) : tablaTemp;
+                    CQL.SelectFlag = false;
+                    CQL.TuplaEnUso = null;
 
                     if (!(tablaTemp2 is null))
                     {
@@ -93,7 +98,12 @@ public class Select : Instruccion
                         Table tablaTemp4 = !(ExpresionLimit is null) ? EjecutarLimit(tablaTemp3, ent) : tablaTemp3;
 
                         // Agrego a la pila de respuestas el resultado del select.
-                        CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
+                        if (!IsFuncionAgregacion)
+                        {
+                            CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
+                        }
+
+                        return tablaTemp4;
                     }
                 }
             }
@@ -135,13 +145,13 @@ public class Select : Instruccion
                     return false;
                 }
             }
-            else
+            /*else
             {
                 if (!(exp is Primitivo))
                 {
                     return false;
                 }
-            }
+            }*/
         }
 
         return true;
@@ -208,16 +218,8 @@ public class Select : Instruccion
 
         return false;
     }
-
-    private void InsertColumnsInResultTable(Table tabla_en_uso)
-    {
-        foreach (Columna col in CQL.TablaEnUso.Tabla.Columns)
-        {
-            tabla_en_uso.AddColumn(col);
-        }
-    }
-
-    private Table EjecutarWhere(Entorno ent)
+    
+    private Table EjecutarWhere(DataTable tablaOriginal, Entorno ent)
     {
         // La instrucción WHERE se llevará a cabo si y solo sí fue definida.  Para ello se itera sobre cada tupla de la tabla para poder evaluar
         // la expresión del WHERE.  En el caso de que no exista una expresión WHERE, se almacena el valor de la tupla normal en la tablaResult.
@@ -226,20 +228,26 @@ public class Select : Instruccion
         Table tablaResult = new Table(CQL.GenerateName(5));
 
         // 2. Agrego las columnas de la tabla del FROM a la tabla del resultado.
-        InsertColumnsInResultTable(tablaResult);
+        AgregarColumnasATabla(tablaOriginal, tablaResult.Tabla);
 
         // 3. Por cada fila se pregunta si existe la expresión WHERE ya que de lo contrario solo se almacena la tupla.
-        foreach (DataRow row in CQL.TablaEnUso.Tabla.Rows)
+        for (int i = 0; i < tablaOriginal.Rows.Count; i++)
         {
-            CQL.TuplaEnUso = row;
+            CQL.TuplaEnUso = tablaOriginal.Rows[i];
+            object whereResponse = ExpresionWhere.Ejecutar(ent);
 
-            object where_resp = ExpresionWhere.Ejecutar(ent);
-
-            if (where_resp is bool)
+            if (whereResponse is bool)
             {
-                if ((bool)where_resp)
+                if ((bool)whereResponse)
                 {
-                    tablaResult.Tabla.Rows.Add(row);
+                    DataRow r = tablaResult.Tabla.NewRow();
+
+                    foreach (DataColumn col in tablaOriginal.Columns)
+                    {
+                        r[col.ColumnName] = tablaOriginal.Rows[i][col.ColumnName];
+                    }
+
+                    tablaResult.Tabla.Rows.Add(r);
                 }
             }
             else
@@ -248,7 +256,7 @@ public class Select : Instruccion
                 return null;
             }
         }
-
+        
         return tablaResult;
     }
 
@@ -261,25 +269,32 @@ public class Select : Instruccion
         // 1. Valido que los tipos de dato sean los permitidos dentro de un select, de lo contrario, se debe mostrar un error.
         if (ValidateFieldTypesOfSelect())
         {
-            // 2. Creo una nueva tabla para almacenar el resultado del WHERE
+            // 2. Creo una nueva tabla para almacenar el resultado del SELECT
             Table tablaResult = new Table(CQL.GenerateName(5));
 
             // 3. Creo un indice que me indica el nombre de la columna calculada.
             int calCol = 0;
 
+            // 4. Agrego los DataRows vacios necesarios para la tabla de respuesta.
+            AgregarFilasATabla(temp.Tabla, tablaResult.Tabla);
+
             foreach (Expresion exp in ListaCampos)
             {
-                if (exp is Primitivo)
+                if (exp is ColumnaTabla)
                 {
-                    tablaResult.Tabla.Merge(GenerarColumnaRepetitiva(("Columna_" + calCol), exp.Ejecutar(ent), temp.Tabla.Rows.Count));
-                    calCol++;
-                }
-                else if (exp is ColumnaTabla)
-                {
-                    DataTable dtAll = temp.Tabla.Copy();
-                    DataView dv = new DataView(dtAll);
-                    DataTable dtCalc = dv.ToTable(false, ((ColumnaTabla)exp).NombreColumna);
-                    tablaResult.Tabla.Merge(dtCalc);
+                    ColumnaTabla ct = (ColumnaTabla)exp;
+
+                    // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
+                    if (!tablaResult.Tabla.Columns.Contains(ct.NombreColumna))
+                    {
+                        tablaResult.Tabla.Columns.Add(ct.NombreColumna, temp.Tabla.Columns[ct.NombreColumna].DataType);
+                    }
+
+                    // Por cada fila en la tabla de respuesta se almacena el valor correspondiente a la posición de la tabla original.
+                    for (int i = 0; i < tablaResult.Tabla.Rows.Count; i++)
+                    {
+                        tablaResult.Tabla.Rows[i][ct.NombreColumna] = temp.Tabla.Rows[i][ct.NombreColumna];
+                    }
                 }
                 else if (exp is AccesoColumna)
                 {
@@ -298,6 +313,29 @@ public class Select : Instruccion
                     {
                         tablaResult.Tabla.Merge((DataTable)access_response);
                     }
+                }
+                else
+                {
+                    // Genero el nombre de la columna calculada.
+                    string nombre_columna = "Columna_" + calCol;
+
+                    // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
+                    if (!tablaResult.Tabla.Columns.Contains(nombre_columna))
+                    {
+                        tablaResult.Tabla.Columns.Add(nombre_columna);
+                    }
+
+                    // Por cada fila de la tabla original se almacena la tupla de forma estática por si el valor de una columna
+                    // es utilizado por una expresión.  Al final, se ejecuta esa expresión y el valor devuelto es el almacenado
+                    // en la tabla de respuesta.
+                    for (int i = 0; i < temp.Tabla.Rows.Count; i++)
+                    {
+                        DataRow row = temp.Tabla.Rows[i];
+                        CQL.TuplaEnUso = row;
+                        tablaResult.Tabla.Rows[i][nombre_columna] = exp.Ejecutar(ent).ToString();
+                    }
+                    
+                    calCol++;
                 }
             }
 
@@ -319,18 +357,45 @@ public class Select : Instruccion
         foreach (Order orden in ListaOrdenamiento)
         {
             ordenamiento += orden.NombreColumnaOrden + (orden.TipoDeOrden.Equals(String.Empty) ? " ASC" : " " + orden.TipoDeOrden.ToUpper());
-            ordenamiento += !ListaOrdenamiento.Last().Equals(orden) ? "" : ", ";
+            ordenamiento += !ListaOrdenamiento.Last().Equals(orden) ? ", " : "";
         }
 
+        // 2. Construyo un DataTable (copia de temp.Tabla) para poder ordenar bien los valores.
+        DataTable cleanDT = ConstruirDataTableLimpio(temp.Tabla);
+
         // 2. Convierto la tabla recibida por parametro a un DataView para poderlo ordenar.
-        DataView dv = new DataView(temp.Tabla);
-        dv.Sort = ordenamiento;
+        cleanDT.DefaultView.Sort = ordenamiento;
+        cleanDT = cleanDT.DefaultView.ToTable();
 
         // 3. Una vez ordenado el DataView, procedo a crear una nueva Table y le adjunto a el atributo Tabla la conversión del DataView a DataTable nuevamente.
         Table tablaResult = new Table(CQL.GenerateName(5));
-        tablaResult.Tabla = dv.ToTable();
+        tablaResult.Tabla = cleanDT;
 
         return tablaResult;
+    }
+
+    private DataTable ConstruirDataTableLimpio(DataTable dtSucio)
+    {
+        DataTable dt = new DataTable(dtSucio.TableName);
+
+        foreach (DataColumn col in dtSucio.Columns)
+        {
+            dt.Columns.Add(col.ColumnName);
+        }
+
+        foreach (DataRow row in dtSucio.Rows)
+        {
+            DataRow dr = dt.NewRow();
+
+            foreach (DataColumn col in dtSucio.Columns)
+            {
+                dr[col.ColumnName] = row[col.ColumnName];
+            }
+
+            dt.Rows.Add(dr);
+        }
+
+        return dt;
     }
 
     private Table EjecutarLimit(Table temp, Entorno ent)
@@ -351,20 +416,21 @@ public class Select : Instruccion
         return null;
     }
 
-    private DataTable GenerarColumnaRepetitiva(string nombre_columna, object valor, int cantidad_iteraciones)
+    private void AgregarFilasATabla(DataTable source, DataTable destiny)
     {
-        DataTable dt = new DataTable();
-        dt.Clear();
-        dt.Columns.Add(nombre_columna);
-       
-        for (int i = 0; i < cantidad_iteraciones; i++)
+        for (int i = 0; i < source.Rows.Count; i++)
         {
-            DataRow row = dt.NewRow();
-            row[nombre_columna] = valor;
-            dt.Rows.Add();
+            DataRow row = destiny.NewRow();
+            destiny.Rows.Add(row);
         }
-
-        return dt;
+    }
+    
+    private void AgregarColumnasATabla(DataTable source, DataTable destiny)
+    {
+        foreach (DataColumn col in source.Columns)
+        {
+            destiny.Columns.Add(col.ColumnName, col.DataType);
+        }
     }
 
     private string GetSelectInAscii(Table t)
@@ -373,9 +439,9 @@ public class Select : Instruccion
         dt.Clear();
 
         // Defino las columnas del DataTable
-        foreach (Columna col in t.Tabla.Columns)
+        foreach (DataColumn col in t.Tabla.Columns)
         {
-            dt.Columns.Add(col.NombreColumna);
+            dt.Columns.Add(col.ColumnName);
         }
 
         // Por cada fila en la tabla de la BD, creo una nueva fila y para cada columna le agrego su valor en string.

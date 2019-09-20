@@ -9,6 +9,12 @@ namespace OLC2_P1_SERVER
     {
         public static void Register(HttpConfiguration config)
         {
+            // Ejecuto las acciones iniciales necesarias para comenzar con el parseo.
+            CQL.AccionesIniciales();
+
+            // Agrego el usuario admin.
+            CQL.ListaUsuariosDisponibles.Add(new Usuario("admin", "admin"));
+            
             // Web API configuration and services
             config.EnableCors();
             // Web API routes

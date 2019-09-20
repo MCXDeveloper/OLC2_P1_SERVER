@@ -1,5 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,7 +30,7 @@ public class AST : Instruccion
             {
                 EjecutarNormal(ent);
             }
-        }
+        }        
 
         //System.Diagnostics.Debug.Write(CQL.TransformEntornoToTable(ent));
         //System.Diagnostics.Debug.Write(CQL.ObtenerListaUserTypesEnString());
@@ -104,6 +103,26 @@ public class AST : Instruccion
             else if (ins is Select)
             {
                 Select x = (Select)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is TruncateTable)
+            {
+                TruncateTable x = (TruncateTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is DropTable)
+            {
+                DropTable x = (DropTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is DeleteTable)
+            {
+                DeleteTable x = (DeleteTable)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is CreateUser)
+            {
+                CreateUser x = (CreateUser)ins;
                 x.Ejecutar(ent);
             }
 

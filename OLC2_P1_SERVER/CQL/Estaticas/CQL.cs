@@ -9,6 +9,7 @@ public class CQL
 {
     public static RaizBD RootBD { get; set; }
     public static bool WhereFlag { get; set; }
+    public static bool SelectFlag { get; set; }
     public static Table TablaEnUso { get; set; }
     public static DataRow TuplaEnUso { get; set; }
     public static string BaseDatosEnUso { get; set; }
@@ -20,7 +21,7 @@ public class CQL
 
     public static bool ExisteUsuarioLogueado()
     {
-        return (UsuarioLogueado is null || !UsuarioLogueado.Equals(String.Empty));
+        return !string.IsNullOrEmpty(UsuarioLogueado);
     }
 
     public static bool ValidarLogin(string user, string pass)
@@ -32,9 +33,44 @@ public class CQL
 
     #region FUNCIONES_DE_BASE_DE_DATOS
 
+    public static bool ExisteBaseDeDatos(string nombre_bd)
+    {
+        return RootBD.ExistsDatabase(nombre_bd);
+    }
+
+    public static void RegistrarBaseDeDatos(string nombre_bd)
+    {
+        RootBD.InsertDatabase(nombre_bd, new Database(nombre_bd));
+    }
+
+    public static void EliminarBaseDeDatos(string nombre_bd)
+    {
+        RootBD.DeleteDatabase(nombre_bd);
+    }
+
     public static bool ExisteBaseDeDatosEnUso()
     {
-        return !(BaseDatosEnUso == string.Empty);
+        return !string.IsNullOrEmpty(BaseDatosEnUso);
+    }
+
+    public static bool TienePermisosSobreBaseDeDatos(string nombre_usuario, string nombre_bd)
+    {
+        return RootBD.GetDatabase(nombre_bd).TieneUsuarioPermisosEnBD(nombre_usuario);
+    }
+    
+    #endregion
+
+    #region FUNCIONES_DE_USUARIO
+
+    public static bool ExisteUsuarioEnSistema(string nombre_usuario)
+    {
+        return ListaUsuariosDisponibles.Any(x => x.NombreUsuario.Equals(nombre_usuario));
+    }
+
+    public static void RegistrarUsuarioEnBD(string nombre_usuario, string password)
+    {
+        Usuario user = RootBD.GetDatabase(BaseDatosEnUso).RegistrarUsuario(nombre_usuario, password);
+        ListaUsuariosDisponibles.Add(user);
     }
 
     #endregion
@@ -54,6 +90,16 @@ public class CQL
     public static void RegistrarTabla(Table tabla)
     {
         RootBD.GetDatabase(BaseDatosEnUso).RegistrarTabla(tabla);
+    }
+
+    public static void TruncarTabla(string nombre_tabla)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).TruncarTabla(nombre_tabla);
+    }
+
+    public static void DropearTabla(string nombre_tabla)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).EliminarTabla(nombre_tabla);
     }
 
     public static bool VerificarSiColumnaEsPK(string nombre_tabla, string nombre_columna)
@@ -84,6 +130,11 @@ public class CQL
     public static Columna ObtenerColumnaDeTabla(string nombre_columna)
     {
         return CQL.TablaEnUso.GetColumn(nombre_columna);
+    }
+
+    public static void EliminarTodosLosRegistrosDeTabla(string nombre_tabla)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).EliminarTodosLosRegistros(nombre_tabla);
     }
 
     #endregion
@@ -148,8 +199,8 @@ public class CQL
     {
         RootBD = new RaizBD();
         PilaRespuestas.Clear();
-        //TablaEnUso = new Table("xxx");
-        //TuplaEnUso = new DataRow("xxx");
+        TablaEnUso = null;
+        TuplaEnUso = null;
         BaseDatosEnUso = string.Empty;
         UsuarioLogueado = string.Empty;
         ListaUsuariosDisponibles = new List<Usuario>();

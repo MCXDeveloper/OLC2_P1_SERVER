@@ -173,7 +173,6 @@
     <Compile Include="CQL\Abstracto\Instruccion.cs" />
     <Compile Include="CQL\Abstracto\InstruccionBD.cs" />
     <Compile Include="CQL\Analizadores\ASTBuilder.cs" />
-    <Compile Include="CQL\Analizadores\Executer.cs" />
     <Compile Include="CQL\Analizadores\Grammar.cs" />
     <Compile Include="CQL\Arbol\AccesoCollection.cs" />
     <Compile Include="CQL\Arbol\AccesoObjeto.cs" />
@@ -204,8 +203,11 @@
     <Compile Include="CQL\Arbol\ColumnaTabla.cs" />
     <Compile Include="CQL\Arbol\CreateDatabase.cs" />
     <Compile Include="CQL\Arbol\CreateTable.cs" />
+    <Compile Include="CQL\Arbol\CreateUser.cs" />
+    <Compile Include="CQL\Arbol\DeleteTable.cs" />
     <Compile Include="CQL\Arbol\DropDatabase.cs" />
     <Compile Include="CQL\Arbol\DropTable.cs" />
+    <Compile Include="CQL\Arbol\FuncionAgregacion.cs" />
     <Compile Include="CQL\Arbol\InsertTable.cs" />
     <Compile Include="CQL\Arbol\ObjectValue.cs" />
     <Compile Include="CQL\Arbol\Order.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="CQL\Entorno\Variable.cs" />
     <Compile Include="CQL\Estaticas\CQL.cs" />
     <Compile Include="CQL\Manejadores\AsciiTableGenerator.cs" />
+    <Compile Include="CQL\Manejadores\TipoFuncionAgregacion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

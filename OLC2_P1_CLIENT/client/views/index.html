@@ -114,6 +114,8 @@
                                 // Parseo el mensaje de LUP que debería de venir en data.
                                 let ast = LUPGrammar.parse(data);
 
+                                console.log(ast);
+
                                 ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
 
                                     if (finalLogin) {

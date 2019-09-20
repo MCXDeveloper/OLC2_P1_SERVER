@@ -1,4 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +28,14 @@ public class TruncateTable : Instruccion
         // +----------------------------------------------------------------------------------------------+
 
         // 1. Procedo a verificar si existe alguna base de datos en uso, de lo contrario, se reporta el error.
-        if (!CQL.BaseDatosEnUso.Equals(String.Empty))
+        if (CQL.ExisteBaseDeDatosEnUso())
         {
             // 2. Procedo a verificar que la tabla que se desea truncar exista en la base de datos.
-            if (CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).ExisteTabla(NombreTabla))
+            if (CQL.ExisteTablaEnBD(NombreTabla))
             {
                 // 3. Procedo a truncar la tabla.
-                CQL.RootBD.GetDatabase(CQL.BaseDatosEnUso).TruncarTabla(NombreTabla);
+                CQL.TruncarTabla(NombreTabla);
+                CQL.AddLUPMessage(">> La tabla '"+ NombreTabla +"' ha sido truncada exitosamente.");
             }
             else
             {

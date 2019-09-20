@@ -1,5 +1,4 @@
-﻿using OLC2_P1_SERVER.CQL.Arbol;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,7 +19,7 @@ public class ColumnaTabla : Expresion
     public object Ejecutar(Entorno ent)
     {
         // 1. Valido si estoy en una instrucción WHERE o una SELECT ya que ambas retornan valores diferentes.
-        if (CQL.WhereFlag)
+        if (CQL.WhereFlag || CQL.SelectFlag)
         {
             // 2. Para este punto debe de existir una tupla estática de la cual se obtendrá su valor en base al nombre de la columna proporcionado en esta clase.
             if (!(CQL.TuplaEnUso is null))

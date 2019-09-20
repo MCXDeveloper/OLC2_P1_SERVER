@@ -384,6 +384,10 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_RETURN = new NonTerminal("SENTENCIA_RETURN");
         NonTerminal SENTENCIA_CONTINUE = new NonTerminal("SENTENCIA_CONTINUE");
         NonTerminal SENTENCIA_FOR = new NonTerminal("SENTENCIA_FOR");
+        NonTerminal FUNCION_AGREGACION = new NonTerminal("FUNCION_AGREGACION");
+        NonTerminal TIPO_FUN_AGG = new NonTerminal("TIPO_FUN_AGG");
+        NonTerminal SENTENCIA_TB_DELETE = new NonTerminal("SENTENCIA_TB_DELETE");
+        NonTerminal SENTENCIA_CREATE_USER = new NonTerminal("SENTENCIA_CREATE_USER");
 
         #endregion
 
@@ -411,15 +415,23 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_CREATE
             | SENTENCIA_DB_USE
             | SENTENCIA_DB_DROP
+            | SENTENCIA_CREATE_USER + puco
             | SENTENCIA_TB_CREATE + puco
             | SENTENCIA_TB_ALTER + puco
             | SENTENCIA_TB_DROP + puco
             | SENTENCIA_TB_TRUNCATE + puco
             | SENTENCIA_TB_INSERT + puco
             | SENTENCIA_TB_SELECT + puco
+            | SENTENCIA_TB_DELETE + puco
             | SENTENCIA_BREAK + puco
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
+            ;
+
+        SENTENCIA_CREATE_USER.Rule = r_create + r_user + identificador + r_with + r_password + cadena;
+
+        SENTENCIA_TB_DELETE.Rule = r_delete + r_from + identificador
+            | r_delete + r_from + identificador + r_where + EXPRESION
             ;
 
         SENTENCIA_TB_SELECT.Rule = r_select + por + r_from + identificador
@@ -582,6 +594,8 @@ public class Grammar : Irony.Parsing.Grammar
 
         LISTA_EXPRESIONES.Rule = MakePlusRule(LISTA_EXPRESIONES, coma, EXPRESION);
 
+        FUNCION_AGREGACION.Rule = TIPO_FUN_AGG + par_a + menor + menor + SENTENCIA_TB_SELECT + mayor + mayor + par_c;
+
         SENTENCIA_ACCESO.Rule = variable + punto + LISTA_ACCESO;
 
         SENTENCIA_INC_DEC.Rule = variable + inc
@@ -597,6 +611,7 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_INC_DEC
             | LLAMADA_FUNCION
             | LLAMADA_PROCEDIMIENTO
+            | FUNCION_AGREGACION
             | identificador
             | r_null
             | r_new + TIPO
@@ -667,6 +682,13 @@ public class Grammar : Irony.Parsing.Grammar
             | xmenos
             | xpor
             | xdiv
+            ;
+
+        TIPO_FUN_AGG.Rule = r_count
+            | r_max
+            | r_min
+            | r_sum
+            | r_avg
             ;
 
         this.Root = INICIO;

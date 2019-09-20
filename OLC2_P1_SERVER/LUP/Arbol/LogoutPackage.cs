@@ -25,12 +25,10 @@ public class LogoutPackage : LUP_Instruccion
         }
         else
         {
-            System.Diagnostics.Debug.Write("Error. El usuario actualmente logueado no concuerda con el que desea cerrar sesión." + Environment.NewLine);
+            CQL.AddLUPMessage(">> Error. El usuario actualmente logueado no concuerda con el que desea cerrar sesión.");
         }
 
-        // TODO | LogoutPackage | Cambiar el return de aqui abajo
-        //return "[+LOGOUT][FAIL][-LOGOUT]";
-        return "[+LOGOUT][SUCCESS][-LOGOUT]";
+        return "[+LOGOUT][FAIL][-LOGOUT]";
     }
 
 }

@@ -53,7 +53,7 @@ namespace OLC2_P1_SERVER.Controllers
                 }
                 else
                 {
-                    System.Diagnostics.Debug.Write("Error. No se pudo construir el árbol de LUP." + Environment.NewLine);
+                    CQL.AddLUPMessage(">> Error. No se pudo construir el árbol de LUP.");
                 }
             }
 

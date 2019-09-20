@@ -27,18 +27,15 @@ public class LoginPackage : LUP_Instruccion
             }
             else
             {
-                System.Diagnostics.Debug.Write("Error. No existe un usuario con el user y pass proporcionado." + Environment.NewLine);
+                CQL.AddLUPMessage(">> Error. No existe un usuario con el user y pass proporcionado.");
             }
         }
         else
         {
-            System.Diagnostics.Debug.Write("Error. Actualmente existe un usuario utilizando la base de datos." + Environment.NewLine);
+            CQL.AddLUPMessage(">> Error. Actualmente existe un usuario utilizando la base de datos.");
         }
 
-        // TODO | LoginPackage | Cambiar el return de aqui abajo
-        //return "[+LOGIN][FAIL][-LOGIN]";
-        CQL.UsuarioLogueado = Usuario;
-        return "[+LOGIN][SUCCESS][-LOGIN]";
+        return "[+LOGIN][FAIL][-LOGIN]";
     }
 
 }
