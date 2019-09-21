@@ -1,19 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Modo Principiante - CQL Teacher</title>
-    <script type="text/javascript" src="javascripts/LUPBuilder.js"></script>
-    <script type="text/javascript" src="javascripts/Helper.js"></script>
-    <script type="text/javascript" src="javascripts/Loadings.js"></script>
-    <script type="text/javascript" src="javascripts/abstracto/AST.js"></script>
-    <script type="text/javascript" src="javascripts/arbol/DataPackage.js"></script>
-    <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
-    <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
-    <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
-    <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
-</head>
-<body>
+<html>
+    <head>
+        <title>Modo Principiante - CQL Teacher</title>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="jstree/dist/jstree.min.js"></script>
+        <script type="text/javascript" src="javascripts/LUPBuilder.js"></script>
+        <script type="text/javascript" src="javascripts/Helper.js"></script>
+        <script type="text/javascript" src="javascripts/Loadings.js"></script>
+        <script type="text/javascript" src="javascripts/abstracto/AST.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/DataPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
+        <script type="text/javascript" src="javascripts/blockly_compressed.js"></script>
+        <script type="text/javascript" src="javascripts/blocks_compressed.js"></script>
+        <script type="text/javascript" src="javascripts/javascript_compressed.js"></script>
+        <script type="text/javascript" src="javascripts/es.js"></script>
+        <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/tabs.css" type="text/css" rel="stylesheet">
+        <link href="jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+        <style>
+            .consolita {
+                background-color: #000 !important;
+                border: 1px solid #000 !important;
+                color: #00ff00 !important;
+                padding: 8px;
+                font-family: courier new;
+                resize: none;
+                white-space: pre;
+                overflow-x: auto;
+            }
+            .errorcito {
+                background-color: #ffffff !important;
+                border: 1px solid #000 !important;
+                color: #ff050f !important;
+                padding: 8px;
+                font-family: courier new;
+                resize: none;
+                white-space: pre;
+                overflow: auto;
+            }
+            .consultita {
+                background-color: #000 !important;
+                border: 1px solid #000 !important;
+                color: #17daff !important;
+                padding: 8px;
+                font-family: courier new;
+                resize: none;
+                white-space: pre;
+                overflow-x: auto;
+            }
+            a {
+                cursor:pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><span>CQL - Teacher</span></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a id="btn-cerrar-sesion">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">MODO PRINCIPIANTE</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Árbol de trabajo</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="jstree_demo_div"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Editor de texto</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="blocklyDiv" style="height: 480px; width: 820px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Consola de salida</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="tab-holder-2">
+                                    <ul id="ul-tab-2" class="tab2">
+                                        <li><a href="#Console">Consola de Salida</a></li>
+                                    </ul>
+                                    <div id="div-tab-2" class="tabContainer">
+                                        <div id="Console" class="tabContent2">
+                                            <textarea class="form-control consolita" rows="10" id="consola-de-salida" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AREA DE SCRIPTS -->
 
-</body>
+        <!-- ARBOL DE TRABAJO - JSTREE -->
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $(function () { $('#jstree_demo_div').jstree(); });
+
+                $('#jstree_demo_div').on("changed.jstree", function (e, data) {
+                    console.log(data.selected);
+                });
+
+                $('#jstree_demo_div').jstree({ 'core' : {
+                    'data' : [
+                        'Simple root node',
+                        {
+                            'text' : 'Root node 2',
+                            'state' : {
+                                'opened' : true,
+                                'selected' : true
+                            },
+                            'children' : [
+                                { 'text' : 'Child 1' },
+                                'Child 2'
+                            ]
+                        }
+                    ]
+                } });
+
+            });
+
+        </script>
+
+        <!-- CONSOLA DE SALIDAS -->
+        <script type="text/javascript">
+
+            // Variable donde almacenare las instancias de textarea que genera CodeMirror para poder acceder al texto después.
+            let consoleblocks = [];
+
+            $(document).ready(function(){
+                //hiding tab content except first one
+                $(".tabContent2").not(":first").hide();
+                // adding Active class to first selected tab and show
+                $("ul.tab2 li:first").addClass("active").show();
+                // set editor
+                setConsole(document.getElementById('consola-de-salida'), 'Console');
+                createNewConsole('Errores', 'consola-de-errores', 'errorcito');
+            });
+
+            function setConsole(element, idTab) {
+                consoleblocks.push({
+                    id: idTab,
+                    instancia: element
+                });
+            }
+
+            function getRandomNumber() {
+                return Math.floor(Math.random() * 100);
+            }
+
+            function createNewConsole(_id, _idArea, _typeForm) {
+
+                let num = getRandomNumber();
+                let id = (_id === null) ? 'Consulta' + num : _id;
+                let idArea = (_idArea === null) ? 'consola-de-salida_' + num : _idArea;
+                let typeForm = (_typeForm === null) ? 'consultita' : _typeForm;
+
+                $('#ul-tab-2').append(
+                    $('<li>').append(
+                        $('<a>').attr('href', '#' + id).append(id)
+                    )
+                );
+
+                $('#div-tab-2').append(
+                    $('<div>').attr('id', id).attr('class', 'tabContent2').attr('style', 'display:none;').append(
+                        $('<textarea>').attr('id', idArea).attr('class', 'form-control ' + typeForm).attr('rows', 10).prop('readonly', true)
+                    )
+                );
+
+                // Click event on tab
+                $("ul.tab2 li").click(function() {
+
+                    // Removing class of Active tab
+                    $("ul.tab2 li.active").removeClass("active");
+                    $("ul.tab2 li").removeClass("colorz");
+                    // Adding Active class to Clicked tab
+                    $(this).addClass("active");
+                    $("ul.tab2 li").not( $(this) ).addClass("colorz");
+                    // hiding all the tab contents
+                    $(".tabContent2").hide();
+                    // showing the clicked tab's content using fading effect
+                    $($('a',this).attr("href")).show();
+
+                    return false;
+
+                });
+
+                setConsole(document.getElementById(idArea), id);
+
+                return idArea;
+
+            }
+
+        </script>
+    
+        <!-- AREA DE XML's -->
+        <xml id="toolbox" style="display: none">
+            <category name="DML">
+                <block type="sentencia_select" colour="120"></block>
+            </category>
+        </xml>
+        <script>
+            
+            Blockly.Blocks['sentencia_select'] = {
+            init: function() {
+                this.appendValueInput("ins_select")
+                    .setCheck("String")
+                    .appendField("SELECT");
+                this.appendValueInput("ins_from")
+                    .setCheck("String")
+                    .appendField("FROM");
+                this.setNextStatement(true, "String");
+                this.setColour(120);
+            this.setTooltip("");
+            this.setHelpUrl("");
+            }
+            };
+
+            Blockly.JavaScript['sentencia_select'] = function(block) {
+            var value_ins_select = Blockly.JavaScript.valueToCode(block, 'ins_select', Blockly.JavaScript.ORDER_ATOMIC);
+            var value_ins_from = Blockly.JavaScript.valueToCode(block, 'ins_from', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = '...;\n';
+            return code;
+            };
+            
+            
+            var demoWorkspace = Blockly.inject('blocklyDiv',
+            {
+                media: 'media/',
+                toolbox: document.getElementById('toolbox')
+            });
+        
+            //Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), demoWorkspace);
+        </script>
+
+    </body>
 </html>

@@ -654,6 +654,14 @@ public class ASTBuilder
         {
             return new CreateUser(ObtenerLexema(actual, 2), ObtenerLexema(actual, 5).Replace("\"", ""), GetFila(actual, 0), GetColumna(actual, 0));
         }
+        else if (EstoyAca(actual, "SENTENCIA_GRANT"))
+        {
+            return new Grant(ObtenerLexema(actual, 1), ObtenerLexema(actual, 3), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_REVOKE"))
+        {
+            return new Revoke(ObtenerLexema(actual, 1), ObtenerLexema(actual, 3), GetFila(actual, 0), GetColumna(actual, 0));
+        }
         else if (EstoyAca(actual, "SENTENCIA_TB_ALTER"))
         {
             if (EstoyAca(actual.ChildNodes[3], "add"))

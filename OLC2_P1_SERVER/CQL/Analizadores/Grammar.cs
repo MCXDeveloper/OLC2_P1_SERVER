@@ -388,6 +388,8 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal TIPO_FUN_AGG = new NonTerminal("TIPO_FUN_AGG");
         NonTerminal SENTENCIA_TB_DELETE = new NonTerminal("SENTENCIA_TB_DELETE");
         NonTerminal SENTENCIA_CREATE_USER = new NonTerminal("SENTENCIA_CREATE_USER");
+        NonTerminal SENTENCIA_GRANT = new NonTerminal("SENTENCIA_GRANT");
+        NonTerminal SENTENCIA_REVOKE = new NonTerminal("SENTENCIA_REVOKE");
 
         #endregion
 
@@ -416,6 +418,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_USE
             | SENTENCIA_DB_DROP
             | SENTENCIA_CREATE_USER + puco
+            | SENTENCIA_GRANT + puco
+            | SENTENCIA_REVOKE + puco
             | SENTENCIA_TB_CREATE + puco
             | SENTENCIA_TB_ALTER + puco
             | SENTENCIA_TB_DROP + puco
@@ -427,6 +431,10 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_GRANT.Rule = r_grant + identificador + r_on + identificador;
+
+        SENTENCIA_REVOKE.Rule = r_revoke + identificador + r_on + identificador;
 
         SENTENCIA_CREATE_USER.Rule = r_create + r_user + identificador + r_with + r_password + cadena;
 
