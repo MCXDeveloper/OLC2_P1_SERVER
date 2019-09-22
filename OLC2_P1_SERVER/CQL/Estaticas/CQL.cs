@@ -57,20 +57,42 @@ public class CQL
     {
         return RootBD.GetDatabase(nombre_bd).TieneUsuarioPermisosEnBD(nombre_usuario);
     }
-    
+
+    public static string ObtenerUsuarioCreador(string nombre_bd)
+    {
+        return RootBD.GetDatabase(nombre_bd).UsuarioCreador;
+    }
+
     #endregion
 
     #region FUNCIONES_DE_USUARIO
 
+    public static bool ExisteUsuarioEnPermisosBD(string nombre_bd, string nombre_usuario)
+    {
+        return RootBD.GetDatabase(nombre_bd).ExisteUsuarioEnPermisos(nombre_usuario);
+    }
+
     public static bool ExisteUsuarioEnSistema(string nombre_usuario)
     {
-        return ListaUsuariosDisponibles.Any(x => x.NombreUsuario.Equals(nombre_usuario));
+        return ListaUsuariosDisponibles.Any(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public static void RegistrarUsuarioEnBD(string nombre_usuario, string password)
     {
         Usuario user = RootBD.GetDatabase(BaseDatosEnUso).RegistrarUsuario(nombre_usuario, password);
         ListaUsuariosDisponibles.Add(user);
+    }
+
+    public static void RegistrarUsuarioEnPermisos(string nombre_bd, string nombre_usuario)
+    {
+        Usuario user = ListaUsuariosDisponibles.Find(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
+        RootBD.GetDatabase(nombre_bd).RegistrarUsuarioAPermisos(user);
+    }
+
+    public static void EliminarUsuarioEnPermisos(string nombre_bd, string nombre_usuario)
+    {
+        Usuario user = ListaUsuariosDisponibles.Find(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
+        RootBD.GetDatabase(nombre_bd).EliminarUsuarioDePermisos(user);
     }
 
     #endregion
@@ -167,7 +189,7 @@ public class CQL
 
     public static void AddLUPMessage(string message)
     {
-        PilaRespuestas.Add("[+MESSAGE]" + message + "[-MESSAGE]" + Environment.NewLine);
+        PilaRespuestas.Add("[+MESSAGE]>> " + message + "[-MESSAGE]" + Environment.NewLine);
     }
 
     public static void AddLUPData(string content)

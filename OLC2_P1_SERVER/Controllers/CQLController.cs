@@ -33,8 +33,9 @@ namespace OLC2_P1_SERVER.Controllers
         // POST: api/CQL
         public string Post([FromBody]LUPackage package)
         {
+            CQL.PilaRespuestas.Clear();
             string response = String.Empty;
-
+            
             // 1. Recibo el mensaje de LUP y procedo a enviarlo a su parser.
             LUP_Grammar gramatica = new LUP_Grammar();
             LanguageData lenguaje = new LanguageData(gramatica);
@@ -53,7 +54,7 @@ namespace OLC2_P1_SERVER.Controllers
                 }
                 else
                 {
-                    CQL.AddLUPMessage(">> Error. No se pudo construir el árbol de LUP.");
+                    CQL.AddLUPMessage("Error. No se pudo construir el árbol de LUP.");
                 }
             }
 

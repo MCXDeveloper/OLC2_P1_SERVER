@@ -8,6 +8,7 @@ public class Database : InstruccionBD
     public string NombreBD { get; set; }
     public string UsuarioCreador { get; set; }
     public List<Table> ListaTablas { get; set; }
+    public List<Usuario> ListaUsuarios { get; set; }
     public List<UserType> ListaUserTypes { get; set; }
     public List<Usuario> ListaUsuariosConPermisos { get; set; }
     public List<Procedimiento> ListaProcedimientos { get; set; }
@@ -16,6 +17,7 @@ public class Database : InstruccionBD
     {
         NombreBD = nombre_bd;
         ListaTablas = new List<Table>();
+        ListaUsuarios = new List<Usuario>();
         UsuarioCreador = CQL.UsuarioLogueado;
         ListaUserTypes = new List<UserType>();
         ListaUsuariosConPermisos = new List<Usuario>();
@@ -24,14 +26,14 @@ public class Database : InstruccionBD
 
     #region FUNCIONES_DE_BD
 
-    public bool ExisteUsuarioEnBD(string nombre_usuario)
+    public bool ExisteUsuarioEnPermisos(string nombre_usuario)
     {
-        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario));
+        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
     }
 
     public bool TieneUsuarioPermisosEnBD(string nombre_usuario)
     {
-        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario)) || UsuarioCreador.Equals(nombre_usuario) || nombre_usuario.Equals("admin");
+        return ListaUsuariosConPermisos.Any(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase)) || UsuarioCreador.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase) || nombre_usuario.Equals("admin", StringComparison.InvariantCultureIgnoreCase);
     }
     
     #endregion
@@ -41,8 +43,18 @@ public class Database : InstruccionBD
     public Usuario RegistrarUsuario(string nombre_usuario, string password)
     {
         Usuario user = new Usuario(nombre_usuario, password);
-        ListaUsuariosConPermisos.Add(user);
+        ListaUsuarios.Add(user);
         return user;
+    }
+
+    public void RegistrarUsuarioAPermisos(Usuario user)
+    {
+        ListaUsuariosConPermisos.Add(user);
+    }
+
+    public void EliminarUsuarioDePermisos(Usuario user)
+    {
+        ListaUsuariosConPermisos.Remove(user);
     }
 
     #endregion

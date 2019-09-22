@@ -27,12 +27,12 @@ public class LoginPackage : LUP_Instruccion
             }
             else
             {
-                CQL.AddLUPMessage(">> Error. No existe un usuario con el user y pass proporcionado.");
+                CQL.AddLUPMessage("Error. No existe un usuario con el user y pass proporcionado.");
             }
         }
         else
         {
-            CQL.AddLUPMessage(">> Error. Actualmente existe un usuario utilizando la base de datos.");
+            CQL.AddLUPMessage("Error. Actualmente existe un usuario utilizando la base de datos.");
         }
 
         return "[+LOGIN][FAIL][-LOGIN]";

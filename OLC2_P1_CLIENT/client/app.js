@@ -42,11 +42,12 @@ http.listen(app.get("port"), () => {
  * Primary app routes.
  */
 app.get('/', function(req, res){
-    /*sess = req.session;
+    sess = req.session;
     if(sess.user_name) {
         return res.redirect('/Home');
-    }*/
-    res.sendFile('ModoPrincipiante.html', { root: path.join(__dirname, './views') });
+    }
+    res.sendFile('index.html', { root: path.join(__dirname, './views') });
+    //res.sendFile('ModoPrincipiante.html', { root: path.join(__dirname, './views') });
 });
 
 app.get('/getActualUser', function(req, res){

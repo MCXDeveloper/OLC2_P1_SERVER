@@ -125,6 +125,17 @@ public class AST : Instruccion
                 CreateUser x = (CreateUser)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is Grant)
+            {
+                Grant x = (Grant)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Revoke)
+            {
+                Revoke x = (Revoke)ins;
+                x.Ejecutar(ent);
+            }
+
 
             else if (ins is AccesoObjeto)
             {

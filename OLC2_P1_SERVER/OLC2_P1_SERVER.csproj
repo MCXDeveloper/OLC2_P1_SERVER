@@ -208,9 +208,11 @@
     <Compile Include="CQL\Arbol\DropDatabase.cs" />
     <Compile Include="CQL\Arbol\DropTable.cs" />
     <Compile Include="CQL\Arbol\FuncionAgregacion.cs" />
+    <Compile Include="CQL\Arbol\Grant.cs" />
     <Compile Include="CQL\Arbol\InsertTable.cs" />
     <Compile Include="CQL\Arbol\ObjectValue.cs" />
     <Compile Include="CQL\Arbol\Order.cs" />
+    <Compile Include="CQL\Arbol\Revoke.cs" />
     <Compile Include="CQL\Arbol\Select.cs" />
     <Compile Include="CQL\Arbol\TruncateTable.cs" />
     <Compile Include="CQL\Arbol\UseDatabase.cs" />

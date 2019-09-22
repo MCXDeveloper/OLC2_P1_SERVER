@@ -34,17 +34,17 @@ public class QueryPackage : LUP_Instruccion
                         
                 if (parseResponse is Nulo)
                 {
-                    CQL.AddLUPMessage(">> Análisis realizado exitosamente.");
+                    CQL.AddLUPMessage("Análisis realizado exitosamente.");
                 }
             }
             else
             {
-                CQL.AddLUPMessage(">> Error. No se pudo construir el árbol de CQL.");
+                CQL.AddLUPMessage("Error. No se pudo construir el árbol de CQL.");
             }
         }
         else
         {
-            CQL.AddLUPMessage(">> Hay errores lexicos o sintacticos.\n>> El arbol de Irony no se construyó.\n>> La cadena es inválida.");
+            CQL.AddLUPMessage("Hay errores lexicos o sintacticos.\n>> El arbol de Irony no se construyó.\n>> La cadena es inválida.");
 
             foreach(LogMessage err in arbol.ParserMessages)
             {

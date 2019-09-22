@@ -37,7 +37,7 @@ public class DropTable : Instruccion
             {
                 // 3. Procedo a eliminar la tabla.
                 CQL.DropearTabla(NombreTabla);
-                CQL.AddLUPMessage(">> La tabla '"+ NombreTabla +"' se ha eliminado correctamente.");
+                CQL.AddLUPMessage("La tabla '"+ NombreTabla +"' se ha eliminado correctamente.");
             }
             else
             {

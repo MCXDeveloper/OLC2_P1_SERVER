@@ -9,7 +9,7 @@ public class RaizBD : InstruccionBD
 
     public RaizBD()
     {
-        ListaDatabase = new Dictionary<string, Database>();
+        ListaDatabase = new Dictionary<string, Database>(StringComparer.InvariantCultureIgnoreCase);
     }
 
     #region FUNCIONES_DE_BD

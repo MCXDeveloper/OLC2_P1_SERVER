@@ -35,7 +35,7 @@ public class TruncateTable : Instruccion
             {
                 // 3. Procedo a truncar la tabla.
                 CQL.TruncarTabla(NombreTabla);
-                CQL.AddLUPMessage(">> La tabla '"+ NombreTabla +"' ha sido truncada exitosamente.");
+                CQL.AddLUPMessage("La tabla '"+ NombreTabla +"' ha sido truncada exitosamente.");
             }
             else
             {
