@@ -47,6 +47,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (CounterTypeException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.USER_ALREADY_EXISTS:
                 try { return EjecutarInstruccionesTry(ent); } catch (UserAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.USER_DONT_EXISTS:
+                try { return EjecutarInstruccionesTry(ent); } catch (UserDontExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;

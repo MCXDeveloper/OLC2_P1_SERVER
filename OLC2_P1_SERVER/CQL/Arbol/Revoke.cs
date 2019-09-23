@@ -39,7 +39,10 @@ public class Revoke : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[REVOKE]", "Error. No se puede quitar permisos al usuario '" + NombreUsuario + "' ya que no existe en el sistema.", fila, columna);
+                string mensaje = "Error. No se puede quitar permisos al usuario '" + NombreUsuario + "' ya que no existe en el sistema.";
+                CQL.AddLUPError("Semántico", "[REVOKE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UserDontExists' no capturada.  " + mensaje); }
+                return new UserDontExists(mensaje);
             }
         }
         else
