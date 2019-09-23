@@ -61,19 +61,37 @@ public class InsertTable : Instruccion
                 if (ListaCampos is null)
                 {
                     // 4. Procedo a realizar una validación exhaustiva para la inserción normal.
-                    if (ValidateNormalInsert(tablita, ent))
+                    object vni = ValidateNormalInsert(tablita, ent);
+
+                    if (vni is bool)
                     {
-                        // 5. Procedo a realizar la inserción de los valores.
-                        tablita.AddRow(GetEvaluatedValues(ent));
+                        if ((bool)vni)
+                        {
+                            // 5. Procedo a realizar la inserción de los valores.
+                            tablita.AddRow(GetEvaluatedValues(ent));
+                        }   
+                    }
+                    else
+                    {
+                        return vni;
                     }
                 }
                 else
                 {
                     // 4. Procedo a realizar una validación exhaustiva para la inserción especial.
-                    if (ValidateSpecialInsert(tablita, ent))
+                    object vsi = ValidateSpecialInsert(tablita, ent);
+
+                    if (vsi is bool)
                     {
-                        // 5. Procedo a realizar la inserción de los valores.
-                        tablita.AddRow(ListaCampos, GetEvaluatedValues(ent));
+                        if ((bool)vsi)
+                        {
+                            // 5. Procedo a realizar la inserción de los valores.
+                            tablita.AddRow(ListaCampos, GetEvaluatedValues(ent));
+                        }
+                    }
+                    else
+                    {
+                        return vsi;
                     }
                 }
             }
@@ -96,30 +114,56 @@ public class InsertTable : Instruccion
         return new Nulo();
     }
 
-    private bool ValidateNormalInsert(Table tablita, Entorno ent)
+    private object ValidateNormalInsert(Table tablita, Entorno ent)
     {
-        // 1. Valido que la cantidad de valores proporcionados concuerde con la cantidad de columnas de la tabla.
-        if (tablita.GetColumnCountWithoutCounterColumns().Equals(ListaValores.Count))
+        if (CQL.TryCatchFlag)
         {
-            // 2. Valido que cada tipo de dato del valor corresponda con el tipo de dato de la columna.
-            if (ValidateValueTypesWithColumnTypes(tablita, ent))
+            object vct = ValidateValueTypesWithColumnTypes(tablita, ent);
+
+            if (vct is bool)
             {
-                return true;
+                if ((bool)vct)
+                {
+                    return true;
+                }
             }
             else
             {
                 CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
+                return vct;
             }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.", fila, columna);
+            // 1. Valido que la cantidad de valores proporcionados concuerde con la cantidad de columnas de la tabla.
+            if (tablita.GetColumnCountWithoutCounterColumns().Equals(ListaValores.Count))
+            {
+                // 2. Valido que cada tipo de dato del valor corresponda con el tipo de dato de la columna.
+                object vct = ValidateValueTypesWithColumnTypes(tablita, ent);
+
+                if (vct is bool)
+                {
+                    if ((bool)vct)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
+                    return vct;
+                }
+            }
+            else
+            {
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.", fila, columna);
+            }
         }
 
         return false;
     }
 
-    private bool ValidateSpecialInsert(Table tablita, Entorno ent)
+    private object ValidateSpecialInsert(Table tablita, Entorno ent)
     {
         // 1. Valido que la cantidad de valores proporcionados concuerde con la cantidad de campos.
         if (ListaCampos.Count.Equals(ListaValores.Count))
@@ -142,7 +186,10 @@ public class InsertTable : Instruccion
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  No se puede insertar un valor en una columna de tipo COUNTER.", fila, columna);
+                    string mensaje = "Error.  No se puede insertar un valor en una columna de tipo COUNTER.";
+                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'CounterTypeException' no capturada.  " + mensaje); }
+                    return new CounterTypeException(mensaje);
                 }
             }
             else
@@ -158,7 +205,7 @@ public class InsertTable : Instruccion
         return false;
     }
 
-    private bool ValidateValueTypesWithColumnTypes(Table tablita, Entorno ent)
+    private object ValidateValueTypesWithColumnTypes(Table tablita, Entorno ent)
     {
         for (int i = 0; i < tablita.Tabla.Columns.Count; i++)
         {
@@ -181,6 +228,13 @@ public class InsertTable : Instruccion
                         return false;
                     }
                 }
+            }
+            else
+            {
+                string mensaje = "Error.  No se puede insertar un valor en una columna de tipo COUNTER.";
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'CounterTypeException' no capturada.  " + mensaje); }
+                return new CounterTypeException(mensaje);
             }
 
             /*if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
