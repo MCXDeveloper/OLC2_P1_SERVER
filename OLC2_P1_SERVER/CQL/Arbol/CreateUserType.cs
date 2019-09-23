@@ -35,7 +35,10 @@ public class CreateUserType : Instruccion
             {
                 if (!ValidacionExiste)
                 {
-                    CQL.AddLUPError("Semántico", "[CREATE_USER_TYPE]", "Error.  Una UserType con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | UserType: " + Identificador + ").", fila, columna);
+                    string mensaje = "Error.  Un UserType con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | UserType: " + Identificador + ").";
+                    CQL.AddLUPError("Semántico", "[CREATE_USER_TYPE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TypeAlreadyExists' no capturada.  " + mensaje); }
+                    return new TypeAlreadyExists(mensaje);
                 }
             }
         }
