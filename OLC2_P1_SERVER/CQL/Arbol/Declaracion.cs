@@ -41,7 +41,7 @@ public class Declaracion : Instruccion
             {
                 object simbolo = ent.ObtenerVariable(variable);
 
-                if (!(simbolo is Nulo))
+                if (simbolo is Nulo)
                 {
                     ent.Agregar(variable, new Variable(Tipo, variable, new Nulo()));
                 }

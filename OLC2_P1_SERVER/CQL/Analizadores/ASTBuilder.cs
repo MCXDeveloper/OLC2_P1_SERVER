@@ -43,11 +43,11 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
-                case 3:
-                    // TIPO + LISTA_VARIABLES + puco
-                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 2), GetColumna(actual, 2));
+                case 2:
+                    // TIPO + LISTA_VARIABLES
+                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual.ChildNodes[0], 0), GetColumna(actual.ChildNodes[0], 0));
                 default:
-                    // TIPO + LISTA_VARIABLES + igual + EXPRESION + puco
+                    // TIPO + LISTA_VARIABLES + igual + EXPRESION
                     return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
             }
         }

@@ -38,6 +38,13 @@ public class Atributo : Expresion
                 // Obtengo el valor del atributo.  Si no existiese, el resultado sería Nulo().
                 return obj.GetAtributo(IsValor, NombreAtributo);
             }
+            else if (Padre is Nulo)
+            {
+                string mensaje = "Error.  No se puede acceder a los atributos de un Objeto si es de tipo Nulo.";
+                CQL.AddLUPError("Semántico", "[ATRIBUTO]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'NullPointerException' no capturada.  " + mensaje); }
+                return new NullPointerException(mensaje);
+            }
             else
             {
                 CQL.AddLUPError("Semántico", "[ATRIBUTO]", "Error en acceso.  No se puede acceder a un atributo si el elemento no es de tipo Objeto.", fila, columna);
