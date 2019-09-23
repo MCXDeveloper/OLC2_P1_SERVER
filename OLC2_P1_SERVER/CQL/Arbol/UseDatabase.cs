@@ -37,7 +37,10 @@ public class UseDatabase : Instruccion
         else
         {
             CQL.BaseDatosEnUso = string.Empty;
-            CQL.AddLUPError("Semántico", "[USE_DATABASE]", "Error.  La base de datos que se desea utilizar ("+ NombreBD +") no existe en el sistema.", fila, columna);
+            string mensaje = "Error.  La base de datos que se desea utilizar (" + NombreBD + ") no existe en el sistema.";
+            CQL.AddLUPError("Semántico", "[USE_DATABASE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'BDDontExists' no capturada.  " + mensaje); }
+            return new BDDontExists(mensaje);
         }
         
         return new Nulo();

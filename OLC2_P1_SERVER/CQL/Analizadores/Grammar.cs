@@ -417,9 +417,9 @@ public class Grammar : Irony.Parsing.Grammar
             | LLAMADA_FUNCION + puco
             | LLAMADA_PROCEDIMIENTO
             | SENTENCIA_DB_CREATE
-            | SENTENCIA_DB_USE
-            | SENTENCIA_DB_DROP
             | SENTENCIA_TRY_CATCH
+            | SENTENCIA_DB_USE + puco
+            | SENTENCIA_DB_DROP + puco
             | SENTENCIA_CREATE_USER + puco
             | SENTENCIA_GRANT + puco
             | SENTENCIA_REVOKE + puco
@@ -510,7 +510,7 @@ public class Grammar : Irony.Parsing.Grammar
             | r_create + r_database + r_if + r_not + r_exists + identificador + puco
             ;
 
-        SENTENCIA_DB_USE.Rule = r_use + identificador + puco;
+        SENTENCIA_DB_USE.Rule = r_use + identificador;
 
         SENTENCIA_DB_DROP.Rule = r_drop + r_database + identificador;
 

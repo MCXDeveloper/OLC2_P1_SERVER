@@ -35,7 +35,10 @@ public class DropDatabase : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[DROP_DATABASE]", "Error.  La base de datos que se desea eliminar (" + NombreBD + ") no existe en el sistema.", fila, columna);
+            string mensaje = "Error.  La base de datos que se desea eliminar (" + NombreBD + ") no existe en el sistema.";
+            CQL.AddLUPError("Semántico", "[DROP_DATABASE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'BDDontExists' no capturada.  " + mensaje); }
+            return new BDDontExists(mensaje);
         }
 
         return new Nulo();
