@@ -140,6 +140,11 @@ public class AST : Instruccion
                 TryCatch x = (TryCatch)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is SentenciaThrow)
+            {
+                SentenciaThrow x = (SentenciaThrow)ins;
+                x.Ejecutar(ent);
+            }
 
             else if (ins is AccesoObjeto)
             {

@@ -970,6 +970,10 @@ public class ASTBuilder
                 return TipoExcepcion.PROCEDURE_ALREADY_EXISTS;
             }
         }
+        else if (EstoyAca(actual, "SENTENCIA_THROW"))
+        {
+            return new SentenciaThrow((TipoExcepcion)Recorrido(actual.ChildNodes[2]));
+        }
 
         return null;
     }

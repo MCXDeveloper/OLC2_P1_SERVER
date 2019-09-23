@@ -392,6 +392,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_REVOKE = new NonTerminal("SENTENCIA_REVOKE");
         NonTerminal SENTENCIA_TRY_CATCH = new NonTerminal("SENTENCIA_TRY_CATCH");
         NonTerminal TIPO_EXCEPCION = new NonTerminal("TIPO_EXCEPCION");
+        NonTerminal SENTENCIA_THROW = new NonTerminal("SENTENCIA_THROW");
 
         #endregion
 
@@ -418,6 +419,7 @@ public class Grammar : Irony.Parsing.Grammar
             | LLAMADA_PROCEDIMIENTO
             | SENTENCIA_DB_CREATE
             | SENTENCIA_TRY_CATCH
+            | SENTENCIA_THROW + puco
             | SENTENCIA_DB_USE + puco
             | SENTENCIA_DB_DROP + puco
             | SENTENCIA_CREATE_USER + puco
@@ -434,6 +436,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_THROW.Rule = r_throw + r_new + TIPO_EXCEPCION;
 
         SENTENCIA_TRY_CATCH.Rule = r_try + llave_a + LISTA_INSTRUCCIONES + llave_c + r_catch + par_a + TIPO_EXCEPCION + variable + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
 

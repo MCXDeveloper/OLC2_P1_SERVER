@@ -214,6 +214,7 @@
     <Compile Include="CQL\Arbol\Order.cs" />
     <Compile Include="CQL\Arbol\Revoke.cs" />
     <Compile Include="CQL\Arbol\Select.cs" />
+    <Compile Include="CQL\Arbol\SentenciaThrow.cs" />
     <Compile Include="CQL\Arbol\TruncateTable.cs" />
     <Compile Include="CQL\Arbol\TryCatch.cs" />
     <Compile Include="CQL\Arbol\UseDatabase.cs" />
