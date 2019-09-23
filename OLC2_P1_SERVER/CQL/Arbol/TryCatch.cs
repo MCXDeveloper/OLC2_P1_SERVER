@@ -57,6 +57,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (IndexOutException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.NULL_POINTER_EXCEPTION:
                 try { return EjecutarInstruccionesTry(ent); } catch (NullPointerException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.FUNCTION_ALREADY_EXISTS:
+                try { return EjecutarInstruccionesTry(ent); } catch (FunctionAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;

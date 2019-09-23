@@ -50,7 +50,10 @@ public class DeclaracionFuncion : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[DECLARACION_FUNCION]", "Se intentó declarar una función con el nombre de '" + key + "'.  Una con el mismo nombre ya existe en el entorno.", fila, columna);
+            string mensaje = "Se intentó declarar una función con el nombre de '" + key + "'.  Una con el mismo nombre ya existe en el entorno.";
+            CQL.AddLUPError("Semántico", "[DECLARACION_FUNCION]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'FunctionAlreadyExists' no capturada.  " + mensaje); }
+            return new FunctionAlreadyExists(mensaje);
         }
 
         return new Nulo();
