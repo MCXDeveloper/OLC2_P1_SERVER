@@ -32,7 +32,10 @@ public class CreateUser : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[CREATE_USER]", "Error. No se puede crear el usuario '"+ NombreUsuario +"'.  Existe uno con el mismo nombre actualmente en la base de datos.", fila, columna);
+                string mensaje = "Error. No se puede crear el usuario '" + NombreUsuario + "'.  Existe uno con el mismo nombre actualmente en la base de datos.";
+                CQL.AddLUPError("Semántico", "[CREATE_USER]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UserAlreadyExists' no capturada.  " + mensaje); }
+                return new UserAlreadyExists(mensaje);
             }
         }
         else
