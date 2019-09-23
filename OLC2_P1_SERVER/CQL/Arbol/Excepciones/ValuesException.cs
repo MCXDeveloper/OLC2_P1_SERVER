@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OLC2_P1_SERVER.CQL.Excepciones
+public class ValuesException : Exception
 {
-    public class ValuesException
+    public static string Mensaje { get; set; }
+
+    public ValuesException(string message) : base(GetCompleteMessage(message)) { }
+
+    private static string GetCompleteMessage(string msj)
     {
+        return "Ocurrió una excepción del tipo 'ValuesException'. " + msj;
     }
 }

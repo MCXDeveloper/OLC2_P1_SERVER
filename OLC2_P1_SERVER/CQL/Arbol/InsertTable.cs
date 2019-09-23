@@ -116,8 +116,10 @@ public class InsertTable : Instruccion
 
     private object ValidateNormalInsert(Table tablita, Entorno ent)
     {
-        if (CQL.TryCatchFlag)
+        // 1. Valido que la cantidad de valores proporcionados concuerde con la cantidad de columnas de la tabla.
+        if (tablita.GetColumnCountWithoutCounterColumns().Equals(ListaValores.Count))
         {
+            // 2. Valido que cada tipo de dato del valor corresponda con el tipo de dato de la columna.
             object vct = ValidateValueTypesWithColumnTypes(tablita, ent);
 
             if (vct is bool)
@@ -129,35 +131,15 @@ public class InsertTable : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
                 return vct;
             }
         }
         else
         {
-            // 1. Valido que la cantidad de valores proporcionados concuerde con la cantidad de columnas de la tabla.
-            if (tablita.GetColumnCountWithoutCounterColumns().Equals(ListaValores.Count))
-            {
-                // 2. Valido que cada tipo de dato del valor corresponda con el tipo de dato de la columna.
-                object vct = ValidateValueTypesWithColumnTypes(tablita, ent);
-
-                if (vct is bool)
-                {
-                    if ((bool)vct)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
-                    return vct;
-                }
-            }
-            else
-            {
-                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.", fila, columna);
-            }
+            string mensaje = "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas de la tabla.";
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+            return new ValuesException(mensaje);
         }
 
         return false;
@@ -181,7 +163,10 @@ public class InsertTable : Instruccion
                     }
                     else
                     {
-                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.", fila, columna);
+                        string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
+                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                        if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+                        return new ValuesException(mensaje);
                     }
                 }
                 else
@@ -199,7 +184,10 @@ public class InsertTable : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas.", fila, columna);
+            string mensaje = "Error.  La cantidad de valores proporcionados no concuerda con la cantidad de columnas.";
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+            return new ValuesException(mensaje);
         }
 
         return false;
@@ -218,14 +206,20 @@ public class InsertTable : Instruccion
                 {
                     if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
                     {
-                        return false;
+                        string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
+                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                        if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+                        return new ValuesException(mensaje);
                     }
                 }
                 else
                 {
                     if (!valType.Equals(colType))
                     {
-                        return false;
+                        string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
+                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                        if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+                        return new ValuesException(mensaje);
                     }
                 }
             }
@@ -236,14 +230,6 @@ public class InsertTable : Instruccion
                 if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'CounterTypeException' no capturada.  " + mensaje); }
                 return new CounterTypeException(mensaje);
             }
-
-            /*if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
-            {
-                if (!((Columna)tablita.Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(ListaValores[i].GetTipo(ent).GetRealTipo()))
-                {
-                    return false;
-                }
-            }*/
         }
 
         return true;
