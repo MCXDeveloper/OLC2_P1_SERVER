@@ -47,7 +47,10 @@ public class Declaracion : Instruccion
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[DECLARACION]", "Se intento declarar '" + variable + "'.  Una variable con el mismo nombre ya se encuentra en el entorno actual.", fila, columna);
+                    string mensaje = "Se intento declarar '" + variable + "'.  Una variable con el mismo nombre ya se encuentra en el entorno actual.";
+                    CQL.AddLUPError("Semántico", "[DECLARACION]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ObjectAlreadyExists' no capturada.  " + mensaje); }
+                    return new ObjectAlreadyExists(mensaje);
                 }
             }
         }
@@ -341,7 +344,10 @@ public class Declaracion : Instruccion
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[DECLARACION]", "Se intento declarar '" + nombre_variable + "'.  Una variable con el mismo nombre ya se encuentra en el entorno actual.", fila, columna);
+                    string mensaje = "Se intento declarar '" + nombre_variable + "'.  Una variable con el mismo nombre ya se encuentra en el entorno actual.";
+                    CQL.AddLUPError("Semántico", "[DECLARACION]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ObjectAlreadyExists' no capturada.  " + mensaje); }
+                    return new ObjectAlreadyExists(mensaje);
                 }
             }
         }
