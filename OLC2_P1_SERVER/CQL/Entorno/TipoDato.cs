@@ -15,6 +15,7 @@ public class TipoDato
         LIST,
         NULO,
         DOUBLE,
+        CURSOR,
         STRING,
         OBJECT,
         BOOLEAN,

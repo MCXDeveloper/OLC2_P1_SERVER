@@ -150,7 +150,21 @@ public class AST : Instruccion
                 UpdateTable x = (UpdateTable)ins;
                 x.Ejecutar(ent);
             }
-
+            else if (ins is DeclaracionCursor)
+            {
+                DeclaracionCursor x = (DeclaracionCursor)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is AccionCursor)
+            {
+                AccionCursor x = (AccionCursor)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is ForEach)
+            {
+                ForEach x = (ForEach)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;

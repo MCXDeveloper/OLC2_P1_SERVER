@@ -997,7 +997,28 @@ public class ASTBuilder
         {
             return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]));
         }
+        else if (EstoyAca(actual, "DECLARACION_CURSOR"))
+        {
+            return new DeclaracionCursor(ObtenerLexema(actual, 1), (Select)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "ACCION_CURSOR"))
+        {
+            string tipo_accion = ObtenerLexema(actual, 0);
 
+            if (tipo_accion.Equals("open", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new AccionCursor(ObtenerLexema(actual, 1), TipoAccionCursor.OPEN, GetFila(actual, 0), GetColumna(actual, 0));
+            }
+            else
+            {
+                return new AccionCursor(ObtenerLexema(actual, 1), TipoAccionCursor.CLOSE, GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
+        else if (EstoyAca(actual, "SENTENCIA_FOREACH"))
+        {
+            //r_for + r_each + par_a + LISTA_PARAMETROS + par_c + r_in + variable + llave_a + LISTA_INSTRUCCIONES + llave_c;
+            return new ForEach((List<Parametro>)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (List<Instruccion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+        }
 
         return null;
     }

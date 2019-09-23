@@ -197,6 +197,7 @@
     <Compile Include="CQL\Arbol\Acceso\FuncionSubstring.cs" />
     <Compile Include="CQL\Arbol\Acceso\FuncionToLowerCase.cs" />
     <Compile Include="CQL\Arbol\Acceso\FuncionToUpperCase.cs" />
+    <Compile Include="CQL\Arbol\AccionCursor.cs" />
     <Compile Include="CQL\Arbol\AlterTable.cs" />
     <Compile Include="CQL\Arbol\Asignacion.cs" />
     <Compile Include="CQL\Arbol\AsignacionColumna.cs" />
@@ -205,9 +206,11 @@
     <Compile Include="CQL\Arbol\CreateDatabase.cs" />
     <Compile Include="CQL\Arbol\CreateTable.cs" />
     <Compile Include="CQL\Arbol\CreateUser.cs" />
+    <Compile Include="CQL\Arbol\DeclaracionCursor.cs" />
     <Compile Include="CQL\Arbol\DeleteTable.cs" />
     <Compile Include="CQL\Arbol\DropDatabase.cs" />
     <Compile Include="CQL\Arbol\DropTable.cs" />
+    <Compile Include="CQL\Arbol\ForEach.cs" />
     <Compile Include="CQL\Arbol\FuncionAgregacion.cs" />
     <Compile Include="CQL\Arbol\Grant.cs" />
     <Compile Include="CQL\Arbol\InsertTable.cs" />
@@ -294,6 +297,7 @@
     <Compile Include="CQL\Arbol\Excepciones\UserDontExists.cs" />
     <Compile Include="CQL\Arbol\Excepciones\ValuesException.cs" />
     <Compile Include="CQL\Manejadores\AsciiTableGenerator.cs" />
+    <Compile Include="CQL\Manejadores\TipoAccionCursor.cs" />
     <Compile Include="CQL\Manejadores\TipoExcepcion.cs" />
     <Compile Include="CQL\Manejadores\TipoFuncionAgregacion.cs" />
     <Compile Include="Global.asax.cs">

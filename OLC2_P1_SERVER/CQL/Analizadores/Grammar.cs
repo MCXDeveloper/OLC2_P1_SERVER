@@ -16,6 +16,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_on = ToTerm("on");
         KeyTerm r_by = ToTerm("by");
         KeyTerm r_in = ToTerm("in");
+        KeyTerm r_is = ToTerm("is");
         KeyTerm r_int = ToTerm("int");
         KeyTerm r_for = ToTerm("for");
         KeyTerm r_new = ToTerm("new");
@@ -137,6 +138,7 @@ public class Grammar : Irony.Parsing.Grammar
             "on",
             "by",
             "in",
+            "is",
             "int",
             "for",
             "new",
@@ -396,7 +398,10 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_TB_UPDATE = new NonTerminal("SENTENCIA_TB_UPDATE");
         NonTerminal ASIGNACION_COLUMNA = new NonTerminal("ASIGNACION_COLUMNA");
         NonTerminal LISTA_ASIGNACION_COLUMNA = new NonTerminal("LISTA_ASIGNACION_COLUMNA");
-
+        NonTerminal DECLARACION_CURSOR = new NonTerminal("DECLARACION_CURSOR");
+        NonTerminal ACCION_CURSOR = new NonTerminal("ACCION_CURSOR");
+        NonTerminal SENTENCIA_FOREACH = new NonTerminal("SENTENCIA_FOREACH");
+        
         #endregion
 
         #region GRAMATICA
@@ -406,6 +411,7 @@ public class Grammar : Irony.Parsing.Grammar
         LISTA_INSTRUCCIONES.Rule = MakePlusRule(LISTA_INSTRUCCIONES, INSTRUCCION);
 
         INSTRUCCION.Rule = DECLARACION + puco
+            | DECLARACION_CURSOR + puco
             | SENTENCIA_ACCESO + puco
             | ASIGNACION + puco
             | LOG
@@ -418,10 +424,12 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_INC_DEC + puco
             | DECLARACION_FUNCION
             | DECLARACION_PROCEDIMIENTO
+            | ACCION_CURSOR + puco
             | LLAMADA_FUNCION + puco
             | LLAMADA_PROCEDIMIENTO + puco
             | SENTENCIA_DB_CREATE
             | SENTENCIA_TRY_CATCH
+            | SENTENCIA_FOREACH
             | SENTENCIA_TB_UPDATE + puco
             | SENTENCIA_THROW + puco
             | SENTENCIA_DB_USE + puco
@@ -439,6 +447,14 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_BREAK + puco
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
+            ;
+
+        SENTENCIA_FOREACH.Rule = r_for + r_each + par_a + LISTA_PARAMETROS + par_c + r_in + variable + llave_a + LISTA_INSTRUCCIONES + llave_c;
+
+        DECLARACION_CURSOR.Rule = r_cursor + variable + r_is + SENTENCIA_TB_SELECT;
+
+        ACCION_CURSOR.Rule = r_open + variable
+            | r_close + variable
             ;
 
         SENTENCIA_TB_UPDATE.Rule = r_update + identificador + r_set + LISTA_ASIGNACION_COLUMNA
@@ -697,6 +713,7 @@ public class Grammar : Irony.Parsing.Grammar
             | r_date
             | r_time
             | r_counter
+            | r_cursor
             | r_set + menor + TIPO + mayor
             | r_set
             | r_list + menor + TIPO + mayor
