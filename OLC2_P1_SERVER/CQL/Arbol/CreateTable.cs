@@ -75,7 +75,10 @@ public class CreateTable : Instruccion
             {
                 if (!IsExists)
                 {
-                    CQL.AddLUPError("Semántico", "[CREATE_TABLE]", "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | Tabla: " + NombreTabla + ").", fila, columna);
+                    string mensaje = "Error.  Una tabla con el mismo nombre ya se encuentra en la base de datos.  (BD: " + CQL.BaseDatosEnUso + " | Tabla: " + NombreTabla + ").";
+                    CQL.AddLUPError("Semántico", "[CREATE_TABLE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableAlreadyExists' no capturada.  " + mensaje); }
+                    return new TableAlreadyExists(mensaje);
                 }
             }
         }

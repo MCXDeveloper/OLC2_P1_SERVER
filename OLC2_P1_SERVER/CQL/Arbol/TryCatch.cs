@@ -39,6 +39,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (BDDontExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.USE_DB_EXCEPTION:
                 try { return EjecutarInstruccionesTry(ent); } catch (UseBDException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.TABLE_ALREADY_EXISTS:
+                try { return EjecutarInstruccionesTry(ent); } catch (TableAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;
