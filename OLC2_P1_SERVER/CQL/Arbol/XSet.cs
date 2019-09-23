@@ -50,10 +50,11 @@ public class XSet
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SET]", "No se puede obtener un elemento en una posición inexistente.", fila, columna);
+            string mensaje = "No se puede obtener un elemento en una posición inexistente.";
+            CQL.AddLUPError("Semántico", "[SET]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+            return new IndexOutException(mensaje);
         }
-
-        return new Nulo();
     }
 
     public bool Set(int posicion, object valor)

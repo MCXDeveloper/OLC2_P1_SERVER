@@ -46,7 +46,10 @@ public class Map
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[MAP]", "No se pudo obtener la clave especificada ya que no existe en la colección.", fila, columna);
+                string mensaje = "No se pudo obtener la clave especificada ya que no existe en la colección.";
+                CQL.AddLUPError("Semántico", "[MAP]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+                return new IndexOutException(mensaje);
             }
         }
         else

@@ -53,6 +53,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (ValuesException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.COLUMN_EXCEPTION:
                 try { return EjecutarInstruccionesTry(ent); } catch (ColumnException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.INDEX_OUT_EXCEPTION:
+                try { return EjecutarInstruccionesTry(ent); } catch (IndexOutException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;
