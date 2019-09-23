@@ -974,6 +974,30 @@ public class ASTBuilder
         {
             return new SentenciaThrow((TipoExcepcion)Recorrido(actual.ChildNodes[2]));
         }
+        else if (EstoyAca(actual, "SENTENCIA_TB_UPDATE"))
+        {
+            switch (actual.ChildNodes.Count)
+            {
+                case 3:
+                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)Recorrido(actual.ChildNodes[3]), (Expresion)Recorrido(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
+        }
+        else if (EstoyAca(actual, "LISTA_ASIGNACION_COLUMNA"))
+        {
+            List<AsignacionColumna> lista_asignaciones = new List<AsignacionColumna>();
+            foreach (ParseTreeNode hijo in actual.ChildNodes)
+            {
+                lista_asignaciones.Add((AsignacionColumna)Recorrido(hijo));
+            }
+            return lista_asignaciones;
+        }
+        else if (EstoyAca(actual, "ASIGNACION_COLUMNA"))
+        {
+            return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]));
+        }
+
 
         return null;
     }

@@ -145,6 +145,11 @@ public class AST : Instruccion
                 SentenciaThrow x = (SentenciaThrow)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is UpdateTable)
+            {
+                UpdateTable x = (UpdateTable)ins;
+                x.Ejecutar(ent);
+            }
 
             else if (ins is AccesoObjeto)
             {

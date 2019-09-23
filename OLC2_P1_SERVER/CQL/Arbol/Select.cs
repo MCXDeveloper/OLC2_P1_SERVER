@@ -85,11 +85,11 @@ public class Select : Instruccion
                     // 3.3 SELECT - En una nueva tabla temporal almaceno el resultado de seleccionar solo ciertas columnas (si hubiese, de lo contrario se muestran todas).
                     CQL.SelectFlag = true;
                     CQL.TuplaEnUso = null;
-                    object execSelect = EjecutarSeleccion(tablaTemp, ent);
+                    object execSelect = !(ListaCampos is null) ? EjecutarSeleccion(tablaTemp, ent) : tablaTemp;
 
                     if (execSelect is Table)
                     {
-                        Table tablaTemp2 = !(ListaCampos is null) ? (Table)execSelect : tablaTemp;
+                        Table tablaTemp2 = (Table)execSelect;
                         CQL.SelectFlag = false;
                         CQL.TuplaEnUso = null;
 

@@ -393,6 +393,9 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_TRY_CATCH = new NonTerminal("SENTENCIA_TRY_CATCH");
         NonTerminal TIPO_EXCEPCION = new NonTerminal("TIPO_EXCEPCION");
         NonTerminal SENTENCIA_THROW = new NonTerminal("SENTENCIA_THROW");
+        NonTerminal SENTENCIA_TB_UPDATE = new NonTerminal("SENTENCIA_TB_UPDATE");
+        NonTerminal ASIGNACION_COLUMNA = new NonTerminal("ASIGNACION_COLUMNA");
+        NonTerminal LISTA_ASIGNACION_COLUMNA = new NonTerminal("LISTA_ASIGNACION_COLUMNA");
 
         #endregion
 
@@ -416,9 +419,10 @@ public class Grammar : Irony.Parsing.Grammar
             | DECLARACION_FUNCION
             | DECLARACION_PROCEDIMIENTO
             | LLAMADA_FUNCION + puco
-            | LLAMADA_PROCEDIMIENTO
+            | LLAMADA_PROCEDIMIENTO + puco
             | SENTENCIA_DB_CREATE
             | SENTENCIA_TRY_CATCH
+            | SENTENCIA_TB_UPDATE + puco
             | SENTENCIA_THROW + puco
             | SENTENCIA_DB_USE + puco
             | SENTENCIA_DB_DROP + puco
@@ -436,6 +440,14 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_TB_UPDATE.Rule = r_update + identificador + r_set + LISTA_ASIGNACION_COLUMNA
+            | r_update + identificador + r_set + LISTA_ASIGNACION_COLUMNA + r_where + EXPRESION
+            ;
+
+        LISTA_ASIGNACION_COLUMNA.Rule = MakePlusRule(LISTA_ASIGNACION_COLUMNA, coma, ASIGNACION_COLUMNA);
+
+        ASIGNACION_COLUMNA.Rule = identificador + TIPO_ASIGNACION + EXPRESION;
 
         SENTENCIA_THROW.Rule = r_throw + r_new + TIPO_EXCEPCION;
 
