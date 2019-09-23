@@ -51,7 +51,10 @@ public class DeleteTable : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[DELETE_TABLE]", "Error.  La tabla de la que se desean eliminar los registros ("+ NombreTabla +") no existe en la base de datos.", fila, columna);
+                string mensaje = "Error.  La tabla de la que se desean eliminar los registros (" + NombreTabla + ") no existe en la base de datos.";
+                CQL.AddLUPError("Semántico", "[DELETE_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
+                return new TableDontExists(mensaje);
             }
         }
         else

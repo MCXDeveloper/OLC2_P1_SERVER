@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OLC2_P1_SERVER.CQL.Excepciones
+public class TableDontExists : Exception
 {
-    public class TableDontExists
+    public static string Mensaje { get; set; }
+
+    public TableDontExists(string message) : base(GetCompleteMessage(message)) { }
+
+    private static string GetCompleteMessage(string msj)
     {
+        return "Ocurrió una excepción del tipo 'TableDontExists'. " + msj;
     }
 }

@@ -88,7 +88,10 @@ public class AlterTable : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[ALTER_TABLE]", "Error.  La tabla especificada '"+ NombreTabla +"' no existe en la base de datos actual.", fila, columna);
+                string mensaje = "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.";
+                CQL.AddLUPError("Semántico", "[ALTER_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
+                return new TableDontExists(mensaje);
             }
         }
         else
