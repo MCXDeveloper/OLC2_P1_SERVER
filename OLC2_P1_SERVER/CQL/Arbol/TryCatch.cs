@@ -33,6 +33,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (ArithmeticException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.TYPE_ALREADY_EXISTS:
                 try { return EjecutarInstruccionesTry(ent); } catch (TypeAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.BD_ALREADY_EXISTS:
+                try { return EjecutarInstruccionesTry(ent); } catch (BDAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;

@@ -31,7 +31,10 @@ public class CreateDatabase : Instruccion
         {
             if(!ExistsFlag)
             {
-                CQL.AddLUPError("Semántico", "[CREATE_DATABASE]", "Error.  No se pudo crear la base de datos ya que existe una actualmente con el mismo nombre.", fila, columna);
+                string mensaje = "Error.  No se pudo crear la base de datos ya que existe una actualmente con el mismo nombre.";
+                CQL.AddLUPError("Semántico", "[CREATE_DATABASE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'BDAlreadyExists' no capturada.  " + mensaje); }
+                return new BDAlreadyExists(mensaje);
             }
         }
 
