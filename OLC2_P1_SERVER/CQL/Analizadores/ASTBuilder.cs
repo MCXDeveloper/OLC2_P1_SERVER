@@ -883,6 +883,93 @@ public class ASTBuilder
                 return TipoFuncionAgregacion.AVG;
             }
         }
+        else if (EstoyAca(actual, "SENTENCIA_TRY_CATCH"))
+        {
+            return new TryCatch((List<Instruccion>)Recorrido(actual.ChildNodes[2]), (TipoExcepcion)Recorrido(actual.ChildNodes[6]), ObtenerLexema(actual, 7), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "TIPO_EXCEPCION"))
+        {
+            if (EstoyAca(actual.ChildNodes[0], "bddontexists"))
+            {
+                return TipoExcepcion.BD_DONT_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "typedontexists"))
+            {
+                return TipoExcepcion.TYPE_DONT_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "usebdexception"))
+            {
+                return TipoExcepcion.USE_DB_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "userdontexists"))
+            {
+                return TipoExcepcion.USER_DONT_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "batchexception"))
+            {
+                return TipoExcepcion.BATCH_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "bdalreadyexists"))
+            {
+                return TipoExcepcion.BD_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "tabledontexists"))
+            {
+                return TipoExcepcion.TABLE_DONT_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "valuesexception"))
+            {
+                return TipoExcepcion.VALUES_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "columnexception"))
+            {
+                return TipoExcepcion.COLUMN_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "typealreadyexists"))
+            {
+                return TipoExcepcion.TYPE_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "useralreadyexists"))
+            {
+                return TipoExcepcion.USER_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "indexoutexception"))
+            {
+                return TipoExcepcion.INDEX_OUT_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "tablealreadyexists"))
+            {
+                return TipoExcepcion.TABLE_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "arithmeticexception"))
+            {
+                return TipoExcepcion.ARITHMETIC_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "objectalreadyexists"))
+            {
+                return TipoExcepcion.OBJECT_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "countertypeexception"))
+            {
+                return TipoExcepcion.COUNTER_TYPE_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "nullpointerexception"))
+            {
+                return TipoExcepcion.NULL_POINTER_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "functionalreadyexists"))
+            {
+                return TipoExcepcion.FUNCTION_ALREADY_EXISTS;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "numberreturnsexception"))
+            {
+                return TipoExcepcion.NUMBER_RETURNS_EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "procedurealreadyexists"))
+            {
+                return TipoExcepcion.PROCEDURE_ALREADY_EXISTS;
+            }
+        }
 
         return null;
     }

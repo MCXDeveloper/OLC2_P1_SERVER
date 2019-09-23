@@ -19,6 +19,7 @@ public class TipoDato
         OBJECT,
         BOOLEAN,
         COUNTER,
+        EXCEPCION,
         DESCONOCIDO
     }
 

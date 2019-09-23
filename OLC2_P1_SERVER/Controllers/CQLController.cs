@@ -8,67 +8,64 @@ using System.Web.Http;
 using Irony.Parsing;
 using System.Web.Http.Cors;
 
-namespace OLC2_P1_SERVER.Controllers
+public class LUPackage
 {
-    public class LUPackage
+    public string LUPMessage { get; set; }
+}
+
+[EnableCors(origins: "*", headers: "*", methods: "*")]
+public class CQLController : ApiController
+{
+    // GET: api/CQL
+    public IEnumerable<string> Get()
     {
-        public string LUPMessage { get; set; }
+        return new string[] { "value1", "value2" };
     }
 
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CQLController : ApiController
+    // GET: api/CQL/5
+    public string Get(int id)
     {
-        // GET: api/CQL
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-        
-        // GET: api/CQL/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+        return "value";
+    }
 
-        // POST: api/CQL
-        public string Post([FromBody]LUPackage package)
-        {
-            CQL.PilaRespuestas.Clear();
-            string response = String.Empty;
-            
-            // 1. Recibo el mensaje de LUP y procedo a enviarlo a su parser.
-            LUP_Grammar gramatica = new LUP_Grammar();
-            LanguageData lenguaje = new LanguageData(gramatica);
-            Parser parser = new Parser(lenguaje);
-            ParseTree arbol = parser.Parse(package.LUPMessage);
+    // POST: api/CQL
+    public string Post([FromBody]LUPackage package)
+    {
+        CQL.PilaRespuestas.Clear();
+        string response = String.Empty;
 
-            if (arbol.ParserMessages.Count.Equals(0))
+        // 1. Recibo el mensaje de LUP y procedo a enviarlo a su parser.
+        LUP_Grammar gramatica = new LUP_Grammar();
+        LanguageData lenguaje = new LanguageData(gramatica);
+        Parser parser = new Parser(lenguaje);
+        ParseTree arbol = parser.Parse(package.LUPMessage);
+
+        if (arbol.ParserMessages.Count.Equals(0))
+        {
+            LUP_ASTBuilder builder = new LUP_ASTBuilder();
+            LUP_AST auxArbol = builder.Analizar(arbol.Root);
+
+            if (!(auxArbol is null))
             {
-                LUP_ASTBuilder builder = new LUP_ASTBuilder();
-                LUP_AST auxArbol = builder.Analizar(arbol.Root);
-
-                if (!(auxArbol is null))
-                {
-                    object parseResponse = auxArbol.Ejecutar();
-                    response = (!(parseResponse is null)) ? (string)parseResponse : response;
-                }
-                else
-                {
-                    CQL.AddLUPMessage("Error. No se pudo construir el árbol de LUP.");
-                }
+                object parseResponse = auxArbol.Ejecutar();
+                response = (!(parseResponse is null)) ? (string)parseResponse : response;
             }
-
-            return response;
+            else
+            {
+                CQL.AddLUPMessage("Error. No se pudo construir el árbol de LUP.");
+            }
         }
 
-        // PUT: api/CQL/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        return response;
+    }
 
-        // DELETE: api/CQL/5
-        public void Delete(int id)
-        {
-        }
+    // PUT: api/CQL/5
+    public void Put(int id, [FromBody]string value)
+    {
+    }
+
+    // DELETE: api/CQL/5
+    public void Delete(int id)
+    {
     }
 }

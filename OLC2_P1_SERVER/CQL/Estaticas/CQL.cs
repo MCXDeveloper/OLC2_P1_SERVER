@@ -11,6 +11,7 @@ public class CQL
     public static bool WhereFlag { get; set; }
     public static bool SelectFlag { get; set; }
     public static Table TablaEnUso { get; set; }
+    public static bool TryCatchFlag { get; set; }
     public static DataRow TuplaEnUso { get; set; }
     public static string BaseDatosEnUso { get; set; }
     public static string UsuarioLogueado { get; set; }

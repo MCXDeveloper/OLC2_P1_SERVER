@@ -6,7 +6,6 @@ using System.Web;
 
 public class Log : Instruccion
 {
-    
     private readonly int fila;
     private readonly int columna;
     public Expresion Elemento { get; set; }
@@ -22,30 +21,30 @@ public class Log : Instruccion
     {
         object ob = Elemento.Ejecutar(ent);
 
-        string salida = "Error <<<>>> Se intentó imprimir una expresión nula.";
-
-        if((ob != null))
+        if (!(ob is Nulo))
         {
-            if (!(ob is Nulo))
+            string salida = String.Empty;
+
+            if (ob is Date)
             {
-                if (ob is Date)
-                {
-                    salida = ((Date)ob).Fecha;
-                }
-                else if (ob is Time)
-                {
-                    salida = ((Time)ob).Tiempo;
-                }
-                else
-                {
-                    salida = ob.ToString();
-                }
+                salida = ((Date)ob).Fecha;
             }
+            else if (ob is Time)
+            {
+                salida = ((Time)ob).Tiempo;
+            }
+            else
+            {
+                salida = ob.ToString();
+            }
+
+            CQL.AddLUPMessage(salida);
+        }
+        else
+        {
+            CQL.AddLUPError("Semántico", "[LOG]", "Error.  Se intentó imprimir una expresión nula.", fila, columna);
         }
 
-        CQL.AddLUPMessage(salida);
-
         return new Nulo();
-        
     }
 }

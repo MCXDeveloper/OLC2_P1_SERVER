@@ -275,37 +275,48 @@ public class Declaracion : Instruccion
                             object value = Valor.Ejecutar(ent);
                             TipoDato valueType = Valor.GetTipo(ent);
 
-                            if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.STRING) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.SET) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.LIST) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
+                            if (valueType.GetRealTipo().Equals(TipoDato.Tipo.EXCEPCION))
                             {
-                                if (valueType.GetRealTipo().Equals(Tipo.GetRealTipo()) || valueType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
-                                {
-                                    ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, value));
-                                }
-                                else
-                                {
-                                    CQL.AddLUPError("Semántico", "[DECLARACION]", "Error de tipos.  Un valor de tipo '" + valueType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + Tipo.GetRealTipo().ToString() + "'.", fila, columna);
-                                }
+                                return value;
                             }
                             else
                             {
-                                if (Tipo.GetRealTipo().Equals(valueType.GetRealTipo()))
+                                if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.STRING) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.MAP) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.SET) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.LIST) || Tipo.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
                                 {
-                                    ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, value));
-                                }
-                                else
-                                {
-                                    value = CasteoImplicito(Tipo, valueType, value);
-
-                                    if (value is Nulo)
-                                    {
-                                        CQL.AddLUPError("Semántico", "[DECLARACION]", "Error de tipos.  El tipo de la variable no concuerda con el tipo de dato del valor de la expresión. (Recibido: " + valueType.GetRealTipo().ToString() + " | Declarado: " + Tipo.GetRealTipo().ToString() + ")", fila, columna);
-                                    }
-                                    else
+                                    if (valueType.GetRealTipo().Equals(Tipo.GetRealTipo()) || valueType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
                                     {
                                         ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, value));
                                     }
+                                    else
+                                    {
+                                        CQL.AddLUPError("Semántico", "[DECLARACION]", "Error de tipos.  Un valor de tipo '" + valueType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + Tipo.GetRealTipo().ToString() + "'.", fila, columna);
+                                    }
                                 }
-                            }  
+                                else
+                                {
+                                    if (Tipo.GetRealTipo().Equals(valueType.GetRealTipo()))
+                                    {
+                                        ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, value));
+                                    }
+                                    else
+                                    {
+                                        value = CasteoImplicito(Tipo, valueType, value);
+
+                                        if (value is Nulo)
+                                        {
+                                            CQL.AddLUPError("Semántico", "[DECLARACION]", "Error de tipos.  El tipo de la variable no concuerda con el tipo de dato del valor de la expresión. (Recibido: " + valueType.GetRealTipo().ToString() + " | Declarado: " + Tipo.GetRealTipo().ToString() + ")", fila, columna);
+                                        }
+                                        else if (value is Exception)
+                                        {
+                                            return value;
+                                        }
+                                        else
+                                        {
+                                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, value));
+                                        }
+                                    }
+                                }
+                            } 
                         }
                     }
                     else

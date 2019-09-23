@@ -135,7 +135,11 @@ public class AST : Instruccion
                 Revoke x = (Revoke)ins;
                 x.Ejecutar(ent);
             }
-
+            else if (ins is TryCatch)
+            {
+                TryCatch x = (TryCatch)ins;
+                x.Ejecutar(ent);
+            }
 
             else if (ins is AccesoObjeto)
             {

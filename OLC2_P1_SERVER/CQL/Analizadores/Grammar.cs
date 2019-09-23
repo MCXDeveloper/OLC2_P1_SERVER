@@ -390,6 +390,8 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal SENTENCIA_CREATE_USER = new NonTerminal("SENTENCIA_CREATE_USER");
         NonTerminal SENTENCIA_GRANT = new NonTerminal("SENTENCIA_GRANT");
         NonTerminal SENTENCIA_REVOKE = new NonTerminal("SENTENCIA_REVOKE");
+        NonTerminal SENTENCIA_TRY_CATCH = new NonTerminal("SENTENCIA_TRY_CATCH");
+        NonTerminal TIPO_EXCEPCION = new NonTerminal("TIPO_EXCEPCION");
 
         #endregion
 
@@ -417,6 +419,7 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_CREATE
             | SENTENCIA_DB_USE
             | SENTENCIA_DB_DROP
+            | SENTENCIA_TRY_CATCH
             | SENTENCIA_CREATE_USER + puco
             | SENTENCIA_GRANT + puco
             | SENTENCIA_REVOKE + puco
@@ -431,6 +434,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_TRY_CATCH.Rule = r_try + llave_a + LISTA_INSTRUCCIONES + llave_c + r_catch + par_a + TIPO_EXCEPCION + variable + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
 
         SENTENCIA_GRANT.Rule = r_grant + identificador + r_on + identificador;
 
@@ -697,6 +702,28 @@ public class Grammar : Irony.Parsing.Grammar
             | r_min
             | r_sum
             | r_avg
+            ;
+
+        TIPO_EXCEPCION.Rule = r_typealreadyexists
+            | r_typedontexists
+            | r_bdalreadyexists
+            | r_bddontexists
+            | r_usebdexception
+            | r_tablealreadyexists
+            | r_tabledontexists
+            | r_countertypeexception
+            | r_useralreadyexists
+            | r_userdontexists
+            | r_valuesexception
+            | r_columnexception
+            | r_batchexception
+            | r_indexoutexception
+            | r_arithmeticexception
+            | r_nullpointerexception
+            | r_numberreturnsexception
+            | r_functionalreadyexists
+            | r_procedurealreadyexists
+            | r_objectalreadyexists
             ;
 
         this.Root = INICIO;

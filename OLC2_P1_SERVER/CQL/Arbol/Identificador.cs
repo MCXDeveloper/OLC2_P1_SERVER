@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,8 +14,15 @@ public class Identificador : Expresion
 
     public object Ejecutar(Entorno ent)
     {
-        Variable sim = (Variable)ent.ObtenerVariable(Id);
-        return (sim.GetValor() is Nulo) ? sim : sim.GetValor();
+        object objSim = ent.ObtenerVariable(Id);
+
+        if (!(objSim is Nulo))
+        {
+            Variable sim = (Variable)objSim;
+            return (sim.GetValor() is Nulo) ? sim : sim.GetValor();
+        }
+
+        return new Nulo();
     }
 
     public TipoDato GetTipo(Entorno ent)
@@ -38,6 +44,18 @@ public class Identificador : Expresion
         else if (valor is bool)
         {
             return new TipoDato(TipoDato.Tipo.BOOLEAN);
+        }
+        else if (valor is Map)
+        {
+            return new TipoDato(TipoDato.Tipo.MAP);
+        }
+        else if (valor is XList)
+        {
+            return new TipoDato(TipoDato.Tipo.LIST);
+        }
+        else if (valor is XSet)
+        {
+            return new TipoDato(TipoDato.Tipo.SET);
         }
         else if (valor is Objeto)
         {

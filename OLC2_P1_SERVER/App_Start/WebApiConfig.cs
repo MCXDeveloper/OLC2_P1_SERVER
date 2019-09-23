@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using OLC2_P1_SERVER.CQL;
 
-namespace OLC2_P1_SERVER
+public static class WebApiConfig
 {
-    public static class WebApiConfig
+    public static void Register(HttpConfiguration config)
     {
-        public static void Register(HttpConfiguration config)
-        {
-            // Ejecuto las acciones iniciales necesarias para comenzar con el parseo.
-            CQL.AccionesIniciales();
+        // Ejecuto las acciones iniciales necesarias para comenzar con el parseo.
+        CQL.AccionesIniciales();
 
-            // Agrego el usuario admin.
-            CQL.ListaUsuariosDisponibles.Add(new Usuario("admin", "admin"));
-            
-            // Web API configuration and services
-            config.EnableCors();
-            // Web API routes
-            config.MapHttpAttributeRoutes();
+        // Agrego el usuario admin.
+        CQL.ListaUsuariosDisponibles.Add(new Usuario("admin", "admin"));
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+        CQL.UsuarioLogueado = "admin";
+
+        // Web API configuration and services
+        config.EnableCors();
+        // Web API routes
+        config.MapHttpAttributeRoutes();
+
+        config.Routes.MapHttpRoute(
+            name: "DefaultApi",
+            routeTemplate: "api/{controller}/{id}",
+            defaults: new { id = RouteParameter.Optional }
+        );
     }
 }

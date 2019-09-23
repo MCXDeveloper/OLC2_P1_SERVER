@@ -65,17 +65,15 @@ public class Asignacion : Instruccion
         
         if (ListaAcceso is null)
         {
-            AsignacionVariableNormal(ent);
+            return AsignacionVariableNormal(ent);
         }
         else
         {
-            AsignacionAccesoObjeto(ent);
+            return AsignacionAccesoObjeto(ent);
         }
-
-        return new Nulo();
     }
     
-    private void AsignacionVariableNormal(Entorno ent)
+    private object AsignacionVariableNormal(Entorno ent)
     {
         // 1. Verifico que la variable proporcionada exista en el entorno.
         object simbolo = ent.ObtenerVariable(Variable);
@@ -85,26 +83,33 @@ public class Asignacion : Instruccion
             Variable elemento = (Variable)simbolo;
             TipoDato ValorType = ObtenerTipoDatoDeValor(elemento, ent);
 
-            if (elemento.GetTipo().Equals(TipoDato.Tipo.STRING) || elemento.GetTipo().Equals(TipoDato.Tipo.MAP) || elemento.GetTipo().Equals(TipoDato.Tipo.SET) || elemento.GetTipo().Equals(TipoDato.Tipo.LIST) || elemento.GetTipo().Equals(TipoDato.Tipo.OBJECT))
+            if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.EXCEPCION))
             {
-                if (ValorType.GetRealTipo().Equals(elemento.GetTipo()) || ValorType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
-                {
-                    RealizarAsignacion(elemento, ValorType, ent);
-                }
-                else
-                {
-                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
-                }
+                return Valor.Ejecutar(ent);
             }
             else
             {
-                if (ValorType.GetRealTipo().Equals(elemento.GetTipo()))
+                if (elemento.GetTipo().Equals(TipoDato.Tipo.STRING) || elemento.GetTipo().Equals(TipoDato.Tipo.MAP) || elemento.GetTipo().Equals(TipoDato.Tipo.SET) || elemento.GetTipo().Equals(TipoDato.Tipo.LIST) || elemento.GetTipo().Equals(TipoDato.Tipo.OBJECT))
                 {
-                    RealizarAsignacion(elemento, ValorType, ent);
+                    if (ValorType.GetRealTipo().Equals(elemento.GetTipo()) || ValorType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
+                    {
+                        RealizarAsignacion(elemento, ValorType, ent);
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                    }
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                    if (ValorType.GetRealTipo().Equals(elemento.GetTipo()))
+                    {
+                        RealizarAsignacion(elemento, ValorType, ent);
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                    }
                 }
             }
         }
@@ -112,9 +117,11 @@ public class Asignacion : Instruccion
         {
             CQL.AddLUPError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a la variable '" + Variable + "', la cual no existe en el entorno.", fila, columna);
         }
+
+        return new Nulo();
     }
 
-    private void AsignacionAccesoObjeto(Entorno ent)
+    private object AsignacionAccesoObjeto(Entorno ent)
     {
         object VarAccess = ListaAcceso.Ejecutar(ent);
 
@@ -123,80 +130,89 @@ public class Asignacion : Instruccion
         {
             TipoDato ValorType = Valor.GetTipo(ent);
 
-            // 2. Verifico que VarAccess sea de tipo AtributoObjeto, ya que dentro éste, se encuentra el valor que queremos cambiar.
-            if (VarAccess is AtributoObjeto)
+            if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.EXCEPCION))
             {
-                AtributoObjeto attrObj = (AtributoObjeto)VarAccess;
-
-                // 3. Verifico que el tipo de dato del elemento concuerde con el tipo de dato de la expresión.
-                if (ValorType.GetRealTipo().Equals(attrObj.Tipo.GetRealTipo()))
+                return Valor.Ejecutar(ent);
+            }
+            else
+            {
+                // 2. Verifico que VarAccess sea de tipo AtributoObjeto, ya que dentro éste, se encuentra el valor que queremos cambiar.
+                if (VarAccess is AtributoObjeto)
                 {
-                    // 4. Verifico que el tipo de asignación, si es diferente de igual, se aplique únicamente a valores numéricos.
-                    switch (TipoAsig)
+                    AtributoObjeto attrObj = (AtributoObjeto)VarAccess;
+
+                    // 3. Verifico que el tipo de dato del elemento concuerde con el tipo de dato de la expresión.
+                    if (ValorType.GetRealTipo().Equals(attrObj.Tipo.GetRealTipo()))
                     {
-                        case TipoAsignacion.AS_NORMAL:
-                            attrObj.Valor = Valor.Ejecutar(ent);
-                            break;
-                        default:
-                            if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.INT))
-                            {
-                                if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
+                        // 4. Verifico que el tipo de asignación, si es diferente de igual, se aplique únicamente a valores numéricos.
+                        switch (TipoAsig)
+                        {
+                            case TipoAsignacion.AS_NORMAL:
+                                attrObj.Valor = Valor.Ejecutar(ent);
+                                break;
+                            default:
+                                if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.INT))
                                 {
-                                    attrObj.Valor = (int)attrObj.Valor + (int)Valor.Ejecutar(ent);
+                                    if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
+                                    {
+                                        attrObj.Valor = (int)attrObj.Valor + (int)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
+                                    {
+                                        attrObj.Valor = (int)attrObj.Valor - (int)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
+                                    {
+                                        attrObj.Valor = (int)attrObj.Valor * (int)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
+                                    {
+                                        attrObj.Valor = (int)attrObj.Valor / (int)Valor.Ejecutar(ent);
+                                    }
                                 }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
+                                else if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
                                 {
-                                    attrObj.Valor = (int)attrObj.Valor - (int)Valor.Ejecutar(ent);
+                                    if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
+                                    {
+                                        attrObj.Valor = (double)attrObj.Valor + (double)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
+                                    {
+                                        attrObj.Valor = (double)attrObj.Valor - (double)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
+                                    {
+                                        attrObj.Valor = (double)attrObj.Valor * (double)Valor.Ejecutar(ent);
+                                    }
+                                    else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
+                                    {
+                                        attrObj.Valor = (double)attrObj.Valor / (double)Valor.Ejecutar(ent);
+                                    }
                                 }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
+                                else
                                 {
-                                    attrObj.Valor = (int)attrObj.Valor * (int)Valor.Ejecutar(ent);
+                                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
                                 }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
-                                {
-                                    attrObj.Valor = (int)attrObj.Valor / (int)Valor.Ejecutar(ent);
-                                }
-                            }
-                            else if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
-                            {
-                                if (TipoAsig.Equals(TipoAsignacion.AS_SUMA))
-                                {
-                                    attrObj.Valor = (double)attrObj.Valor + (double)Valor.Ejecutar(ent);
-                                }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_RESTA))
-                                {
-                                    attrObj.Valor = (double)attrObj.Valor - (double)Valor.Ejecutar(ent);
-                                }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_MULTIPLICACION))
-                                {
-                                    attrObj.Valor = (double)attrObj.Valor * (double)Valor.Ejecutar(ent);
-                                }
-                                else if (TipoAsig.Equals(TipoAsignacion.AS_DIVISION))
-                                {
-                                    attrObj.Valor = (double)attrObj.Valor / (double)Valor.Ejecutar(ent);
-                                }
-                            }
-                            else
-                            {
-                                CQL.AddLUPError("Semántico", "[ASIGNACION]", "No se puede realizar una 'Asignación y Operación' a valores que no sean numéricos.", fila, columna);
-                            }
-                            break;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + attrObj.Tipo.GetRealTipo().ToString() + "'.", fila, columna);
                     }
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + attrObj.Tipo.GetRealTipo().ToString() + "'.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
                 }
-            }
-            else
-            {
-                CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
             }
         }
         else
         {
             CQL.AddLUPError("Semántico", "[ASIGNACION]", "Se intento asignar un valor a un acceso a objeto que retornó un valor nulo.", fila, columna);
         }
+
+        return new Nulo();
     }
 
     private TipoDato ObtenerTipoDatoDeValor(Variable elemento, Entorno ent)
