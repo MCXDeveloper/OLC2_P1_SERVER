@@ -114,7 +114,10 @@ public class Select : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  No se puede seleccionar de una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            string mensaje = "Error.  No se puede seleccionar de una tabla si no se ha especificado la base de datos a utilizar.";
+            CQL.AddLUPError("Semántico", "[SELECT]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+            return new UseBDException(mensaje);
         }
 
         return new Nulo();

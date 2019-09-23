@@ -37,7 +37,10 @@ public class CreateUser : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[CREATE_USER]", "Error. No se puede crear un usuario si no existe una base de datos en uso.", fila, columna);
+            string mensaje = "Error. No se puede crear un usuario si no existe una base de datos en uso.";
+            CQL.AddLUPError("Semántico", "[CREATE_USER]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+            return new UseBDException(mensaje);
         }
 
         return new Nulo();

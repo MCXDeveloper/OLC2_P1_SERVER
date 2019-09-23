@@ -44,7 +44,10 @@ public class CreateUserType : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[CREATE_USER_TYPE]", "Error.  No se puede crear un UserType si no se ha especificado la base de datos a utilizar.", fila, columna);
+            string mensaje = "Error.  No se puede crear un UserType si no se ha especificado la base de datos a utilizar.";
+            CQL.AddLUPError("Semántico", "[CREATE_USER_TYPE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+            return new UseBDException(mensaje);
         }
 
         return new Nulo();

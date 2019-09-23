@@ -44,7 +44,10 @@ public class TruncateTable : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[TRUNCATE_TABLE]", "Error.  No se puede truncar una tabla si no se ha especificado la base de datos a utilizar.", fila, columna);
+            string mensaje = "Error.  No se puede truncar una tabla si no se ha especificado la base de datos a utilizar.";
+            CQL.AddLUPError("Semántico", "[TRUNCATE_TABLE]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+            return new UseBDException(mensaje);
         }
 
         return new Nulo();
