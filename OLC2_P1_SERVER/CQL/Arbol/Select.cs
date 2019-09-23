@@ -85,25 +85,34 @@ public class Select : Instruccion
                     // 3.3 SELECT - En una nueva tabla temporal almaceno el resultado de seleccionar solo ciertas columnas (si hubiese, de lo contrario se muestran todas).
                     CQL.SelectFlag = true;
                     CQL.TuplaEnUso = null;
-                    Table tablaTemp2 = !(ListaCampos is null) ? EjecutarSeleccion(tablaTemp, ent) : tablaTemp;
-                    CQL.SelectFlag = false;
-                    CQL.TuplaEnUso = null;
+                    object execSelect = EjecutarSeleccion(tablaTemp, ent);
 
-                    if (!(tablaTemp2 is null))
+                    if (execSelect is Table)
                     {
-                        // 3.4 ORDER BY - En una nueva tabla temporal almaceno el resultado de ordernar (si hubiese, de lo contrario, se deja la misma) la tabla resultante del select y el where.
-                        Table tablaTemp3 = !(ListaOrdenamiento is null) ? EjecutarOrderBy(tablaTemp2) : tablaTemp2;
+                        Table tablaTemp2 = !(ListaCampos is null) ? (Table)execSelect : tablaTemp;
+                        CQL.SelectFlag = false;
+                        CQL.TuplaEnUso = null;
 
-                        // 3.5 LIMIT - En una nueva tabla temporal almaceno el resultado de obtener solo la cantidad de filas especificada por la expresión (si hubiese).
-                        Table tablaTemp4 = !(ExpresionLimit is null) ? EjecutarLimit(tablaTemp3, ent) : tablaTemp3;
-
-                        // Agrego a la pila de respuestas el resultado del select.
-                        if (!IsFuncionAgregacion)
+                        if (!(tablaTemp2 is null))
                         {
-                            CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
-                        }
+                            // 3.4 ORDER BY - En una nueva tabla temporal almaceno el resultado de ordernar (si hubiese, de lo contrario, se deja la misma) la tabla resultante del select y el where.
+                            Table tablaTemp3 = !(ListaOrdenamiento is null) ? EjecutarOrderBy(tablaTemp2) : tablaTemp2;
 
-                        return tablaTemp4;
+                            // 3.5 LIMIT - En una nueva tabla temporal almaceno el resultado de obtener solo la cantidad de filas especificada por la expresión (si hubiese).
+                            Table tablaTemp4 = !(ExpresionLimit is null) ? EjecutarLimit(tablaTemp3, ent) : tablaTemp3;
+
+                            // Agrego a la pila de respuestas el resultado del select.
+                            if (!IsFuncionAgregacion)
+                            {
+                                CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
+                            }
+
+                            return tablaTemp4;
+                        }
+                    }
+                    else
+                    {
+                        return execSelect;
                     }
                 }
             }
@@ -123,44 +132,45 @@ public class Select : Instruccion
         return new Nulo();
     }
     
-    private bool ValidateFieldTypesOfSelect()
+    private object ValidateFieldTypesOfSelect()
     {
         foreach (Expresion exp in ListaCampos)
         {
+            object vact = null;
+
             if (exp is AccesoColumna)
             {
-                if (!Validate_AccesoColumna((AccesoColumna)exp))
-                {
-                    return false;
-                }
+                vact = Validate_AccesoColumna((AccesoColumna)exp);
             }
             else if (exp is AccesoCollection)
             {
-                if (!Validate_AccesoCollection((AccesoCollection)exp))
-                {
-                    return false;
-                }
+                vact = Validate_AccesoCollection((AccesoCollection)exp);
             }
             else if (exp is ColumnaTabla)
             {
-                if (!Validate_AccesoColumnaTabla((ColumnaTabla)exp))
+                vact = Validate_AccesoColumnaTabla((ColumnaTabla)exp);
+            }
+
+            if (vact != null)
+            {
+                if (vact is bool)
                 {
-                    return false;
+                    if (!(bool)vact)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return vact;
                 }
             }
-            /*else
-            {
-                if (!(exp is Primitivo))
-                {
-                    return false;
-                }
-            }*/
         }
 
         return true;
     }
 
-    private bool Validate_AccesoColumnaTabla(ColumnaTabla exp)
+    private object Validate_AccesoColumnaTabla(ColumnaTabla exp)
     {
         // 1. Valido que la columna exista en la tabla.
         if (CQL.ExisteColumnaEnTabla(NombreTabla, exp.NombreColumna))
@@ -169,13 +179,14 @@ public class Select : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            string mensaje = "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.";
+            CQL.AddLUPError("Semántico", "[SELECT]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ColumnException' no capturada.  " + mensaje); }
+            return new ColumnException(mensaje);
         }
-
-        return false;
     }
 
-    private bool Validate_AccesoCollection(AccesoCollection exp)
+    private object Validate_AccesoCollection(AccesoCollection exp)
     {
         // 1. Valido que la columna exista en la tabla.
         if (CQL.ExisteColumnaEnTabla(NombreTabla, exp.NombreColumna))
@@ -192,13 +203,16 @@ public class Select : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            string mensaje = "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.";
+            CQL.AddLUPError("Semántico", "[SELECT]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ColumnException' no capturada.  " + mensaje); }
+            return new ColumnException(mensaje);
         }
         
         return false;
     }
 
-    private bool Validate_AccesoColumna(AccesoColumna exp)
+    private object Validate_AccesoColumna(AccesoColumna exp)
     {
         // 1. Valido que la columna exista en la tabla.
         if (CQL.ExisteColumnaEnTabla(NombreTabla, exp.NombreColumna))
@@ -216,7 +230,10 @@ public class Select : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La columna '"+ exp.NombreColumna +"' especificada en la instrucción SELECT no existe en la tabla.", fila, columna);
+            string mensaje = "Error.  La columna '" + exp.NombreColumna + "' especificada en la instrucción SELECT no existe en la tabla.";
+            CQL.AddLUPError("Semántico", "[SELECT]", mensaje, fila, columna);
+            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ColumnException' no capturada.  " + mensaje); }
+            return new ColumnException(mensaje);
         }
 
         return false;
@@ -263,92 +280,101 @@ public class Select : Instruccion
         return tablaResult;
     }
 
-    private Table EjecutarSeleccion(Table temp, Entorno ent)
+    private object EjecutarSeleccion(Table temp, Entorno ent)
     {
         // La instrucción SELECT se llevará a cabo si y solo sí fueron definidos una lista de campos para seleccionarse.  Para ello se va a ejecutar expresión por expresión dentro de la lista de campos.
         // - Aquellas que retornen un valor primitivo se debe crear una nueva columna con el valor proporcionado y repetir sus valores para todas aquellas tuplas existentes dentro de la tabla.
         // - Aquellas que retornen un valor de tipo ColumnaTabla/AccesoColumna/AccesoCollection todas van a retornar su valor correspondiente en String para no tener complicaciones.
 
         // 1. Valido que los tipos de dato sean los permitidos dentro de un select, de lo contrario, se debe mostrar un error.
-        if (ValidateFieldTypesOfSelect())
+        object vfts = ValidateFieldTypesOfSelect();
+
+        if (vfts is bool)
         {
-            // 2. Creo una nueva tabla para almacenar el resultado del SELECT
-            Table tablaResult = new Table(CQL.GenerateName(5));
-
-            // 3. Creo un indice que me indica el nombre de la columna calculada.
-            int calCol = 0;
-
-            // 4. Agrego los DataRows vacios necesarios para la tabla de respuesta.
-            AgregarFilasATabla(temp.Tabla, tablaResult.Tabla);
-
-            foreach (Expresion exp in ListaCampos)
+            if ((bool)vfts)
             {
-                if (exp is ColumnaTabla)
+                // 2. Creo una nueva tabla para almacenar el resultado del SELECT
+                Table tablaResult = new Table(CQL.GenerateName(5));
+
+                // 3. Creo un indice que me indica el nombre de la columna calculada.
+                int calCol = 0;
+
+                // 4. Agrego los DataRows vacios necesarios para la tabla de respuesta.
+                AgregarFilasATabla(temp.Tabla, tablaResult.Tabla);
+
+                foreach (Expresion exp in ListaCampos)
                 {
-                    ColumnaTabla ct = (ColumnaTabla)exp;
-
-                    // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
-                    if (!tablaResult.Tabla.Columns.Contains(ct.NombreColumna))
+                    if (exp is ColumnaTabla)
                     {
-                        tablaResult.Tabla.Columns.Add(ct.NombreColumna, temp.Tabla.Columns[ct.NombreColumna].DataType);
+                        ColumnaTabla ct = (ColumnaTabla)exp;
+
+                        // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
+                        if (!tablaResult.Tabla.Columns.Contains(ct.NombreColumna))
+                        {
+                            tablaResult.Tabla.Columns.Add(ct.NombreColumna, temp.Tabla.Columns[ct.NombreColumna].DataType);
+                        }
+
+                        // Por cada fila en la tabla de respuesta se almacena el valor correspondiente a la posición de la tabla original.
+                        for (int i = 0; i < tablaResult.Tabla.Rows.Count; i++)
+                        {
+                            tablaResult.Tabla.Rows[i][ct.NombreColumna] = temp.Tabla.Rows[i][ct.NombreColumna];
+                        }
                     }
-
-                    // Por cada fila en la tabla de respuesta se almacena el valor correspondiente a la posición de la tabla original.
-                    for (int i = 0; i < tablaResult.Tabla.Rows.Count; i++)
+                    else if (exp is AccesoColumna)
                     {
-                        tablaResult.Tabla.Rows[i][ct.NombreColumna] = temp.Tabla.Rows[i][ct.NombreColumna];
+                        object access_response = ((AccesoColumna)exp).Ejecutar(ent);
+
+                        if (!(access_response is Nulo))
+                        {
+                            tablaResult.Tabla.Merge((DataTable)access_response);
+                        }
+                    }
+                    else if (exp is AccesoCollection)
+                    {
+                        object access_response = ((AccesoCollection)exp).Ejecutar(ent);
+
+                        if (!(access_response is Nulo))
+                        {
+                            tablaResult.Tabla.Merge((DataTable)access_response);
+                        }
+                    }
+                    else
+                    {
+                        // Genero el nombre de la columna calculada.
+                        string nombre_columna = "Columna_" + calCol;
+
+                        // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
+                        if (!tablaResult.Tabla.Columns.Contains(nombre_columna))
+                        {
+                            tablaResult.Tabla.Columns.Add(nombre_columna);
+                        }
+
+                        // Por cada fila de la tabla original se almacena la tupla de forma estática por si el valor de una columna
+                        // es utilizado por una expresión.  Al final, se ejecuta esa expresión y el valor devuelto es el almacenado
+                        // en la tabla de respuesta.
+                        for (int i = 0; i < temp.Tabla.Rows.Count; i++)
+                        {
+                            DataRow row = temp.Tabla.Rows[i];
+                            CQL.TuplaEnUso = row;
+                            tablaResult.Tabla.Rows[i][nombre_columna] = exp.Ejecutar(ent).ToString();
+                        }
+
+                        calCol++;
                     }
                 }
-                else if (exp is AccesoColumna)
-                {
-                    object access_response = ((AccesoColumna)exp).Ejecutar(ent);
 
-                    if (!(access_response is Nulo))
-                    {
-                        tablaResult.Tabla.Merge((DataTable)access_response);
-                    }
-                }
-                else if (exp is AccesoCollection)
-                {
-                    object access_response = ((AccesoCollection)exp).Ejecutar(ent);
-
-                    if (!(access_response is Nulo))
-                    {
-                        tablaResult.Tabla.Merge((DataTable)access_response);
-                    }
-                }
-                else
-                {
-                    // Genero el nombre de la columna calculada.
-                    string nombre_columna = "Columna_" + calCol;
-
-                    // Verifico si ya existe en la tabla de respuesta la columna calculada.  Si no existe, se la agrego.
-                    if (!tablaResult.Tabla.Columns.Contains(nombre_columna))
-                    {
-                        tablaResult.Tabla.Columns.Add(nombre_columna);
-                    }
-
-                    // Por cada fila de la tabla original se almacena la tupla de forma estática por si el valor de una columna
-                    // es utilizado por una expresión.  Al final, se ejecuta esa expresión y el valor devuelto es el almacenado
-                    // en la tabla de respuesta.
-                    for (int i = 0; i < temp.Tabla.Rows.Count; i++)
-                    {
-                        DataRow row = temp.Tabla.Rows[i];
-                        CQL.TuplaEnUso = row;
-                        tablaResult.Tabla.Rows[i][nombre_columna] = exp.Ejecutar(ent).ToString();
-                    }
-                    
-                    calCol++;
-                }
+                return tablaResult;
             }
-
-            return tablaResult;
+            else
+            {
+                CQL.AddLUPError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
+            }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[SELECT]", "Error.  Un tipo de dato no permitido existe en la sentencia SELECT.  Estos deben ser solo primitivos o los permitidos en base a las columnas.", fila, columna);
+            return vfts;
         }
-        
+
         return null;
     }
 
@@ -462,7 +488,6 @@ public class Select : Instruccion
         }
 
         // Una vez tenemos el DataTable completamente en String retornamos la tabla generada en ASCII.
-
         return AsciiTableGenerator.CreateAsciiTableFromDataTable(dt).ToString();
     }
 }
