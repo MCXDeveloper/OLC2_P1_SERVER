@@ -186,6 +186,20 @@ public class CQL
 
     #endregion
 
+    #region FUNCIONES_DE_PROCEDIMIENTOS
+
+    public static bool ExisteProcedimientoEnBD(string nombre_proc)
+    {
+        return RootBD.GetDatabase(BaseDatosEnUso).ExisteProcedimiento(nombre_proc);
+    }
+
+    public static void RegistrarProcedimientoEnBD(Procedimiento proc)
+    {
+        RootBD.GetDatabase(BaseDatosEnUso).RegistrarProcedimiento(proc);
+    }
+
+    #endregion
+
     #region FUNCIONES_DE_LUP
 
     public static void AddLUPMessage(string message)

@@ -84,7 +84,6 @@ public class AST : Instruccion
                 CreateUserType x = (CreateUserType)ins;
                 x.Ejecutar(ent);
             }
-
             else if (ins is CreateTable)
             {
                 CreateTable x = (CreateTable)ins;
@@ -165,6 +164,12 @@ public class AST : Instruccion
                 ForEach x = (ForEach)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is DeclaracionProcedimiento)
+            {
+                DeclaracionProcedimiento x = (DeclaracionProcedimiento)ins;
+                x.Ejecutar(ent);
+            }
+
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;

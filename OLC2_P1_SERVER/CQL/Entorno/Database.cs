@@ -125,6 +125,20 @@ public class Database : InstruccionBD
 
     #endregion
 
+    #region FUNCIONES_DE_PROCEDIMIENTOS
+
+    public bool ExisteProcedimiento(string nombre_proc)
+    {
+        return ListaProcedimientos.Any(x => x.NombreProcedimiento.Equals(nombre_proc, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    public void RegistrarProcedimiento(Procedimiento proc)
+    {
+        ListaProcedimientos.Add(proc);
+    }
+
+    #endregion
+
     public string CrearChison()
     {
         throw new NotImplementedException();

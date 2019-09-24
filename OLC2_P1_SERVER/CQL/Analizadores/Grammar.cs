@@ -499,7 +499,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         SENTENCIA_BREAK.Rule = r_break;
 
-        SENTENCIA_RETURN.Rule = r_return + EXPRESION;
+        SENTENCIA_RETURN.Rule = r_return + LISTA_EXPRESIONES;
 
         SENTENCIA_CONTINUE.Rule = r_continue;
 

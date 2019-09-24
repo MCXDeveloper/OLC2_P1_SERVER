@@ -590,7 +590,7 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "DECLARACION_PROCEDIMIENTO"))
         {
-            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]));
+            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "LLAMADA_PROCEDIMIENTO"))
         {
@@ -846,7 +846,7 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_RETURN"))
         {
-            return new Return((Expresion)Recorrido(actual.ChildNodes[1]));
+            return new Return((List<Expresion>)Recorrido(actual.ChildNodes[1]));
         }
         else if (EstoyAca(actual, "SENTENCIA_CONTINUE"))
         {
@@ -1016,7 +1016,6 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_FOREACH"))
         {
-            //r_for + r_each + par_a + LISTA_PARAMETROS + par_c + r_in + variable + llave_a + LISTA_INSTRUCCIONES + llave_c;
             return new ForEach((List<Parametro>)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (List<Instruccion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
         }
 

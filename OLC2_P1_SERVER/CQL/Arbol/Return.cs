@@ -1,25 +1,49 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 public class Return : Instruccion
 {
-    public Expresion Valor { get; set; }
+    public List<Expresion> ListaValores { get; set; }
     
     public Return()
     {
-        Valor = new Nulo();
+        ListaValores = new List<Expresion>();
     }
 
-    public Return(Expresion valor)
+    public Return(List<Expresion> lista_valores)
     {
-        Valor = valor;
+        ListaValores = lista_valores;
+    }
+
+    public int CantidadRetornos()
+    {
+        return ListaValores.Count;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        return (Valor is Nulo) ? Valor : Valor.Ejecutar(ent);
+        switch (CantidadRetornos())
+        {
+            case 0:
+                return new Nulo();
+            case 1:
+                return (ListaValores[0] is Nulo) ? ListaValores[0] : ListaValores[0].Ejecutar(ent);
+            default:
+                return ObtenerRetornosEjecutados(ent);
+        }        
+    }
+
+    public List<object> ObtenerRetornosEjecutados(Entorno ent)
+    {
+        List<object> ValoresRetorno = new List<object>();
+
+        foreach (Expresion exp in ListaValores)
+        {
+            ValoresRetorno.Add(exp.Ejecutar(ent));
+        }
+
+        return ValoresRetorno;
     }
 }
