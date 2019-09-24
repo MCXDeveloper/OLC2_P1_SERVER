@@ -42,9 +42,25 @@ public class RaizBD : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
-        // TODO | RaizBD | Escribir función de CrearPaqueteLup.
-        throw new NotImplementedException();
+        string response = "[+DATABASES]";
+
+        // Obtengo todas las bases de datos donde el user brindado en el parámetro sea el creador.
+        foreach (KeyValuePair<string, Database> entry in ListaDatabase)
+        {
+            if (user.Equals("admin", StringComparison.InvariantCultureIgnoreCase))
+            {
+                response += entry.Value.CrearPaqueteLUP(user);
+            }
+            else if (entry.Value.UsuarioCreador.Equals(user, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response += entry.Value.CrearPaqueteLUP(user);
+            }
+        }
+
+        response += "[-DATABASES]";
+
+        return response;
     }
 }

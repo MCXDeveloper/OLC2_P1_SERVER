@@ -48,4 +48,18 @@ class LUPBuilder {
 
     }
 
+    static BuildStructPackage(username) {
+
+        let message = "";
+
+        message += "[+STRUCT]\n";
+        message += "    [+USER]\n";
+        message += "        "+ username +"\n";
+        message += "    [-USER]\n";
+        message += "[-STRUCT]\n";
+
+        return message;
+
+    }
+
 }

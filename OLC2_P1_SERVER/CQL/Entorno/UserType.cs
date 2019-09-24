@@ -20,10 +20,16 @@ public class UserType : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
-        // TODO | UserType | Escribir función de CrearPaqueteLup.
-        throw new NotImplementedException();
+        string response = "[+TYPE]";
+        response += "[+NAME]"+ Identificador +"[-NAME]";
+        foreach (AtributoUT aut in ListaAtributos)
+        {
+            response += "[+ATTRIBUTES]" + aut.Identificador + "[-ATTRIBUTES]";
+        }
+        response += "[-TYPE]";
+        return response;
     }
 
     public override string ToString()

@@ -149,8 +149,39 @@ public class Database : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
-        throw new NotImplementedException();
+        string response = "[+DATABASE]";
+
+        // Nombre de la base de datos.
+        response += "[+NAME]"+ NombreBD +"[-NAME]";
+
+        // Tablas de la base de datos.
+        response += "[+TABLES]";
+        foreach (Table tab in ListaTablas)
+        {
+            response += tab.CrearPaqueteLUP(user);
+        }
+        response += "[-TABLES]";
+
+        // UserTypes de la base de datos.
+        response += "[+TYPES]";
+        foreach (UserType ut in ListaUserTypes)
+        {
+            response += ut.CrearPaqueteLUP(user);
+        }
+        response += "[-TYPES]";
+
+        // Procedimientos de la base de datos.
+        response += "[+PROCEDURES]";
+        foreach (Procedimiento proc in ListaProcedimientos)
+        {
+            response += proc.CrearPaqueteLUP(user);
+        }
+        response += "[-PROCEDURES]";
+
+        response += "[-DATABASE]";
+
+        return response;
     }
 }

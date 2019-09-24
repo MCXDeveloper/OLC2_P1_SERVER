@@ -10,6 +10,7 @@ class AST {
         let finalLogin = "";
         let finalErrors = [];
         let finalMessages = "";
+        let finalStructTree = "";
 
         finalErrors.push(["Tipo", "Ubicacion", "Descripcion", "Fila", "Columna"]);
 
@@ -27,10 +28,13 @@ class AST {
             else if (obj instanceof LoginPackage) {
                 finalLogin = obj.ejecutar();
             }
+            else if (obj instanceof StructPackage) {
+                finalStructTree = obj.ejecutar();
+            }
 
         });
 
-        callback(finalMessages, finalErrors, finalData, finalLogin);
+        callback(finalMessages, finalErrors, finalData, finalLogin, finalStructTree);
 
     }
 

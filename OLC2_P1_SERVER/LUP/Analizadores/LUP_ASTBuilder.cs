@@ -29,6 +29,10 @@ namespace OLC2_P1_SERVER.LUP.Analizadores
                 {
                     return new LogoutPackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", "").Replace("\n", "").Trim());
                 }
+                else if (EstoyAca(actual.ChildNodes[0], "[+STRUCT]"))
+                {
+                    return new StructurePackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", "").Replace("\n", "").Trim());
+                }
                 else
                 {
                     return new QueryPackage(GetLexema(actual, 1).Replace("[+USER]", "").Replace("[-USER]", "").Replace("\n", "").Trim(), GetLexema(actual, 2).Replace("[+DATA]", "").Replace("[-DATA]", ""));

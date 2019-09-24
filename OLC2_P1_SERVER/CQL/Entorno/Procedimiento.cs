@@ -23,8 +23,8 @@ public class Procedimiento : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
-        throw new NotImplementedException();
+        return "[+PROCEDURES]"+ NombreProcedimiento +"[-PROCEDURES]";
     }
 }

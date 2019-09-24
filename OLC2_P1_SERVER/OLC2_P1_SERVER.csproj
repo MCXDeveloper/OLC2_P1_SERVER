@@ -312,6 +312,7 @@
     <Compile Include="LUP\Arbol\LoginPackage.cs" />
     <Compile Include="LUP\Arbol\LogoutPackage.cs" />
     <Compile Include="LUP\Arbol\QueryPackage.cs" />
+    <Compile Include="LUP\Arbol\StructurePackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

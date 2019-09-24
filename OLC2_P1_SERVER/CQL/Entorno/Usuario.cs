@@ -19,7 +19,7 @@ public class Usuario : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
         throw new NotImplementedException();
     }

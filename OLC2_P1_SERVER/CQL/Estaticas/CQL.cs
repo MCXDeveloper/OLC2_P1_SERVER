@@ -224,14 +224,14 @@ public class CQL
         PilaRespuestas.Add("[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+LOCATION]" + location + "[-LOCATION][+DESC]" + description + "[-DESC][-ERROR]" + Environment.NewLine);
     }
 
+    #endregion
+
+    #region FUNCIONES_ADICIONALES
+
     public static string GetCompleteResponse()
     {
         return String.Join(String.Empty, PilaRespuestas.ToArray());
     }
-
-    #endregion
-
-    #region FUNCIONES_ADICIONALES
 
     public static bool CompararTiposDeObjeto(TipoDato t1, TipoDato t2)
     {

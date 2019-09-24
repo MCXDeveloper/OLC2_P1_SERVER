@@ -14,7 +14,7 @@ public static class WebApiConfig
         // Agrego el usuario admin.
         CQL.ListaUsuariosDisponibles.Add(new Usuario("admin", "admin"));
 
-        CQL.UsuarioLogueado = "admin";
+        //CQL.UsuarioLogueado = "admin";
 
         // Web API configuration and services
         config.EnableCors();

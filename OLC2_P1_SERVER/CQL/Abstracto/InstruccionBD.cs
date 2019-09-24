@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 public interface InstruccionBD
 {
-    string CrearPaqueteLUP();
+    string CrearPaqueteLUP(string user);
     string CrearChison();
 }

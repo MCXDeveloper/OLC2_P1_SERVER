@@ -29,6 +29,11 @@ public class LUP_AST : LUP_Instruccion
             QueryPackage qp = (QueryPackage)Instruccion;
             return qp.Ejecutar();
         }
+        else if (Instruccion is StructurePackage)
+        {
+            StructurePackage sp = (StructurePackage)Instruccion;
+            return sp.Ejecutar();
+        }
 
         return null;
     }

@@ -120,8 +120,21 @@ public class Table : InstruccionBD
         throw new NotImplementedException();
     }
 
-    public string CrearPaqueteLUP()
+    public string CrearPaqueteLUP(string user)
     {
-        throw new NotImplementedException();
+        string response = "[+TABLE]";
+
+        // Nombre de la tabla.
+        response += "[+NAME]"+ NombreTabla +"[-NAME]";
+
+        // Columnas de la tabla.
+        foreach (DataColumn col in Tabla.Columns)
+        {
+            response += "[+COLUMNS]"+ col.ColumnName +"[-COLUMNS]";
+        }
+        
+        response += "[-TABLE]";
+
+        return response;
     }
 }

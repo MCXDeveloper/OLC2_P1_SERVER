@@ -72,12 +72,12 @@
   }
 */
 var LUPGrammar = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[5,7,8,9,10,11];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[1,10],$V6=[5,7,8,9,10,11,18],$V7=[1,17],$V8=[5,7,8,9,10,11,18,22],$V9=[35,42],$Va=[27,42],$Vb=[1,45],$Vc=[1,48],$Vd=[1,51],$Ve=[33,34],$Vf=[1,54],$Vg=[40,41],$Vh=[30,31],$Vi=[37,38];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"LISTA_INSTRUCCIONES":4,"eof":5,"INSTRUCCION":6,"data_package":7,"message_package":8,"login_package":9,"logout_package":10,"open_error":11,"error_line":12,"error_column":13,"error_type":14,"error_location":15,"error_description":16,"close_error":17,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"eof",7:"data_package",8:"message_package",9:"login_package",10:"logout_package",11:"open_error",12:"error_line",13:"error_column",14:"error_type",15:"error_location",16:"error_description",17:"close_error"},
-productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,1],[6,1],[6,1],[6,1],[6,7]],
+symbols_: {"error":2,"INICIO":3,"LISTA_INSTRUCCIONES":4,"eof":5,"INSTRUCCION":6,"data_package":7,"message_package":8,"login_package":9,"logout_package":10,"open_error":11,"error_line":12,"error_column":13,"error_type":14,"error_location":15,"error_description":16,"close_error":17,"open_databases":18,"LISTA_BDS":19,"DATABASE":20,"close_databases":21,"open_database":22,"name_package":23,"TABLES_BLOCK":24,"TYPES_BLOCK":25,"LISTA_PROCEDURES":26,"close_database":27,"open_tables":28,"LISTA_TABLES":29,"close_tables":30,"open_table":31,"LISTA_COLUMNAS":32,"close_table":33,"columns_package":34,"open_types":35,"LISTA_TYPES":36,"close_types":37,"open_type":38,"LISTA_ATRIBUTOS":39,"close_type":40,"attributes_package":41,"procedures_package":42,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"eof",7:"data_package",8:"message_package",9:"login_package",10:"logout_package",11:"open_error",12:"error_line",13:"error_column",14:"error_type",15:"error_location",16:"error_description",17:"close_error",18:"open_databases",21:"close_databases",22:"open_database",23:"name_package",27:"close_database",28:"open_tables",30:"close_tables",31:"open_table",33:"close_table",34:"columns_package",35:"open_types",37:"close_types",38:"open_type",40:"close_type",41:"attributes_package",42:"procedures_package"},
+productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,1],[6,1],[6,1],[6,1],[6,7],[6,2],[19,2],[19,1],[19,1],[20,6],[24,3],[24,0],[29,5],[29,4],[32,2],[32,1],[25,3],[25,0],[36,5],[36,4],[39,2],[39,1],[26,2],[26,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,10 +86,10 @@ switch (yystate) {
 case 1:
  this.$ = new AST($$[$0-1]); return this.$; 
 break;
-case 2:
+case 2: case 11:
  this.$ = $$[$0-1];  this.$.push($$[$0]); 
 break;
-case 3:
+case 3: case 12:
  this.$ = [];  this.$.push($$[$0]); 
 break;
 case 4:
@@ -110,10 +110,52 @@ break;
 case 9:
  this.$ = new ErrorPackage({ fila: $$[$0-5].replace(/\[\+LINE]|\[\-LINE]/g, ""), columna: $$[$0-4].replace(/\[\+COLUMN]|\[\-COLUMN]/g, ""), tipo_error: $$[$0-3].replace(/\[\+TYPE]|\[\-TYPE]/g, ""), ubicacion: $$[$0-2].replace(/\[\+LOCATION]|\[\-LOCATION]/g, ""), descripcion: $$[$0-1].replace(/\[\+DESC]|\[\-DESC]/g, "") }); 
 break;
+case 10:
+ this.$ = new StructPackage($$[$0]); 
+break;
+case 13:
+ this.$ = []; 
+break;
+case 14:
+ this.$ = { name: $$[$0-4], lista_tablas: $$[$0-3], lista_types: $$[$0-2], lista_procs: $$[$0-1] }; 
+break;
+case 15: case 21:
+ this.$ = $$[$0-1]; 
+break;
+case 17:
+ this.$ = $$[$0-4];  this.$.push({ name: $$[$0-2].replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_columnas: $$[$0-1] }); 
+break;
+case 18:
+ this.$ = [];  this.$.push({ name: $$[$0-2].replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_columnas: $$[$0-1] }); 
+break;
+case 19:
+ this.$ = $$[$0-1];  this.$.push($$[$0].replace(/\[\+COLUMNS]|\[\-COLUMNS]/g, "")); 
+break;
+case 20:
+ this.$ = [];  this.$.push($$[$0].replace(/\[\+COLUMNS]|\[\-COLUMNS]/g, "")); 
+break;
+case 23:
+ this.$ = $$[$0-4];  this.$.push({ name: $$[$0-2].replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_atributos: $$[$0-1] }); 
+break;
+case 24:
+ this.$ = [];  this.$.push({ name: $$[$0-2].replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_atributos: $$[$0-1] }); 
+break;
+case 25:
+ this.$ = $$[$0-1];  this.$.push($$[$0].replace(/\[\+ATTRIBUTES]|\[\-ATTRIBUTES]/g, "")); 
+break;
+case 26:
+ this.$ = [];  this.$.push($$[$0].replace(/\[\+ATTRIBUTES]|\[\-ATTRIBUTES]/g, "")); 
+break;
+case 27:
+ this.$ = $$[$0-1];  this.$.push($$[$0].replace(/\[\+PROCEDURES]|\[\-PROCEDURES]/g, "")); 
+break;
+case 28:
+ this.$ = [];  this.$.push($$[$0].replace(/\[\+PROCEDURES]|\[\-PROCEDURES]/g, "")); 
+break;
 }
 },
-table: [{2:[1,4],3:1,4:2,6:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},{1:[3]},{5:[1,10],6:11,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4},o($V5,[2,3]),o($V5,[2,4]),o($V5,[2,5]),o($V5,[2,6]),o($V5,[2,7]),o($V5,[2,8]),{12:[1,12]},{1:[2,1]},o($V5,[2,2]),{13:[1,13]},{14:[1,14]},{15:[1,15]},{16:[1,16]},{17:[1,17]},o($V5,[2,9])],
-defaultActions: {10:[2,1]},
+table: [{2:[1,4],3:1,4:2,6:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,18:$V5},{1:[3]},{5:[1,11],6:12,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,18:$V5},o($V6,[2,3]),o($V6,[2,4]),o($V6,[2,5]),o($V6,[2,6]),o($V6,[2,7]),o($V6,[2,8]),{12:[1,13]},{19:14,20:15,21:[1,16],22:$V7},{1:[2,1]},o($V6,[2,2]),{13:[1,18]},o($V6,[2,10],{20:19,22:$V7}),o($V8,[2,12]),o($V8,[2,13]),{23:[1,20]},{14:[1,21]},o($V8,[2,11]),o($V9,[2,16],{24:22,28:[1,23]}),{15:[1,24]},{25:25,35:[1,26],42:[2,22]},{29:27,31:[1,28]},{16:[1,29]},{26:30,42:[1,31]},{36:32,38:[1,33]},{30:[1,34],31:[1,35]},{23:[1,36]},{17:[1,37]},{27:[1,38],42:[1,39]},o($Va,[2,28]),{37:[1,40],38:[1,41]},{23:[1,42]},o($V9,[2,15]),{23:[1,43]},{32:44,34:$Vb},o($V6,[2,9]),o($V8,[2,14]),o($Va,[2,27]),{42:[2,21]},{23:[1,46]},{39:47,41:$Vc},{32:49,34:$Vb},{33:[1,50],34:$Vd},o($Ve,[2,20]),{39:52,41:$Vc},{40:[1,53],41:$Vf},o($Vg,[2,26]),{33:[1,55],34:$Vd},o($Vh,[2,18]),o($Ve,[2,19]),{40:[1,56],41:$Vf},o($Vi,[2,24]),o($Vg,[2,25]),o($Vh,[2,17]),o($Vi,[2,23])],
+defaultActions: {11:[2,1],40:[2,21]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -697,32 +739,64 @@ case 2:return 11;
 break;
 case 3:return 17;
 break;
-case 4:return 12;
+case 4:return 18;
 break;
-case 5:return 13;
+case 5:return 21;
 break;
-case 6:return 15;
+case 6:return 22;
 break;
-case 7:return 14;
+case 7:return 27;
 break;
-case 8:return 16;
+case 8:return 28;
 break;
-case 9:return 7;
+case 9:return 30;
 break;
-case 10:return 8;
+case 10:return 31;
 break;
-case 11:return 9;
+case 11:return 33;
 break;
-case 12:return 10;
+case 12:return 35;
 break;
-case 13:return 5;
+case 13:return 37;
 break;
-case 14: console.log('Error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
+case 14:return 38;
+break;
+case 15:return 40;
+break;
+case 16:return 23;
+break;
+case 17:return 34;
+break;
+case 18:return 41;
+break;
+case 19:return 42;
+break;
+case 20:return 12;
+break;
+case 21:return 13;
+break;
+case 22:return 15;
+break;
+case 23:return 14;
+break;
+case 24:return 16;
+break;
+case 25:return 7;
+break;
+case 26:return 8;
+break;
+case 27:return 9;
+break;
+case 28:return 10;
+break;
+case 29:return 5;
+break;
+case 30: console.log('Error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+LOCATION\](.*)\[-LOCATION\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\][^\[]*\[-DATA\])/i,/^(?:\[\+MESSAGE\][^\[]*\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:\[\+ERROR\])/i,/^(?:\[-ERROR\])/i,/^(?:\[\+DATABASES\])/i,/^(?:\[-DATABASES\])/i,/^(?:\[\+DATABASE\])/i,/^(?:\[-DATABASE\])/i,/^(?:\[\+TABLES\])/i,/^(?:\[-TABLES\])/i,/^(?:\[\+TABLE\])/i,/^(?:\[-TABLE\])/i,/^(?:\[\+TYPES\])/i,/^(?:\[-TYPES\])/i,/^(?:\[\+TYPE\])/i,/^(?:\[-TYPE\])/i,/^(?:\[\+NAME\][^\[]*\[-NAME\])/i,/^(?:\[\+COLUMNS\](.*)\[-COLUMNS\])/i,/^(?:\[\+ATTRIBUTES\](.*)\[-ATTRIBUTES\])/i,/^(?:\[\+PROCEDURES\](.*)\[-PROCEDURES\])/i,/^(?:\[\+LINE\](.*)\[-LINE\])/i,/^(?:\[\+COLUMN\](.*)\[-COLUMN\])/i,/^(?:\[\+LOCATION\](.*)\[-LOCATION\])/i,/^(?:\[\+TYPE\](.*)\[-TYPE\])/i,/^(?:\[\+DESC\](.*)\[-DESC\])/i,/^(?:\[\+DATA\][^\[]*\[-DATA\])/i,/^(?:\[\+MESSAGE\][^\[]*\[-MESSAGE\])/i,/^(?:\[\+LOGIN\](.*)\[-LOGIN\])/i,/^(?:\[\+LOGOUT\](.*)\[-LOGOUT\])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"inclusive":true}}
 });
 return lexer;
 })();
