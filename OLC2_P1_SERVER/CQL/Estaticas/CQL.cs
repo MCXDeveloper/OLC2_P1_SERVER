@@ -198,6 +198,11 @@ public class CQL
         RootBD.GetDatabase(BaseDatosEnUso).RegistrarProcedimiento(proc);
     }
 
+    public static Procedimiento ObtenerProcedimientoDeBD(string nombre_proc)
+    {
+        return RootBD.GetDatabase(BaseDatosEnUso).ObtenerProcedimiento(nombre_proc);
+    }
+
     #endregion
 
     #region FUNCIONES_DE_LUP
@@ -303,5 +308,4 @@ public class CQL
     }
 
     #endregion
-
 }

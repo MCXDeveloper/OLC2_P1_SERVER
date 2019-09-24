@@ -169,7 +169,11 @@ public class AST : Instruccion
                 DeclaracionProcedimiento x = (DeclaracionProcedimiento)ins;
                 x.Ejecutar(ent);
             }
-
+            else if (ins is AsignacionMultiple)
+            {
+                AsignacionMultiple x = (AsignacionMultiple)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;

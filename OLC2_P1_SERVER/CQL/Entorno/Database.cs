@@ -137,6 +137,11 @@ public class Database : InstruccionBD
         ListaProcedimientos.Add(proc);
     }
 
+    public Procedimiento ObtenerProcedimiento(string nombre_proc)
+    {
+        return ListaProcedimientos.Find(x => x.NombreProcedimiento.Equals(nombre_proc, StringComparison.InvariantCultureIgnoreCase));
+    }
+
     #endregion
 
     public string CrearChison()

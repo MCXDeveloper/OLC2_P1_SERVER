@@ -1018,6 +1018,10 @@ public class ASTBuilder
         {
             return new ForEach((List<Parametro>)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (List<Instruccion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
         }
+        else if (EstoyAca(actual, "ASIGNACION_MULTIPLE"))
+        {
+            return new AsignacionMultiple((List<string>)Recorrido(actual.ChildNodes[0]), (LlamadaProcedimiento)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+        }
 
         return null;
     }

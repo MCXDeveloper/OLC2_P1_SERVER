@@ -201,6 +201,7 @@
     <Compile Include="CQL\Arbol\AlterTable.cs" />
     <Compile Include="CQL\Arbol\Asignacion.cs" />
     <Compile Include="CQL\Arbol\AsignacionColumna.cs" />
+    <Compile Include="CQL\Arbol\AsignacionMultiple.cs" />
     <Compile Include="CQL\Arbol\AtributoObjeto.cs" />
     <Compile Include="CQL\Arbol\ColumnaTabla.cs" />
     <Compile Include="CQL\Arbol\CreateDatabase.cs" />
