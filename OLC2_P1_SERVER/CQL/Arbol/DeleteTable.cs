@@ -35,34 +35,54 @@ public class DeleteTable : Instruccion
             // 2. Valido que exista la tabla de la cual se quieren eliminar los registros.
             if (CQL.ExisteTablaEnBD(NombreTabla))
             {
-                // 3. Verifico si la ExpresionWhere es Nulo ya que si lo es, se eliminan todos los registros, de lo contrario, se eliminan solo los filtrados por el Where.
-                if (ExpresionWhere is Nulo)
+                // Valido si la instrucción se esta validando desde un BATCH
+                if (!CQL.BatchFlag)
                 {
-                    CQL.EliminarTodosLosRegistrosDeTabla(NombreTabla);
-                }
-                else
-                {
-                    CQL.TuplaEnUso = null;
-                    CQL.WhereFlag = true;
-                    EjecutarDeleteConWhere(CQL.ObtenerTabla(NombreTabla).Tabla, ent);
-                    CQL.TuplaEnUso = null;
-                    CQL.WhereFlag = false;
-                }
+                    // 3. Verifico si la ExpresionWhere es Nulo ya que si lo es, se eliminan todos los registros, de lo contrario, se eliminan solo los filtrados por el Where.
+                    if (ExpresionWhere is Nulo)
+                    {
+                        CQL.EliminarTodosLosRegistrosDeTabla(NombreTabla);
+                    }
+                    else
+                    {
+                        CQL.TuplaEnUso = null;
+                        CQL.WhereFlag = true;
+                        EjecutarDeleteConWhere(CQL.ObtenerTabla(NombreTabla).Tabla, ent);
+                        CQL.TuplaEnUso = null;
+                        CQL.WhereFlag = false;
+                    }
+                }   
             }
             else
             {
-                string mensaje = "Error.  La tabla de la que se desean eliminar los registros (" + NombreTabla + ") no existe en la base de datos.";
-                CQL.AddLUPError("Semántico", "[DELETE_TABLE]", mensaje, fila, columna);
-                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
-                return new TableDontExists(mensaje);
+                // Valido si la instrucción se esta validando desde un BATCH
+                if (!CQL.BatchFlag)
+                {
+                    string mensaje = "Error.  La tabla de la que se desean eliminar los registros (" + NombreTabla + ") no existe en la base de datos.";
+                    CQL.AddLUPError("Semántico", "[DELETE_TABLE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
+                    return new TableDontExists(mensaje);
+                }
+                else
+                {
+                    CQL.BatchErrorCounter++;
+                }
             }
         }
         else
         {
-            string mensaje = "Error.  No se puede eliminar registros de una tabla si no se ha especificado la base de datos a utilizar.";
-            CQL.AddLUPError("Semántico", "[DELETE_TABLE]", mensaje, fila, columna);
-            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
-            return new UseBDException(mensaje);
+            // Valido si la instrucción se esta validando desde un BATCH
+            if (!CQL.BatchFlag)
+            {
+                string mensaje = "Error.  No se puede eliminar registros de una tabla si no se ha especificado la base de datos a utilizar.";
+                CQL.AddLUPError("Semántico", "[DELETE_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+                return new UseBDException(mensaje);
+            }
+            else
+            {
+                CQL.BatchErrorCounter++;
+            }
         }
 
         return new Nulo();

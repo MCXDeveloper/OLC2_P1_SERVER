@@ -402,6 +402,7 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal ACCION_CURSOR = new NonTerminal("ACCION_CURSOR");
         NonTerminal SENTENCIA_FOREACH = new NonTerminal("SENTENCIA_FOREACH");
         NonTerminal ASIGNACION_MULTIPLE = new NonTerminal("ASIGNACION_MULTIPLE");
+        NonTerminal SENTENCIA_BATCH = new NonTerminal("SENTENCIA_BATCH");
         
         #endregion
 
@@ -432,6 +433,7 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_CREATE
             | SENTENCIA_TRY_CATCH
             | SENTENCIA_FOREACH
+            | SENTENCIA_BATCH + puco
             | SENTENCIA_TB_UPDATE + puco
             | SENTENCIA_THROW + puco
             | SENTENCIA_DB_USE + puco
@@ -450,6 +452,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_BATCH.Rule = r_begin + r_batch + LISTA_INSTRUCCIONES + r_apply + r_batch;
 
         ASIGNACION_MULTIPLE.Rule = LISTA_VARIABLES + igual + LLAMADA_PROCEDIMIENTO;
 

@@ -9,11 +9,13 @@ public class CQL
 {
     public static RaizBD RootBD { get; set; }
     public static bool WhereFlag { get; set; }
+    public static bool BatchFlag { get; set; }
     public static bool SelectFlag { get; set; }
     public static Table TablaEnUso { get; set; }
     public static bool TryCatchFlag { get; set; }
     public static DataRow TuplaEnUso { get; set; }
     public static string BaseDatosEnUso { get; set; }
+    public static int BatchErrorCounter { get; set; }
     public static string UsuarioLogueado { get; set; }
     public static List<string> PilaRespuestas = new List<string>();
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }

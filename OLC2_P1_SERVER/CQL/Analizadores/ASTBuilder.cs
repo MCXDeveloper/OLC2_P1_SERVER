@@ -1022,6 +1022,10 @@ public class ASTBuilder
         {
             return new AsignacionMultiple((List<string>)Recorrido(actual.ChildNodes[0]), (LlamadaProcedimiento)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
         }
+        else if (EstoyAca(actual, "SENTENCIA_BATCH"))
+        {
+            return new Batch((List<Instruccion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+        }
 
         return null;
     }

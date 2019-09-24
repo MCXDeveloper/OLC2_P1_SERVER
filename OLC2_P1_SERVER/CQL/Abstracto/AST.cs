@@ -174,6 +174,11 @@ public class AST : Instruccion
                 AsignacionMultiple x = (AsignacionMultiple)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is Batch)
+            {
+                Batch x = (Batch)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;

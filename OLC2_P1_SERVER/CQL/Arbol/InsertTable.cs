@@ -67,13 +67,25 @@ public class InsertTable : Instruccion
                     {
                         if ((bool)vni)
                         {
-                            // 5. Procedo a realizar la inserción de los valores.
-                            tablita.AddRow(GetEvaluatedValues(ent));
+                            // Valido si la instrucción se esta validando desde un BATCH
+                            if (!CQL.BatchFlag)
+                            {
+                                // 5. Procedo a realizar la inserción de los valores.
+                                tablita.AddRow(GetEvaluatedValues(ent));
+                            }
                         }   
                     }
                     else
                     {
-                        return vni;
+                        // Valido si la instrucción se esta validando desde un BATCH
+                        if (!CQL.BatchFlag)
+                        {
+                            return vni;
+                        }
+                        else
+                        {
+                            CQL.BatchErrorCounter++;
+                        }
                     }
                 }
                 else
@@ -85,30 +97,58 @@ public class InsertTable : Instruccion
                     {
                         if ((bool)vsi)
                         {
-                            // 5. Procedo a realizar la inserción de los valores.
-                            tablita.AddRow(ListaCampos, GetEvaluatedValues(ent));
+                            // Valido si la instrucción se esta validando desde un BATCH
+                            if (!CQL.BatchFlag)
+                            {
+                                // 5. Procedo a realizar la inserción de los valores.
+                                tablita.AddRow(ListaCampos, GetEvaluatedValues(ent));
+                            }
                         }
                     }
                     else
                     {
-                        return vsi;
+                        // Valido si la instrucción se esta validando desde un BATCH
+                        if (!CQL.BatchFlag)
+                        {
+                            return vsi;
+                        }
+                        else
+                        {
+                            CQL.BatchErrorCounter++;
+                        }
                     }
                 }
             }
             else
             {
-                string mensaje = "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.";
-                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
-                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
-                return new TableDontExists(mensaje);
+                // Valido si la instrucción se esta validando desde un BATCH
+                if (!CQL.BatchFlag)
+                {
+                    string mensaje = "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.";
+                    CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
+                    return new TableDontExists(mensaje);
+                }
+                else
+                {
+                    CQL.BatchErrorCounter++;
+                }
             }
         }
         else
         {
-            string mensaje = "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.";
-            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
-            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
-            return new UseBDException(mensaje);
+            // Valido si la instrucción se esta validando desde un BATCH
+            if (!CQL.BatchFlag)
+            {
+                string mensaje = "Error.  No se puede insertar en una tabla si no se ha especificado la base de datos a utilizar.";
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+                return new UseBDException(mensaje);
+            }
+            else
+            {
+                CQL.BatchErrorCounter++;
+            }
         }
 
         return new Nulo();

@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OLC2_P1_SERVER.CQL.Excepciones
+public class BatchException : Exception
 {
-    public class BatchException
+    public static string Mensaje { get; set; }
+
+    public BatchException(string message) : base(GetCompleteMessage(message)) { }
+
+    private static string GetCompleteMessage(string msj)
     {
+        return "Ocurrió una excepción del tipo 'BatchException'. " + msj;
     }
 }

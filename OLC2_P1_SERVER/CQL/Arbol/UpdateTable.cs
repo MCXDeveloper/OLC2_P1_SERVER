@@ -63,14 +63,25 @@ public class UpdateTable : Instruccion
 
                         if (ValidarTipoColumnaConTipoValor(ent))
                         {
-                            RealizarActualizacionDeValores(ent);
+                            if (!CQL.BatchFlag)
+                            {
+                                RealizarActualizacionDeValores(ent);
+                            }
                         }
                         else
                         {
-                            string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
-                            CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
-                            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
-                            return new ValuesException(mensaje);
+                            // Valido si la instrucción se esta validando desde un BATCH
+                            if (!CQL.BatchFlag)
+                            {
+                                string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
+                                CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
+                                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+                                return new ValuesException(mensaje);
+                            }
+                            else
+                            {
+                                CQL.BatchErrorCounter++;
+                            }
                         }
 
                         CQL.WhereFlag = false;
@@ -80,24 +91,47 @@ public class UpdateTable : Instruccion
                 }
                 else
                 {
-                    return vec;
+                    // Valido si la instrucción se esta validando desde un BATCH
+                    if (!CQL.BatchFlag)
+                    {
+                        return vec;
+                    }
+                    else
+                    {
+                        CQL.BatchErrorCounter++;
+                    }
                 }
-
             }
             else
             {
-                string mensaje = "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.";
-                CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
-                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
-                return new TableDontExists(mensaje);
+                // Valido si la instrucción se esta validando desde un BATCH
+                if (!CQL.BatchFlag)
+                {
+                    string mensaje = "Error.  La tabla especificada '" + NombreTabla + "' no existe en la base de datos actual.";
+                    CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
+                    if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TableDontExists' no capturada.  " + mensaje); }
+                    return new TableDontExists(mensaje);
+                }
+                else
+                {
+                    CQL.BatchErrorCounter++;
+                }
             }
         }
         else
         {
-            string mensaje = "Error.  No se puede actualizar los valores en una tabla si no se ha especificado la base de datos a utilizar.";
-            CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
-            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
-            return new UseBDException(mensaje);
+            // Valido si la instrucción se esta validando desde un BATCH
+            if (!CQL.BatchFlag)
+            {
+                string mensaje = "Error.  No se puede actualizar los valores en una tabla si no se ha especificado la base de datos a utilizar.";
+                CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'UseBDException' no capturada.  " + mensaje); }
+                return new UseBDException(mensaje);
+            }
+            else
+            {
+                CQL.BatchErrorCounter++;
+            }
         }
 
         return new Nulo();
