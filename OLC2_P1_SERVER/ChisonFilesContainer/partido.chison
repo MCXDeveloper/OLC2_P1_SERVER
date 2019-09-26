@@ -1,0 +1,63 @@
+<
+    "Fecha" = '2011-10-12',
+    "Hora" = '14:00:00',
+    "Local" = 
+        <
+            "Nombre" = "Real Madrid",
+            "Aficion" = 100000,
+            "Pais" = "España"
+        >,
+    "Visita" =
+        <   
+            "Nombre" = "Chelsea",
+            "Aficion" = 80000,
+            "Pais" = "Inglaterra"
+        >,
+    "Resultado" =
+        <
+            "Local" = 5,
+            "Visita" = 3
+        >
+>,
+<
+    "Fecha" = '2011-10-12',
+    "Hora" = '16:00:00',
+    "Local" = 
+        <
+            "Nombre" = "Barcelona",
+            "Aficion" = 100000,
+            "Pais" = "España"
+        >,
+    "Visita" =
+        <   
+            "Nombre" = "Bayern",
+            "Aficion" = 90000,
+            "Pais" = "Alemania"
+        >,
+    "Resultado" =
+        <
+            "Local" = 4,
+            "Visita" = 2
+        >
+>,
+<
+    "Fecha" = '2015-10-12',
+    "Hora" = '16:00:00',
+    "Local" = 
+        <
+            "Nombre" = "Arsenal",
+            "Aficion" = 70000,
+            "Pais" = "Inglaterra"
+        >,
+    "Visita" =
+        <   
+            "Nombre" = "Liverpool",
+            "Aficion" = 85000,
+            "Pais" = "Inglaterra"
+        >,
+    "Resultado" =
+        <
+            "Local" = 1,
+            "Visita" = 1
+        >
+>

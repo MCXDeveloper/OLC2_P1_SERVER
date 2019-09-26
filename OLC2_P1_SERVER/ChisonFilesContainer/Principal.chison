@@ -1,0 +1,225 @@
+$<
+    "DATABASES"= [
+        <
+            "NAME" = "Database1",
+            "Data" = [
+                <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Direccion",
+                    "ATTRS" = [
+                        < 
+                            "NAME" = "Apartamento",
+                            "TYPE" = "String" 
+                        >,
+                        < 
+                            "NAME" = "Zona",
+                            "TYPE" = "String"
+                        >,
+                        < 
+                            "NAME" = "Nivel",
+                            "TYPE" = "Int"
+                        >
+                    ]
+                >,
+                <
+                    "CQL-TYPE" = "TABLE",
+                    "NAME" = "Alumno",
+                    "COLUMNS" = [
+                        <
+                            "NAME" = "Carnet",
+                            "TYPE" = "Counter",
+                            "PK" = TRUE      
+                        >,
+                        <
+                            "NAME" = "Nombre",
+                            "TYPE" = "String",
+                            "PK" = FALSE      
+                        >,
+                        <
+                            "NAME" = "Edad",
+                            "TYPE" = "Int",
+                            "PK" = FALSE      
+                        >,
+                        <
+                            "NAME" = "Cursos_Aprobados",
+                            "TYPE" = "Set<String>",
+                            "PK" = FALSE      
+                        >,
+                        <
+                            "NAME" = "Direccion",
+                            "TYPE" = "Direccion",
+                            "PK" = FALSE      
+                        >
+                    ],
+                    "DATA" = [
+                        ${ alumnos.chison }$
+                    ]  
+                >,      
+                <
+                    "ATTRS" = [
+                        < 
+                            "NAME" = "Nombre",
+                            "TYPE" = "String" 
+                        >,
+                        < 
+                            "NAME" = "Aficion",
+                            "TYPE" = "Int"
+                        >,
+                        < 
+                            "NAME" = "Pais",
+                            "TYPE" = "String"
+                        >
+                    ],
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Equipo"                    
+                >,
+                <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Resultado",
+                    "ATTRS" = [
+                        < 
+                            "NAME" = "local",
+                            "TYPE" = "Int" 
+                        >,
+                        < 
+                            "NAME" = "visita",
+                            "TYPE" = "Int"
+                        >
+                    ]
+                >,
+                <
+                    "CQL-TYPE" = "TABLE",
+                    "NAME" = "Partido",
+                    "DATA" = [
+                        ${ partido.chison }$
+                    ],  
+                    "COLUMNS" = [
+                        < 
+                            "NAME" = "Hora",
+                            "TYPE" = "Time",
+                            "PK" = TRUE      
+                        >,
+                        < 
+                            "NAME" = "Fecha",
+                            "TYPE" = "Date",
+                            "PK" = TRUE      
+                        >,
+                        < 
+                            "NAME" = "Local",
+                            "TYPE" = "Equipo" ,
+                            "PK" = FALSE
+                        >,
+                        < 
+                            "NAME" = "Visita",
+                            "TYPE" = "Equipo",
+                            "PK" = FALSE
+                        >,
+                        < 
+                            "NAME" = "Resultado",
+                            "TYPE" = "Resultado",
+                            "PK" = FALSE
+
+                        >
+                    ]
+                >,                
+                <
+                    "ATTRS" = [
+                        < 
+                            "NAME" = "Tipo",
+                            "TYPE" = "String" 
+                        >,
+                        < 
+                            "NAME" = "Marca",
+                            "TYPE" = "String"
+                        >,
+                        < 
+                            "NAME" = "Precio",
+                            "TYPE" = "Double"
+                        >,
+                        < 
+                            "NAME" = "Tallas",
+                            "TYPE" = "Set<Double>"
+                        >
+                    ],
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Articulo"
+                    
+                >,
+                <                    
+                    "DATA" = [
+                        ${ tiendaropa.chison }$
+                    ],  
+                    "NAME" = "TiendaRopa",
+                    "CQL-TYPE" = "TABLE",                    
+                    "COLUMNS" = [
+                        < 
+                            "NAME" = "ID",
+                            "TYPE" = "Int",
+                            "PK" = TRUE      
+                        >,
+                        < 
+                            "NAME" = "Articulo",
+                            "TYPE" = "Articulo",
+                            "PK" =  FALSE
+                        >
+                    ]
+                >         
+
+            ]
+        >,    
+        <
+        "NAME"= "Database2",
+        "Data"= [
+            ${ bd2data.chison }$
+        ]
+        >,
+        <
+        "Data"= [],
+        "NAME"= "Database3"
+        
+        >
+    ],
+    "USERS"= [        
+        <            
+            "PERMISSIONS"= [],
+            "NAME"="Fernando",
+            "PASSWORD"= "5678"
+        >,
+        <
+            "NAME"="Lilly",
+            "PASSWORD"= "Collins",
+            "PERMISSIONS"= [
+                <
+                    "NAME" = "Database1"
+                >
+            ]
+        >,
+        <
+            "NAME"="Luis",
+            "PASSWORD"= "1234",
+            "PERMISSIONS"= [
+                <
+                    "NAME" = "Database1"
+                >,
+                <
+                    "NAME" = "Database2"
+                >
+            ]
+        >,
+        <
+            "NAME"="Admin",
+            "PASSWORD"= "admin",
+            "PERMISSIONS"= [
+                <
+                    "NAME" = "Database1"
+                >,
+                <
+                    "NAME" = "Database2"
+                >,
+                <
+                    "NAME" = "Database3"
+                >
+            ]
+        >
+    ]
+>$

@@ -44,7 +44,9 @@ public class QueryPackage : LUP_Instruccion
         }
         else
         {
-            CQL.AddLUPMessage("Hay errores lexicos o sintacticos.\n>> El arbol de Irony no se construyó.\n>> La cadena es inválida.");
+            CQL.AddLUPMessage("Hay errores lexicos o sintacticos.");
+            CQL.AddLUPMessage("El arbol de Irony no se construyó.");
+            CQL.AddLUPMessage("La cadena es inválida.");
 
             foreach(LogMessage err in arbol.ParserMessages)
             {

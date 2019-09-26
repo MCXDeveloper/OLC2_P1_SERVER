@@ -1,0 +1,44 @@
+<
+	"ID" = 1,
+	"Articulo" =
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "Marca1",
+			"Precio" = 189.50,
+			"Tallas" = [27,28,29,30,31,32]
+		>
+
+>,
+<
+	"ID" = 2,
+	"Articulo" =
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "MarcaCamisa",
+			"Precio" = 189.50,
+			"Tallas" = [14.5,15,18.5]
+		>
+
+>,
+<
+	"ID" = 3,
+	"Articulo" =
+		<
+			"Tipo" = "Zapato",
+			"Marca" = "MarcaZapato",
+			"Precio" = 499.99,
+			"Tallas" = [6,7,7.5,8]
+		>
+
+>,
+<
+	"ID" = 4,
+	"Articulo" =
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "Marca2",
+			"Precio" = 225,
+			"Tallas" = [29,32]
+		>
+
+>

@@ -1,0 +1,48 @@
+<
+    "Carnet" = 1,
+    "Nombre" = "Alumno1",
+    "Edad" = 18,
+    "Cursos_Aprobados" = ["Compiladores 1","Matematica Intermedia 2"],
+    "Direccion" = 
+        <
+            "Apartamento" = "2B",
+            "Zona" = "4ta Calle y 3ra Avenida Z.15",
+            "Nivel" = 2
+        >
+>,
+<
+    "Carnet" = 2,
+    "Nombre" = "Alumno2",
+    "Edad" = 24,
+    "Cursos_Aprobados" = ["Compiladores 2","Estadistica 1","Matematica Intermedia 3"],
+    "Direccion" = 
+        <
+            "Apartamento" = "",
+            "Zona" = "Avenida Reforma Final, Z.9",
+            "Nivel" = 0
+        >
+>,
+<
+    "Carnet" = 3,
+    "Nombre" = "Alumno3",
+    "Edad" = 19,
+    "Cursos_Aprobados" = ["Estructuras de Datos","Mate Computo 2","Ecologia"],
+    "Direccion" = 
+        <
+            "Apartamento" = "4A",
+            "Zona" = "4ta Calle y 3ra Avenida Z.15",
+            "Nivel" = 4
+        >
+>,
+<
+    "Carnet" = 4,
+    "Nombre" = "Alumno4",
+    "Edad" = 22,
+    "Cursos_Aprobados" = ["Compiladores 2","Quimica 1","Organizacion Computacional","Ingenieria Economica"],
+    "Direccion" = 
+        <
+            "Apartamento" = "5A",
+            "Zona" = "4ta Calle y 3ra Avenida Z.15",
+            "Nivel" = 5
+        >
+>
