@@ -55,11 +55,11 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
-                case 4:
-                    // variable + igual + EXPRESION + puco
+                case 3:
+                    // variable + igual + EXPRESION
                     return new Asignacion(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    // variable + punto + LISTA_ACCESO + igual + EXPRESION + puco
+                    // variable + punto + LISTA_ACCESO + igual + EXPRESION
                     return new Asignacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), TipoAsignacion.AS_NORMAL, (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
@@ -616,7 +616,7 @@ public class ASTBuilder
                     return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 case 9:
                     return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), GetFila(actual, 0), GetColumna(actual, 0));
-                case 11:
+                case 12:
                     return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
                     return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), (List<string>)Recorrido(actual.ChildNodes[12]), GetFila(actual, 0), GetColumna(actual, 0));

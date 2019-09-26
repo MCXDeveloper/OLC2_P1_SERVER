@@ -30,11 +30,11 @@ public class AST : Instruccion
             {
                 EjecutarNormal(ent);
             }
-        }        
+        }
 
         //System.Diagnostics.Debug.Write(CQL.TransformEntornoToTable(ent));
         //System.Diagnostics.Debug.Write(CQL.ObtenerListaUserTypesEnString());
-
+        CQL.testing();
         return new Nulo();
     }
 

@@ -51,9 +51,9 @@ $<
                             "PK" = FALSE      
                         >
                     ],
-                    "DATA" = [
-                        ${ alumnos.chison }$
-                    ]  
+					"DATA" = [
+						${ alumnos.chison }$
+					]
                 >,      
                 <
                     "ATTRS" = [
@@ -163,24 +163,22 @@ $<
                             "PK" =  FALSE
                         >
                     ]
-                >         
-
-            ]
-        >,    
+                >
+			]
+		>,    
         <
-        "NAME"= "Database2",
-        "Data"= [
-            ${ bd2data.chison }$
-        ]
-        >,
+			"NAME"= "Database2",
+			"Data"= [
+				${ bd2data.chison }$
+			]
+		>,
         <
-        "Data"= [],
-        "NAME"= "Database3"
-        
+			"Data"= [],
+			"NAME"= "Database3"
         >
     ],
-    "USERS"= [        
-        <            
+    "USERS"= [
+		<            
             "PERMISSIONS"= [],
             "NAME"="Fernando",
             "PASSWORD"= "5678"
@@ -221,5 +219,5 @@ $<
                 >
             ]
         >
-    ]
+	]
 >$

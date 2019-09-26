@@ -22,7 +22,7 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
 
             foreach (CHI_Val val in ListaValores)
             {
-                lista_campos.Add(val.Clave.ToString());
+                lista_campos.Add(val.Clave.ToString().Replace("\"", ""));
                 lista_valores.Add(val.Ejecutar().ToString());
             }
 

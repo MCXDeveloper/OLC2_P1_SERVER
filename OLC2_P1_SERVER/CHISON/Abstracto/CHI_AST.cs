@@ -1,4 +1,6 @@
-﻿using OLC2_P1_SERVER.CHISON.Arbol;
+﻿using Irony;
+using Irony.Parsing;
+using OLC2_P1_SERVER.CHISON.Arbol;
 using OLC2_P1_SERVER.CHISON.Estaticas;
 using System;
 using System.Collections.Generic;
@@ -68,8 +70,53 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
             }
             else
             {
-                // TODO - Aqui debería de ir todo el texto para mandar a la gramatica real.
-                Debug.WriteLine(string.Join("\n", StaticChison.CadenaSalida));
+                string CadenaFinal = string.Join("\n", StaticChison.CadenaSalida);
+
+                Debug.WriteLine(CadenaFinal);
+
+                Grammar gramatica = new Grammar();
+                LanguageData lenguaje = new LanguageData(gramatica);
+                Parser parser = new Parser(lenguaje);
+                ParseTree arbol = parser.Parse(CadenaFinal);
+
+                if (arbol.ParserMessages.Count.Equals(0))
+                {
+                    ASTBuilder builder = new ASTBuilder();
+                    AST auxArbol = builder.Analizar(arbol.Root);
+
+                    if (!(auxArbol is null))
+                    {
+                        object parseResponse = auxArbol.Ejecutar(new Entorno(null));
+
+                        if (parseResponse is Nulo)
+                        {
+                            Debug.WriteLine("Análisis realizado exitosamente.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Error. No se pudo construir el árbol de CQL.");
+                    }
+
+                    //return String.Join(String.Empty, PilaRespuestas.ToArray());
+                }
+                else
+                {
+                    Debug.WriteLine("Hay errores lexicos o sintacticos.");
+                    Debug.WriteLine("El arbol de Irony no se construyó.");
+                    Debug.WriteLine("La cadena es inválida.");
+
+                    foreach (LogMessage err in arbol.ParserMessages)
+                    {
+                        //CQL.AddLUPError("Sintáctico", "Parser", err.Message, err.Location.Line, err.Location.Column);
+                        Debug.WriteLine("Tipo de Error: Sintáctico.");
+                        Debug.WriteLine("Ubicación: Parser.");
+                        Debug.WriteLine("Descripcion: " + err.Message);
+                        Debug.WriteLine("Linea: " + err.Location.Line);
+                        Debug.WriteLine("Columna: " + err.Location.Column);
+                    }
+                }
+
             }
 
             return null;

@@ -533,9 +533,9 @@ public class Grammar : Irony.Parsing.Grammar
             ;
 
         SENTENCIA_TB_CREATE.Rule = r_create + r_table + identificador + par_a + LISTA_COLUMNAS + par_c
-            | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c
+            | r_create + r_table + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + par_c
             | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + par_c
-            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c
+            | r_create + r_table + r_if + r_not + r_exists + identificador + par_a + LISTA_COLUMNAS + coma + r_primary + r_key + par_a + LISTA_IDENTIFICADORES + par_c + par_c
             ;
 
         LISTA_COLUMNAS.Rule = MakePlusRule(LISTA_COLUMNAS, coma, COLUMNA);
@@ -673,7 +673,7 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_ACCESO
             | identificador + punto + LISTA_ACCESO
             | llave_a + LISTA_ATR_MAP + llave_c
-            | llave_a + LISTA_EXPRESIONES + llave_c
+            | cor_a + LISTA_EXPRESIONES + cor_c
             | par_a + EXPRESION + par_c
             | par_a + TIPO + par_c + EXPRESION
             | identificador + cor_a + EXPRESION + cor_c

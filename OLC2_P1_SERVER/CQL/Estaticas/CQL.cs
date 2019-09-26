@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -19,6 +20,11 @@ public class CQL
     public static string UsuarioLogueado { get; set; }
     public static List<string> PilaRespuestas = new List<string>();
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }
+
+    public static void testing()
+    {
+        Debug.WriteLine("hehe");
+    }
 
     #region FUNCIONES_DE_LOGIN
 
