@@ -24,7 +24,17 @@ namespace OLC2_P1_SERVER.Analizadores
         {
             if (EstoyAca(actual, "INICIO"))
             {
-                return new CHI_AST(Recorrido(actual.ChildNodes[4]), Recorrido(actual.ChildNodes[10]));
+                object ob1 = Recorrido(actual.ChildNodes[4]);
+                object ob2 = Recorrido(actual.ChildNodes[10]);
+
+                if (EstoyAca(actual.ChildNodes[1], "\"DATABASES\""))
+                {
+                    return new CHI_AST(ob1, ob2);
+                }
+                else
+                {
+                    return new CHI_AST(ob2, ob1);
+                }
             }
 
             else if (EstoyAca(actual, "IMPORTAR"))
@@ -32,59 +42,14 @@ namespace OLC2_P1_SERVER.Analizadores
                 return new CHI_Importar(ObtenerLexema(actual, 1), actual.ChildNodes[0].Token.Location.Position, actual.ChildNodes[4].Token.Location.Position + 2, GetFila(actual, 0), GetColumna(actual, 0));
             }
 
-            else if (EstoyAca(actual, "ELEMENTO_TABLA"))
-            {
-                return new CHI_Tabla(ObtenerLexemaSinComillas(actual, 7), Recorrido(actual.ChildNodes[12]), Recorrido(actual.ChildNodes[18]));
-            }
-
-            else if (EstoyAca(actual, "ELEMENTO_USERTYPE"))
-            {
-                return new CHI_UserType(ObtenerLexemaSinComillas(actual, 7), Recorrido(actual.ChildNodes[12]));
-            }
-
-            else if (EstoyAca(actual, "ELEMENTO_PROCEDURE"))
-            {
-                return new CHI_Procedure(ObtenerLexemaSinComillas(actual, 7), Recorrido(actual.ChildNodes[12]), CleanProcedureContent(ObtenerLexema(actual, 17)));
-            }
-
             else if (EstoyAca(actual, "VAL"))
             {
-                return new CHI_Val(ObtenerLexemaSinComillas(actual, 0), Recorrido(actual.ChildNodes[2]));
-            }
-
-            else if (EstoyAca(actual, "VALUE"))
-            {
-                return new CHI_Value((List<CHI_Val>)Recorrido(actual.ChildNodes[1]));
+                return new CHI_Val(Recorrido(actual.ChildNodes[0]), Recorrido(actual.ChildNodes[2]));
             }
 
             else if (EstoyAca(actual, "PERMISO"))
             {
                 return new CHI_Permiso(ObtenerLexemaSinComillas(actual, 3));
-            }
-
-            else if (EstoyAca(actual, "ATRIBUTO"))
-            {
-                return new CHI_Atributo(ObtenerLexemaSinComillas(actual, 3), (CHIDataType)Recorrido(actual.ChildNodes[7]));
-            }
-
-            else if (EstoyAca(actual, "DATABASE"))
-            {
-                return new CHI_Database(ObtenerLexemaSinComillas(actual, 3), Recorrido(actual.ChildNodes[8]));
-            }
-
-            else if (EstoyAca(actual, "PARAMETRO"))
-            {
-                return new CHI_Parametro(ObtenerLexemaSinComillas(actual, 3), (CHIDataType)Recorrido(actual.ChildNodes[7]), (string)Recorrido(actual.ChildNodes[11]));
-            }
-
-            else if (EstoyAca(actual, "COLUMNA"))
-            {
-                return new CHI_Columna(ObtenerLexemaSinComillas(actual, 3), (CHIDataType)Recorrido(actual.ChildNodes[7]), (bool)Recorrido(actual.ChildNodes[11]));
-            }
-
-            else if (EstoyAca(actual, "USUARIO"))
-            {
-                return new CHI_Usuario(ObtenerLexemaSinComillas(actual, 3), ObtenerLexema(actual, 7), Recorrido(actual.ChildNodes[12]));
             }
 
             else if (EstoyAca(actual, "LISTA_VAL"))
@@ -97,24 +62,19 @@ namespace OLC2_P1_SERVER.Analizadores
                 return lista_values;
             }
 
-            else if (EstoyAca(actual, "LISTA_VALUES"))
+            else if (EstoyAca(actual, "LISTA_BLOCK"))
             {
-                List<CHI_Value> lista_values = new List<CHI_Value>();
+                object[] objList = new object[4];
                 foreach (ParseTreeNode hijo in actual.ChildNodes)
                 {
-                    lista_values.Add((CHI_Value)Recorrido(hijo));
-                }
-                return lista_values;
-            }
+                    object[] x = (object[])Recorrido(hijo);
 
-            else if (EstoyAca(actual, "LISTA_USUARIOS"))
-            {
-                List<CHI_Usuario> lista_usuarios = new List<CHI_Usuario>();
-                foreach (ParseTreeNode hijo in actual.ChildNodes)
-                {
-                    lista_usuarios.Add((CHI_Usuario)Recorrido(hijo));
+                    if (x != null)
+                    {
+                        objList[(int)x[0]] = x[1];
+                    }
                 }
-                return lista_usuarios;
+                return objList;
             }
 
             else if (EstoyAca(actual, "LISTA_PERMISOS"))
@@ -127,54 +87,14 @@ namespace OLC2_P1_SERVER.Analizadores
                 return lista_permisos;
             }
 
-            else if (EstoyAca(actual, "LISTA_COLUMNAS"))
-            {
-                List<CHI_Columna> lista_columnas = new List<CHI_Columna>();
-                foreach (ParseTreeNode hijo in actual.ChildNodes)
-                {
-                    lista_columnas.Add((CHI_Columna)Recorrido(hijo));
-                }
-                return lista_columnas;
-            }
-
-            else if (EstoyAca(actual, "LISTA_DATABASE"))
-            {
-                List<CHI_Database> lista_database = new List<CHI_Database>();
-                foreach (ParseTreeNode hijo in actual.ChildNodes)
-                {
-                    lista_database.Add((CHI_Database)Recorrido(hijo));
-                }
-                return lista_database;
-            }
-
             else if (EstoyAca(actual, "LISTA_ELEMENTOS"))
             {
-                List<CHI_Instruccion> lista_elementos = new List<CHI_Instruccion>();
+                List<object> lista_elementos = new List<object>();
                 foreach (ParseTreeNode hijo in actual.ChildNodes)
                 {
-                    lista_elementos.Add((CHI_Instruccion)Recorrido(hijo));
+                    lista_elementos.Add(Recorrido(hijo));
                 }
                 return lista_elementos;
-            }
-
-            else if (EstoyAca(actual, "LISTA_ATRIBUTOS"))
-            {
-                List<CHI_Atributo> lista_atributos = new List<CHI_Atributo>();
-                foreach (ParseTreeNode hijo in actual.ChildNodes)
-                {
-                    lista_atributos.Add((CHI_Atributo)Recorrido(hijo));
-                }
-                return lista_atributos;
-            }
-
-            else if (EstoyAca(actual, "LISTA_PARAMETROS"))
-            {
-                List<CHI_Parametro> lista_parametros = new List<CHI_Parametro>();
-                foreach (ParseTreeNode hijo in actual.ChildNodes)
-                {
-                    lista_parametros.Add((CHI_Parametro)Recorrido(hijo));
-                }
-                return lista_parametros;
             }
 
             else if (EstoyAca(actual, "LISTA_PRIMITIVOS"))
@@ -187,14 +107,56 @@ namespace OLC2_P1_SERVER.Analizadores
                 return lista_primitivos;
             }
 
-            else if (EstoyAca(actual, "BLOQUE_DATABASE"))
+            else if (EstoyAca(actual, "BLOCK"))
             {
-                return Recorrido(actual.ChildNodes[0]);
-            }
-
-            else if (EstoyAca(actual, "BLOQUE_USUARIOS"))
-            {
-                return Recorrido(actual.ChildNodes[0]);
+                if (EstoyAca(actual.ChildNodes[0], "\"CQL-TYPE\""))
+                {
+                    return new object[] { 0, ObtenerLexemaSinComillas(actual, 2) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"NAME\""))
+                {
+                    return new object[] { 1, ObtenerLexemaSinComillas(actual, 2) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"ATTRS\""))
+                {
+                    return new object[] { 2, Recorrido(actual.ChildNodes[3]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"DATA\""))
+                {
+                    return new object[] { 2, Recorrido(actual.ChildNodes[3]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"PARAMETERS\""))
+                {
+                    return new object[] { 2, Recorrido(actual.ChildNodes[3]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"TYPE\""))
+                {
+                    return new object[] { 2, (CHIDataType)Recorrido(actual.ChildNodes[2]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"PASSWORD\""))
+                {
+                    return new object[] { 2, ObtenerLexema(actual, 2) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"COLUMNS\""))
+                {
+                    return new object[] { 3, Recorrido(actual.ChildNodes[3]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"INSTR\""))
+                {
+                    return new object[] { 3, CleanProcedureContent(ObtenerLexema(actual, 2)) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"AS\""))
+                {
+                    return new object[] { 3, (string)Recorrido(actual.ChildNodes[2]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"PK\""))
+                {
+                    return new object[] { 3, (bool)Recorrido(actual.ChildNodes[2]) };
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "\"PERMISSIONS\""))
+                {
+                    return new object[] { 3, Recorrido(actual.ChildNodes[3]) };
+                }
             }
 
             else if (EstoyAca(actual, "BLOQUE_PERMISOS"))
@@ -207,29 +169,58 @@ namespace OLC2_P1_SERVER.Analizadores
                 return Recorrido(actual.ChildNodes[0]);
             }
 
-            else if (EstoyAca(actual, "BLOQUE_PARAMETROS"))
-            {
-                return Recorrido(actual.ChildNodes[0]);
-            }
-
-            else if (EstoyAca(actual, "BLOQUE_ATRIBUTOS"))
-            {
-                return Recorrido(actual.ChildNodes[0]);
-            }
-
-            else if (EstoyAca(actual, "BLOQUE_COLUMNAS"))
-            {
-                return Recorrido(actual.ChildNodes[0]);
-            }
-
-            else if (EstoyAca(actual, "BLOQUE_VALUES"))
-            {
-                return Recorrido(actual.ChildNodes[0]);
-            }
-
             else if (EstoyAca(actual, "ELEMENTO"))
             {
-                return Recorrido(actual.ChildNodes[0]);
+                if (EstoyAca(actual.ChildNodes[1], "LISTA_BLOCK"))
+                {
+                    object[] listObj = (object[])Recorrido(actual.ChildNodes[1]);
+
+                    if (listObj[0] != null)
+                    {
+                        if (((string)listObj[0]).Equals("TABLE"))
+                        {
+                            return new CHI_Tabla((string)listObj[1], listObj[3], listObj[2]);
+                        }
+                        else if (((string)listObj[0]).Equals("OBJECT"))
+                        {
+                            return new CHI_UserType((string)listObj[1], listObj[2]);
+                        }
+                        else
+                        {
+                            return new CHI_Procedure((string)listObj[1], listObj[2], (string)listObj[3]);
+                        }
+                    }
+                    else if (listObj[3] != null)
+                    {
+                        if (listObj[3] is string)
+                        {
+                            return new CHI_Parametro((string)listObj[1], (CHIDataType)listObj[2], (string)listObj[3]);
+                        }
+                        else if (listObj[3] is bool)
+                        {
+                            return new CHI_Columna((string)listObj[1], (CHIDataType)listObj[2], (bool)listObj[3]);
+                        }
+                        else
+                        {
+                            return new CHI_Usuario((string)listObj[1], (string)listObj[2], listObj[3]);
+                        }
+                    }
+                    else
+                    {
+                        if (listObj[2] is CHIDataType)
+                        {
+                            return new CHI_Atributo((string)listObj[1], (CHIDataType)listObj[2]);
+                        }
+                        else
+                        {
+                            return new CHI_Database((string)listObj[1], listObj[2]);
+                        }
+                    }
+                }
+                else
+                {
+                    return Recorrido(actual.ChildNodes[1]);
+                }
             }
 
             else if (EstoyAca(actual, "EXPRESION"))
@@ -273,11 +264,11 @@ namespace OLC2_P1_SERVER.Analizadores
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "fecha"))
                 {
-                    return ObtenerLexema(actual, 0).Replace("'", "");
+                    return ObtenerLexema(actual, 0);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "hora"))
                 {
-                    return ObtenerLexema(actual, 0).Replace("'", "");
+                    return ObtenerLexema(actual, 0);
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "true"))
                 {

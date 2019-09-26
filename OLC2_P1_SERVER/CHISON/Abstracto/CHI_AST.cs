@@ -38,11 +38,10 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
             }
             else
             {
-                List<CHI_Database> ListaDBS = (List<CHI_Database>)ObjetoBasesDatos;
-
-                foreach (CHI_Database db in ListaDBS)
+                foreach (object db in (List<object>)ObjetoBasesDatos)
                 {
-                    db.Ejecutar();
+                    CHI_Database xdb = (CHI_Database)db;
+                    xdb.Ejecutar();
                 }
             }
 
@@ -53,11 +52,10 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
             }
             else
             {
-                List<CHI_Usuario> ListaUsers = (List<CHI_Usuario>)ObjetoUsuarios;
-
-                foreach (CHI_Usuario user in ListaUsers)
+                foreach (object user in (List<object>)ObjetoUsuarios)
                 {
-                    user.Ejecutar();
+                    CHI_Instruccion ci = (CHI_Instruccion)user;
+                    ci.Ejecutar();
                 }
             }
 

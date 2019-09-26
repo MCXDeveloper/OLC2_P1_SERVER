@@ -28,20 +28,21 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             else
             {
                 StaticChison.CadenaSalida.Add("CREATE TYPE " + NombreUserType + " ( ");
-                StaticChison.CadenaSalida.AddRange(ObtenerTextoAtributos((List<CHI_Atributo>)ObjetoAtributos));
+                StaticChison.CadenaSalida.AddRange(ObtenerTextoAtributos((List<object>)ObjetoAtributos));
                 StaticChison.CadenaSalida.Add(");" + Environment.NewLine);
             }
 
             return null;
         }
 
-        private List<string> ObtenerTextoAtributos(List<CHI_Atributo> listAtrs)
+        private List<string> ObtenerTextoAtributos(List<object> listAtrs)
         {
             List<string> resp = new List<string>();
 
-            foreach (CHI_Atributo atr in listAtrs)
+            foreach (object atr in listAtrs)
             {
-                resp.Add("\t" + (string)atr.Ejecutar() + (atr.Equals(listAtrs.Last()) ? "" : ","));
+                CHI_Instruccion ci = (CHI_Instruccion)atr;
+                resp.Add("\t" + (string)ci.Ejecutar() + (atr.Equals(listAtrs.Last()) ? "" : ","));
             }
 
             return resp;

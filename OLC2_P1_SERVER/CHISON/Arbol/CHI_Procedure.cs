@@ -33,15 +33,17 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
                 List<string> inputParam = new List<string>();
                 List<string> outputParam = new List<string>();
                 
-                foreach (CHI_Parametro param in (List<CHI_Parametro>)ObjetoParametros)
+                foreach (object param in (List<object>)ObjetoParametros)
                 {
-                    if (param.TipoParametro.Equals("in", StringComparison.InvariantCultureIgnoreCase))
+                    CHI_Parametro cp = (CHI_Parametro)param;
+
+                    if (cp.TipoParametro.Equals("in", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        inputParam.Add((string)param.Ejecutar());
+                        inputParam.Add((string)cp.Ejecutar());
                     }
                     else
                     {
-                        outputParam.Add((string)param.Ejecutar());
+                        outputParam.Add((string)cp.Ejecutar());
                     }
                 }
 

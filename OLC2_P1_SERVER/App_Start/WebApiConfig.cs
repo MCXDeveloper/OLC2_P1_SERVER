@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web.Http;
 using Irony;
 using Irony.Parsing;
@@ -42,7 +43,7 @@ public static class WebApiConfig
     private static void LoadChisonFiles()
     {
         string path = System.Web.Hosting.HostingEnvironment.MapPath("~/ChisonFilesContainer/Principal.chison");
-        string[] lines = File.ReadAllLines(path);
+        string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
         string contenido = string.Join("\n", lines);
         BuildChisonParsing(contenido);
     }

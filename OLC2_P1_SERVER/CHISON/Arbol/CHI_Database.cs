@@ -30,11 +30,10 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
                 StaticChison.CadenaSalida.Add("CREATE DATABASE "+ NombreBD + ";" + Environment.NewLine);
                 StaticChison.CadenaSalida.Add("USE " + NombreBD + ";" + Environment.NewLine);
 
-                List<CHI_Instruccion> listaObjs = (List<CHI_Instruccion>)ObjetoElementos;
-                
-                foreach (CHI_Instruccion obj in listaObjs)
+                foreach (object obj in (List<object>)ObjetoElementos)
                 {
-                    obj.Ejecutar();
+                    CHI_Instruccion ci = (CHI_Instruccion)obj;
+                    ci.Ejecutar();
                 }
             }
 

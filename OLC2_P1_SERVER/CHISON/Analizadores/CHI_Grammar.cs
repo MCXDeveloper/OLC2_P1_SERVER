@@ -105,101 +105,64 @@ namespace OLC2_P1_SERVER.Analizadores
             #region NO_TERMINALES
 
             NonTerminal VAL = new NonTerminal("VAL");
-            NonTerminal VALUE = new NonTerminal("VALUE");
+            NonTerminal BLOCK = new NonTerminal("BLOCK");
             NonTerminal INICIO = new NonTerminal("INICIO");
-            NonTerminal COLUMNA = new NonTerminal("COLUMNA");
             NonTerminal PERMISO = new NonTerminal("PERMISO");
-            NonTerminal USUARIO = new NonTerminal("USUARIO");
             NonTerminal ELEMENTO = new NonTerminal("ELEMENTO");
-            NonTerminal ATRIBUTO = new NonTerminal("ATRIBUTO");
             NonTerminal IMPORTAR = new NonTerminal("IMPORTAR");
-            NonTerminal DATABASE = new NonTerminal("DATABASE");
             NonTerminal TIPO_DATO = new NonTerminal("TIPO_DATO");
             NonTerminal EXPRESION = new NonTerminal("EXPRESION");
             NonTerminal LISTA_VAL = new NonTerminal("LISTA_VAL");
-            NonTerminal PARAMETRO = new NonTerminal("PARAMETRO");
             NonTerminal TIPO_PARAM = new NonTerminal("TIPO_PARAM");
             NonTerminal BLOQUE_DATA = new NonTerminal("BLOQUE_DATA");
-            NonTerminal LISTA_VALUES = new NonTerminal("LISTA_VALUES");
+            NonTerminal LISTA_BLOCK = new NonTerminal("LISTA_BLOCK");
             NonTerminal TIPO_BOOLEANO = new NonTerminal("TIPO_BOOLEANO");
-            NonTerminal BLOQUE_VALUES = new NonTerminal("BLOQUE_VALUES");
-            NonTerminal LISTA_COLUMNAS = new NonTerminal("LISTA_COLUMNAS");
-            NonTerminal ELEMENTO_TABLA = new NonTerminal("ELEMENTO_TABLA");
-            NonTerminal LISTA_DATABASE = new NonTerminal("LISTA_DATABASE");
             NonTerminal LISTA_PERMISOS = new NonTerminal("LISTA_PERMISOS");
-            NonTerminal LISTA_USUARIOS = new NonTerminal("LISTA_USUARIOS");
-            NonTerminal BLOQUE_COLUMNAS = new NonTerminal("BLOQUE_COLUMNAS");
             NonTerminal VALOR_PRIMITIVO = new NonTerminal("VALOR_PRIMITIVO");
             NonTerminal LISTA_ELEMENTOS = new NonTerminal("LISTA_ELEMENTOS");
-            NonTerminal LISTA_ATRIBUTOS = new NonTerminal("LISTA_ATRIBUTOS");
             NonTerminal BLOQUE_PERMISOS = new NonTerminal("BLOQUE_PERMISOS");
-            NonTerminal BLOQUE_USUARIOS = new NonTerminal("BLOQUE_USUARIOS");
-            NonTerminal BLOQUE_DATABASE = new NonTerminal("BLOQUE_DATABASE");
             NonTerminal LISTA_PRIMITIVOS = new NonTerminal("LISTA_PRIMITIVOS");
-            NonTerminal BLOQUE_ATRIBUTOS = new NonTerminal("BLOQUE_ATRIBUTOS");
-            NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
-            NonTerminal ELEMENTO_USERTYPE = new NonTerminal("ELEMENTO_USERTYPE");
-            NonTerminal BLOQUE_PARAMETROS = new NonTerminal("BLOQUE_PARAMETROS");
-            NonTerminal ELEMENTO_PROCEDURE = new NonTerminal("ELEMENTO_PROCEDURE");
 
             #endregion
 
             #region GRAMATICA
 
-            INICIO.Rule = open_chison + r_databases + igual + cor_a + BLOQUE_DATABASE + cor_c + coma + r_users + igual + cor_a + BLOQUE_USUARIOS + cor_c + close_chison;
+            INICIO.Rule
+                = open_chison + r_databases + igual + cor_a + BLOQUE_DATA + cor_c + coma + r_users + igual + cor_a + BLOQUE_DATA + cor_c + close_chison
+                | open_chison + r_users + igual + cor_a + BLOQUE_DATA + cor_c + coma + r_databases + igual + cor_a + BLOQUE_DATA + cor_c + close_chison
+                ;
 
             IMPORTAR.Rule = open_file + identificador + punto + r_chison + close_file;
 
-            ELEMENTO_USERTYPE.Rule = open + r_cql_type + igual + r_object + coma + r_name + igual + cadena + coma + r_attrs + igual + cor_a + BLOQUE_ATRIBUTOS + cor_c + close;
-
-            ELEMENTO_TABLA.Rule = open + r_cql_type + igual + r_table + coma + r_name + igual + cadena + coma + r_columns + igual + cor_a + BLOQUE_COLUMNAS + cor_c + coma + r_data + igual + cor_a + BLOQUE_VALUES + cor_c + close;
-
-            ELEMENTO_PROCEDURE.Rule = open + r_cql_type + igual + r_procedure + coma + r_name + igual + cadena + coma + r_parameters + igual + cor_a + BLOQUE_PARAMETROS + cor_c + coma + r_instr + igual + procedure_content + close;
-
-            VAL.Rule = cadena + igual + EXPRESION;
-
-            VALUE.Rule = open + LISTA_VAL + close;
+            VAL.Rule = VALOR_PRIMITIVO + igual + EXPRESION;
 
             PERMISO.Rule = open + r_name + igual + cadena + close;
 
-            ATRIBUTO.Rule = open + r_name + igual + cadena + coma + r_type + igual + TIPO_DATO + close;
-
-            DATABASE.Rule = open + r_name + igual + cadena + coma + r_data + igual + cor_a + BLOQUE_DATA + cor_c + close;
-
-            PARAMETRO.Rule = open + r_name + igual + cadena + coma + r_type + igual + TIPO_DATO + coma + r_as + igual + TIPO_PARAM + close;
-
-            COLUMNA.Rule = open + r_name + igual + cadena + coma + r_type + igual + TIPO_DATO + coma + r_pk + igual + TIPO_BOOLEANO + close;
-
-            USUARIO.Rule = open + r_name + igual + cadena + coma + r_password + igual + cadena + coma + r_permissions + igual + cor_a + BLOQUE_PERMISOS + cor_c + close;
-
             LISTA_VAL.Rule = MakePlusRule(LISTA_VAL, coma, VAL);
 
-            LISTA_VALUES.Rule = MakeStarRule(LISTA_VALUES, coma, VALUE);
-
-            LISTA_USUARIOS.Rule = MakeStarRule(LISTA_USUARIOS, coma, USUARIO);
+            LISTA_BLOCK.Rule = MakePlusRule(LISTA_BLOCK, coma, BLOCK);
 
             LISTA_PERMISOS.Rule = MakeStarRule(LISTA_PERMISOS, coma, PERMISO);
 
-            LISTA_COLUMNAS.Rule = MakePlusRule(LISTA_COLUMNAS, coma, COLUMNA);
-
-            LISTA_DATABASE.Rule = MakeStarRule(LISTA_DATABASE, coma, DATABASE);
-
             LISTA_ELEMENTOS.Rule = MakeStarRule(LISTA_ELEMENTOS, coma, ELEMENTO);
-
-            LISTA_ATRIBUTOS.Rule = MakePlusRule(LISTA_ATRIBUTOS, coma, ATRIBUTO);
-
-            LISTA_PARAMETROS.Rule = MakeStarRule(LISTA_PARAMETROS, coma, PARAMETRO);
 
             LISTA_PRIMITIVOS.Rule = MakeStarRule(LISTA_PRIMITIVOS, coma, VALOR_PRIMITIVO);
 
-            BLOQUE_DATABASE.Rule
-                = LISTA_DATABASE
-                | IMPORTAR
-                ;
-
-            BLOQUE_USUARIOS.Rule
-                = LISTA_USUARIOS
-                | IMPORTAR
+            BLOCK.Rule
+                = r_cql_type + igual + r_table
+                | r_cql_type + igual + r_object
+                | r_cql_type + igual + r_procedure
+                | r_name + igual + cadena
+                | r_attrs + igual + cor_a + BLOQUE_DATA + cor_c
+                | r_columns + igual + cor_a + BLOQUE_DATA + cor_c
+                | r_data + igual + cor_a + BLOQUE_DATA + cor_c
+                | r_parameters + igual + cor_a + BLOQUE_DATA + cor_c
+                | r_instr + igual + procedure_content
+                | r_type + igual + TIPO_DATO
+                | r_as + igual + TIPO_PARAM
+                | r_pk + igual + TIPO_BOOLEANO
+                | r_password + igual + cadena
+                | r_permissions + igual + cor_a + BLOQUE_PERMISOS + cor_c
                 ;
 
             BLOQUE_PERMISOS.Rule
@@ -212,33 +175,14 @@ namespace OLC2_P1_SERVER.Analizadores
                 | IMPORTAR
                 ;
 
-            BLOQUE_PARAMETROS.Rule
-                = LISTA_PARAMETROS
-                | IMPORTAR
-                ;
-
-            BLOQUE_ATRIBUTOS.Rule
-                = LISTA_ATRIBUTOS
-                | IMPORTAR
-                ;
-
-            BLOQUE_COLUMNAS.Rule
-                = LISTA_COLUMNAS
-                | IMPORTAR
-                ;
-
-            BLOQUE_VALUES.Rule
-                = LISTA_VALUES
-                | IMPORTAR
-                ;
-
-            ELEMENTO.Rule = ELEMENTO_TABLA
-                | ELEMENTO_USERTYPE
-                | ELEMENTO_PROCEDURE
+            ELEMENTO.Rule
+                = open + LISTA_BLOCK + close
+                | open + LISTA_VAL + close
                 ;
 
             EXPRESION.Rule
                 = cor_a + LISTA_PRIMITIVOS + cor_c
+                | open + LISTA_VAL + close
                 | VALOR_PRIMITIVO
                 ;
 

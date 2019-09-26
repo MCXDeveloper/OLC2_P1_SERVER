@@ -38,7 +38,7 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             // 3. Verifico que el archivo exista en el folder de ChisonFilesContainer.
             if (File.Exists(path))
             {
-                string[] lines = File.ReadAllLines(path);
+                string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
                 string contenido = string.Join("\n", lines);
 
                 // 4. En la variable StaticChison.CadenaEntradaSeparada se encuentra separado en posiciones la cadena de

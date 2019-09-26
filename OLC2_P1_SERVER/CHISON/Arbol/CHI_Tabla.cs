@@ -30,7 +30,7 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             else
             {
                 StaticChison.CadenaSalida.Add("CREATE TABLE " + NombreTabla + " (");
-                StaticChison.CadenaSalida.AddRange(ObtenerTextoColumnas((List<CHI_Columna>)ObjetoColumnas));
+                StaticChison.CadenaSalida.AddRange(ObtenerTextoColumnas((List<object>)ObjetoColumnas));
                 StaticChison.CadenaSalida.Add(");" + Environment.NewLine);
             }
 
@@ -41,19 +41,21 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             }
             else
             {
-                StaticChison.CadenaSalida.AddRange(ObtenerTextoValores((List<CHI_Value>)ObjetoValores));
+                StaticChison.CadenaSalida.AddRange(ObtenerTextoValores((List<object>)ObjetoValores));
             }
 
             return null;
         }
 
-        private List<string> ObtenerTextoColumnas(List<CHI_Columna> listCols)
+        private List<string> ObtenerTextoColumnas(List<object> listCols)
         {
             List<string> listAuxCol = new List<string>();
             List<string> colPKS = new List<string>();
 
-            foreach (CHI_Columna col in listCols)
+            foreach (object item in listCols)
             {
+                CHI_Columna col = (CHI_Columna)item;
+
                 if (col.IsPK)
                 {
                     colPKS.Add(col.NombreColumna);
@@ -70,13 +72,14 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             return listAuxCol;
         }
 
-        private List<string> ObtenerTextoValores(List<CHI_Value> listValores)
+        private List<string> ObtenerTextoValores(List<object> listValores)
         {
             List<string> listAuxVal = new List<string>();
 
-            foreach (CHI_Value val in listValores)
+            foreach (object item in listValores)
             {
-                listAuxVal.Add("INSERT INTO " + NombreTabla + (string)val.Ejecutar() + Environment.NewLine);
+                CHI_Value ciValue = new CHI_Value((List<CHI_Val>)item);
+                listAuxVal.Add("INSERT INTO " + NombreTabla + (string)ciValue.Ejecutar() + Environment.NewLine);
             }
 
             return listAuxVal;
