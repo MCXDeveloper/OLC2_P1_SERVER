@@ -350,60 +350,61 @@ public class Grammar : Irony.Parsing.Grammar
         NonTerminal LISTA_ORDER = new NonTerminal("LISTA_ORDER");
         NonTerminal SENTENCIA_IF = new NonTerminal("SENTENCIA_IF");
         NonTerminal LISTA_ACCESO = new NonTerminal("LISTA_ACCESO");
+        NonTerminal TIPO_FUN_AGG = new NonTerminal("TIPO_FUN_AGG");
         NonTerminal LISTA_ELSE_IF = new NonTerminal("LISTA_ELSE_IF");
         NonTerminal LISTA_ATR_MAP = new NonTerminal("LISTA_ATR_MAP");
+        NonTerminal SENTENCIA_FOR = new NonTerminal("SENTENCIA_FOR");
+        NonTerminal ACCION_CURSOR = new NonTerminal("ACCION_CURSOR");
         NonTerminal LISTA_ATR_TYPE = new NonTerminal("LISTA_ATR_TYPE");
         NonTerminal LISTA_COLUMNAS = new NonTerminal("LISTA_COLUMNAS");
+        NonTerminal TIPO_EXCEPCION = new NonTerminal("TIPO_EXCEPCION");
         NonTerminal TIPO_ASIGNACION = new NonTerminal("TIPO_ASIGNACION");
         NonTerminal LISTA_VARIABLES = new NonTerminal("LISTA_VARIABLES");
         NonTerminal LLAMADA_FUNCION = new NonTerminal("LLAMADA_FUNCION");
         NonTerminal SENTENCIA_WHILE = new NonTerminal("SENTENCIA_WHILE");
+        NonTerminal SENTENCIA_BREAK = new NonTerminal("SENTENCIA_BREAK");
+        NonTerminal SENTENCIA_GRANT = new NonTerminal("SENTENCIA_GRANT");
+        NonTerminal SENTENCIA_THROW = new NonTerminal("SENTENCIA_THROW");
+        NonTerminal SENTENCIA_BATCH = new NonTerminal("SENTENCIA_BATCH");
         NonTerminal SENTENCIA_SWITCH = new NonTerminal("SENTENCIA_SWITCH");
         NonTerminal SENTENCIA_ACCESO = new NonTerminal("SENTENCIA_ACCESO");
         NonTerminal EXPRESION_LOGICA = new NonTerminal("EXPRESION_LOGICA");
         NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
         NonTerminal SENTENCIA_DB_USE = new NonTerminal("SENTENCIA_DB_USE");
+        NonTerminal SENTENCIA_RETURN = new NonTerminal("SENTENCIA_RETURN");
+        NonTerminal SENTENCIA_REVOKE = new NonTerminal("SENTENCIA_REVOKE");
+        NonTerminal SENTENCIA_COMMIT = new NonTerminal("SENTENCIA_COMMIT");
         NonTerminal SENTENCIA_INC_DEC = new NonTerminal("SENTENCIA_INC_DEC");
         NonTerminal LISTA_EXPRESIONES = new NonTerminal("LISTA_EXPRESIONES");
         NonTerminal SENTENCIA_DB_DROP = new NonTerminal("SENTENCIA_DB_DROP");
         NonTerminal SENTENCIA_TB_DROP = new NonTerminal("SENTENCIA_TB_DROP");
+        NonTerminal SENTENCIA_FOREACH = new NonTerminal("SENTENCIA_FOREACH");
         NonTerminal SENTENCIA_DO_WHILE = new NonTerminal("SENTENCIA_DO_WHILE");
         NonTerminal SENTENCIA_TB_ALTER = new NonTerminal("SENTENCIA_TB_ALTER");
+        NonTerminal SENTENCIA_CONTINUE = new NonTerminal("SENTENCIA_CONTINUE");
+        NonTerminal FUNCION_AGREGACION = new NonTerminal("FUNCION_AGREGACION");
+        NonTerminal ASIGNACION_COLUMNA = new NonTerminal("ASIGNACION_COLUMNA");
+        NonTerminal DECLARACION_CURSOR = new NonTerminal("DECLARACION_CURSOR");
+        NonTerminal SENTENCIA_ROLLBACK = new NonTerminal("SENTENCIA_ROLLBACK");
         NonTerminal SENTENCIA_DB_CREATE = new NonTerminal("SENTENCIA_DB_CREATE");
         NonTerminal LISTA_INSTRUCCIONES = new NonTerminal("LISTA_INSTRUCCIONES");
         NonTerminal DECLARACION_FUNCION = new NonTerminal("DECLARACION_FUNCION");
         NonTerminal SENTENCIA_TB_CREATE = new NonTerminal("SENTENCIA_TB_CREATE");
         NonTerminal SENTENCIA_TB_INSERT = new NonTerminal("SENTENCIA_TB_INSERT");
         NonTerminal SENTENCIA_TB_SELECT = new NonTerminal("SENTENCIA_TB_SELECT");
+        NonTerminal SENTENCIA_TB_DELETE = new NonTerminal("SENTENCIA_TB_DELETE");
+        NonTerminal SENTENCIA_TRY_CATCH = new NonTerminal("SENTENCIA_TRY_CATCH");
+        NonTerminal SENTENCIA_TB_UPDATE = new NonTerminal("SENTENCIA_TB_UPDATE");
+        NonTerminal ASIGNACION_MULTIPLE = new NonTerminal("ASIGNACION_MULTIPLE");
         NonTerminal EXPRESION_ARITMETICA = new NonTerminal("EXPRESION_ARITMETICA");
         NonTerminal EXPRESION_RELACIONAL = new NonTerminal("EXPRESION_RELACIONAL");
         NonTerminal SENTENCIA_TB_TRUNCATE = new NonTerminal("SENTENCIA_TB_TRUNCATE");
         NonTerminal LLAMADA_PROCEDIMIENTO = new NonTerminal("LLAMADA_PROCEDIMIENTO");
         NonTerminal LISTA_IDENTIFICADORES = new NonTerminal("LISTA_IDENTIFICADORES");
+        NonTerminal SENTENCIA_CREATE_USER = new NonTerminal("SENTENCIA_CREATE_USER");
+        NonTerminal LISTA_ASIGNACION_COLUMNA = new NonTerminal("LISTA_ASIGNACION_COLUMNA");
         NonTerminal DECLARACION_PROCEDIMIENTO = new NonTerminal("DECLARACION_PROCEDIMIENTO");
 
-        NonTerminal SENTENCIA_BREAK = new NonTerminal("SENTENCIA_BREAK");
-        NonTerminal SENTENCIA_RETURN = new NonTerminal("SENTENCIA_RETURN");
-        NonTerminal SENTENCIA_CONTINUE = new NonTerminal("SENTENCIA_CONTINUE");
-        NonTerminal SENTENCIA_FOR = new NonTerminal("SENTENCIA_FOR");
-        NonTerminal FUNCION_AGREGACION = new NonTerminal("FUNCION_AGREGACION");
-        NonTerminal TIPO_FUN_AGG = new NonTerminal("TIPO_FUN_AGG");
-        NonTerminal SENTENCIA_TB_DELETE = new NonTerminal("SENTENCIA_TB_DELETE");
-        NonTerminal SENTENCIA_CREATE_USER = new NonTerminal("SENTENCIA_CREATE_USER");
-        NonTerminal SENTENCIA_GRANT = new NonTerminal("SENTENCIA_GRANT");
-        NonTerminal SENTENCIA_REVOKE = new NonTerminal("SENTENCIA_REVOKE");
-        NonTerminal SENTENCIA_TRY_CATCH = new NonTerminal("SENTENCIA_TRY_CATCH");
-        NonTerminal TIPO_EXCEPCION = new NonTerminal("TIPO_EXCEPCION");
-        NonTerminal SENTENCIA_THROW = new NonTerminal("SENTENCIA_THROW");
-        NonTerminal SENTENCIA_TB_UPDATE = new NonTerminal("SENTENCIA_TB_UPDATE");
-        NonTerminal ASIGNACION_COLUMNA = new NonTerminal("ASIGNACION_COLUMNA");
-        NonTerminal LISTA_ASIGNACION_COLUMNA = new NonTerminal("LISTA_ASIGNACION_COLUMNA");
-        NonTerminal DECLARACION_CURSOR = new NonTerminal("DECLARACION_CURSOR");
-        NonTerminal ACCION_CURSOR = new NonTerminal("ACCION_CURSOR");
-        NonTerminal SENTENCIA_FOREACH = new NonTerminal("SENTENCIA_FOREACH");
-        NonTerminal ASIGNACION_MULTIPLE = new NonTerminal("ASIGNACION_MULTIPLE");
-        NonTerminal SENTENCIA_BATCH = new NonTerminal("SENTENCIA_BATCH");
-        
         #endregion
 
         #region GRAMATICA
@@ -433,6 +434,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_DB_CREATE
             | SENTENCIA_TRY_CATCH
             | SENTENCIA_FOREACH
+            | SENTENCIA_COMMIT + puco
+            | SENTENCIA_ROLLBACK + puco
             | SENTENCIA_BATCH + puco
             | SENTENCIA_TB_UPDATE + puco
             | SENTENCIA_THROW + puco
@@ -452,6 +455,10 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_RETURN + puco
             | SENTENCIA_CONTINUE + puco
             ;
+
+        SENTENCIA_COMMIT.Rule = r_commit;
+
+        SENTENCIA_ROLLBACK.Rule = r_rollback;
 
         SENTENCIA_BATCH.Rule = r_begin + r_batch + LISTA_INSTRUCCIONES + r_apply + r_batch;
 

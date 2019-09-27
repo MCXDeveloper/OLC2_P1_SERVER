@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Irony.Parsing;
 
-namespace OLC2_P1_SERVER.Analizadores
+namespace OLC2_P1_SERVER.CHISON.Analizadores
 {
     public class CHI_Grammar : Irony.Parsing.Grammar
     {

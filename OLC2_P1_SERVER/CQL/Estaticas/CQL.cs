@@ -13,13 +13,15 @@ public class CQL
     public static bool BatchFlag { get; set; }
     public static bool SelectFlag { get; set; }
     public static Table TablaEnUso { get; set; }
+    public static bool RollbackFlag { get; set; }
     public static bool TryCatchFlag { get; set; }
     public static DataRow TuplaEnUso { get; set; }
     public static string BaseDatosEnUso { get; set; }
     public static int BatchErrorCounter { get; set; }
     public static string UsuarioLogueado { get; set; }
-    public static List<string> PilaRespuestas = new List<string>();
+    public static List<string> PilaRespuestas { get; set; }
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }
+    public static List<RollbackError> PilaErroresRollback { get; set; }
 
     public static void testing()
     {
@@ -227,7 +229,14 @@ public class CQL
 
     public static void AddLUPError(string type, string location, string description, int line, int column)
     {
-        PilaRespuestas.Add("[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+LOCATION]" + location + "[-LOCATION][+DESC]" + description + "[-DESC][-ERROR]" + Environment.NewLine);
+        if (RollbackFlag)
+        {
+            PilaErroresRollback.Add(new RollbackError(type, location, description, line, column));
+        }
+        else
+        {
+            PilaRespuestas.Add("[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+LOCATION]" + location + "[-LOCATION][+DESC]" + description + "[-DESC][-ERROR]" + Environment.NewLine);
+        }
     }
 
     #endregion
@@ -236,7 +245,7 @@ public class CQL
 
     public static string GetCompleteResponse()
     {
-        return String.Join(String.Empty, PilaRespuestas.ToArray());
+        return string.Join(string.Empty, PilaRespuestas.ToArray());
     }
 
     public static bool CompararTiposDeObjeto(TipoDato t1, TipoDato t2)
@@ -247,13 +256,20 @@ public class CQL
     // Esta función se encarga de iniciar todos los elementos estáticos y limpiar la pila de respuestas.
     public static void AccionesIniciales()
     {
-        RootBD = new RaizBD();
-        PilaRespuestas.Clear();
+        WhereFlag = false;
+        BatchFlag = false;
         TablaEnUso = null;
         TuplaEnUso = null;
+        SelectFlag = false;
+        RollbackFlag = false;
+        TryCatchFlag = false;
+        RootBD = new RaizBD();
+        BatchErrorCounter = 0;
         BaseDatosEnUso = string.Empty;
         UsuarioLogueado = string.Empty;
+        PilaRespuestas = new List<string>();
         ListaUsuariosDisponibles = new List<Usuario>();
+        PilaErroresRollback = new List<RollbackError>();
     }
 
     public static string TransformEntornoToTable(Entorno ent)

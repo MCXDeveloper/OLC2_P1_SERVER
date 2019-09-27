@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Irony.Parsing;
+using System.Collections.Generic;
 using OLC2_P1_SERVER.CHISON.Arbol;
 using OLC2_P1_SERVER.CHISON.Abstracto;
 using OLC2_P1_SERVER.CHISON.Constantes;
 using OLC2_P1_SERVER.CHISON.Manejadores;
-using System.IO;
-using System.Text;
-using System.Diagnostics;
 
-namespace OLC2_P1_SERVER.Analizadores
+namespace OLC2_P1_SERVER.CHISON.Analizadores
 {
     public class CHI_ASTBuilder
     {

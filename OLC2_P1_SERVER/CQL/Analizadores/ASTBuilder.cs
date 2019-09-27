@@ -1026,6 +1026,14 @@ public class ASTBuilder
         {
             return new Batch((List<Instruccion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
         }
+        else if (EstoyAca(actual, "SENTENCIA_COMMIT"))
+        {
+            return new Commit(GetFila(actual, 0), GetColumna(actual, 0));
+        }
+        else if (EstoyAca(actual, "SENTENCIA_ROLLBACK"))
+        {
+            return new Rollback(GetFila(actual, 0), GetColumna(actual, 0));
+        }
 
         return null;
     }

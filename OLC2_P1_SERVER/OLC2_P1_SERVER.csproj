@@ -225,6 +225,7 @@
     <Compile Include="CQL\Arbol\AtributoObjeto.cs" />
     <Compile Include="CQL\Arbol\Batch.cs" />
     <Compile Include="CQL\Arbol\ColumnaTabla.cs" />
+    <Compile Include="CQL\Arbol\Commit.cs" />
     <Compile Include="CQL\Arbol\CreateDatabase.cs" />
     <Compile Include="CQL\Arbol\CreateTable.cs" />
     <Compile Include="CQL\Arbol\CreateUser.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="CQL\Arbol\ObjectValue.cs" />
     <Compile Include="CQL\Arbol\Order.cs" />
     <Compile Include="CQL\Arbol\Revoke.cs" />
+    <Compile Include="CQL\Arbol\Rollback.cs" />
     <Compile Include="CQL\Arbol\Select.cs" />
     <Compile Include="CQL\Arbol\SentenciaThrow.cs" />
     <Compile Include="CQL\Arbol\TruncateTable.cs" />
@@ -319,6 +321,7 @@
     <Compile Include="CQL\Arbol\Excepciones\UserDontExists.cs" />
     <Compile Include="CQL\Arbol\Excepciones\ValuesException.cs" />
     <Compile Include="CQL\Manejadores\AsciiTableGenerator.cs" />
+    <Compile Include="CQL\Manejadores\RollbackError.cs" />
     <Compile Include="CQL\Manejadores\TipoAccionCursor.cs" />
     <Compile Include="CQL\Manejadores\TipoExcepcion.cs" />
     <Compile Include="CQL\Manejadores\TipoFuncionAgregacion.cs" />

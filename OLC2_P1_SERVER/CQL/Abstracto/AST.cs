@@ -179,6 +179,11 @@ public class AST : Instruccion
                 Batch x = (Batch)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is Rollback)
+            {
+                Rollback x = (Rollback)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is AccesoObjeto)
             {
                 AccesoObjeto x = (AccesoObjeto)ins;
