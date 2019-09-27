@@ -279,8 +279,26 @@ public class InsertTable : Instruccion
     {
         for (int i = 0; i < ListaCampos.Count; i++)
         {
+            Expresion exp = ListaValores[i];
             TipoDato.Tipo colType = tablita.GetColumn(ListaCampos[i]).TipoDatoColumna.GetRealTipo();
-            TipoDato.Tipo valType = ListaValores[i].GetTipo(ent).GetRealTipo();
+            TipoDato.Tipo valType = TipoDato.Tipo.NULO;
+
+            if (colType.Equals(TipoDato.Tipo.LIST) && exp is CollectionValue)
+            {
+                CollectionValue cv = (CollectionValue)exp;
+                cv.IsList = true;
+                valType = cv.GetTipo(ent).GetRealTipo();
+            }
+            else if (colType.Equals(TipoDato.Tipo.SET) && exp is CollectionValue)
+            {
+                CollectionValue cv = (CollectionValue)exp;
+                cv.IsList = false;
+                valType = cv.GetTipo(ent).GetRealTipo();
+            }
+            else
+            {
+                valType = exp.GetTipo(ent).GetRealTipo();
+            }
 
             if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
             {
@@ -321,21 +339,50 @@ public class InsertTable : Instruccion
     {
         List<object> list = new List<object>();
 
-        foreach (Expresion exp in ListaValores)
+        for (int i = 0; i < ListaValores.Count; i++)
         {
-            object val = exp.Ejecutar(ent);
+            Expresion exp = ListaValores[i];
 
-            if (val is Date)
+            if (exp is CollectionValue)
             {
-                list.Add(((Date)val).GetParsedDate());
-            }
-            else if (val is Time)
-            {
-                list.Add(((Time)val).GetTimeInDateTime());
+                CollectionValue cv = (CollectionValue)exp;
+
+                // 1. Obtengo la columna de la tabla para verificar su tipo de dato.
+                Columna col = CQL.ObtenerColumnaDeTabla(NombreTabla, ListaCampos[i]);
+
+                // 2. Verifico el tipo de dato de la columna para establecer la bandera para diferenciar List de Set.
+                if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.LIST))
+                {
+                    cv.IsList = true;
+                }
+                else if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.SET))
+                {
+                    cv.IsList = false;
+                }
+
+                list.Add(cv.Ejecutar(ent));
             }
             else
             {
-                list.Add(val);
+                object val = exp.Ejecutar(ent);
+
+                if (val is Date)
+                {
+                    list.Add(((Date)val).GetParsedDate());
+                }
+                else if (val is Time)
+                {
+                    list.Add(((Time)val).GetTimeInDateTime());
+                }
+                else if (val is CollectionValue)
+                {
+
+
+                }
+                else
+                {
+                    list.Add(val);
+                }
             }
         }
 

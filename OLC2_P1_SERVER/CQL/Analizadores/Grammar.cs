@@ -320,7 +320,7 @@ public class Grammar : Irony.Parsing.Grammar
         StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.AllowsAllEscapes);
         RegexBasedTerminal variable = new RegexBasedTerminal("variable", "@[a-zA-Z]([a-zA-Z]|_|[0-9]+)*");
         RegexBasedTerminal fecha = new RegexBasedTerminal("fecha", "'\\d{4}-((0\\d)|(1[012]))-(([012]\\d)|3[01])'");
-        RegexBasedTerminal hora = new RegexBasedTerminal("hora", "'(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])'");
+        RegexBasedTerminal hora = new RegexBasedTerminal("hora", "'(0|0[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])'");
 
         #endregion
 
@@ -673,6 +673,8 @@ public class Grammar : Irony.Parsing.Grammar
             | SENTENCIA_ACCESO
             | identificador + punto + LISTA_ACCESO
             | llave_a + LISTA_ATR_MAP + llave_c
+            | cor_a + LISTA_ATR_MAP + cor_c
+            | llave_a + LISTA_EXPRESIONES + llave_c
             | cor_a + LISTA_EXPRESIONES + cor_c
             | par_a + EXPRESION + par_c
             | par_a + TIPO + par_c + EXPRESION

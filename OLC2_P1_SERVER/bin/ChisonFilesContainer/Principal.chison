@@ -196,7 +196,7 @@ $<
                         <
                             "NAME" = "id_cliente",
                             "TYPE" = "INT",
-                            "PK" = True
+                            "PK" = False
                         >,
                         <
                             "NAME" = "fechas",
