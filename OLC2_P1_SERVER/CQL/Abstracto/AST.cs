@@ -32,9 +32,6 @@ public class AST : Instruccion
             }
         }
 
-        //System.Diagnostics.Debug.Write(CQL.TransformEntornoToTable(ent));
-        //System.Diagnostics.Debug.Write(CQL.ObtenerListaUserTypesEnString());
-        CQL.testing();
         return new Nulo();
     }
 
@@ -182,6 +179,11 @@ public class AST : Instruccion
             else if (ins is Rollback)
             {
                 Rollback x = (Rollback)ins;
+                x.Ejecutar(ent);
+            }
+            else if (ins is Commit)
+            {
+                Commit x = (Commit)ins;
                 x.Ejecutar(ent);
             }
             else if (ins is AccesoObjeto)

@@ -323,6 +323,7 @@
     <Compile Include="CQL\Manejadores\AsciiTableGenerator.cs" />
     <Compile Include="CQL\Manejadores\RollbackError.cs" />
     <Compile Include="CQL\Manejadores\TipoAccionCursor.cs" />
+    <Compile Include="CQL\Manejadores\TipoDatoExtensions.cs" />
     <Compile Include="CQL\Manejadores\TipoExcepcion.cs" />
     <Compile Include="CQL\Manejadores\TipoFuncionAgregacion.cs" />
     <Compile Include="Global.asax.cs">

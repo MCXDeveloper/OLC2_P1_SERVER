@@ -144,9 +144,38 @@ public class Database : InstruccionBD
 
     #endregion
 
-    public string CrearChison()
+    public string CrearChison(int numTabs)
     {
-        throw new NotImplementedException();
+        List<string> ElementosChison = new List<string>();
+
+        string chison = new string('\t', numTabs + 1) + "<" + Environment.NewLine;
+
+        chison += new string('\t', numTabs + 2) + "\"NAME\" = \"" + NombreBD + "\", " + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"DATA\" = [" + Environment.NewLine;
+
+        /* CHISON DE OBJETOS */
+        foreach (UserType utp in ListaUserTypes)
+        {
+            ElementosChison.Add(utp.CrearChison(numTabs + 2));
+        }
+
+        /* CHISON DE TABLAS */
+        foreach (Table tab in ListaTablas)
+        {
+            ElementosChison.Add(tab.CrearChison(numTabs + 2));
+        }
+
+        /* CHISON DE PROCEDIMIENTOS */
+        foreach (Procedimiento proc in ListaProcedimientos)
+        {
+            ElementosChison.Add(proc.CrearChison(numTabs + 2));
+        }
+
+        chison += string.Join(", ", ElementosChison);
+        chison += new string('\t', numTabs + 2) + "]" + Environment.NewLine;
+        chison += new string('\t', numTabs + 1) + ">" + Environment.NewLine;
+
+        return chison;
     }
 
     public string CrearPaqueteLUP(string user)

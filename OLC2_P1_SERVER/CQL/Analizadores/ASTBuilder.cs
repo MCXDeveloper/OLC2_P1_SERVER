@@ -8,10 +8,12 @@ using static Asignacion;
 
 public class ASTBuilder
 {
+    public string CadenaEntrada { get; set; }
     public bool AccesoObjetoFlag { get; set; }
 
-    public ASTBuilder()
+    public ASTBuilder(string entrada)
     {
+        CadenaEntrada = entrada;
         AccesoObjetoFlag = false;
     }
 
@@ -590,7 +592,10 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "DECLARACION_PROCEDIMIENTO"))
         {
-            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+            int inicio = actual.ChildNodes[10].Span.Location.Position;
+            int longitud = actual.ChildNodes[10].Span.Length;
+            string instxt = CadenaEntrada.Substring(inicio, longitud);
+            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), instxt, GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "LLAMADA_PROCEDIMIENTO"))
         {
@@ -1032,7 +1037,7 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_ROLLBACK"))
         {
-            return new Rollback(GetFila(actual, 0), GetColumna(actual, 0));
+            return new Rollback(false, GetFila(actual, 0), GetColumna(actual, 0));
         }
 
         return null;

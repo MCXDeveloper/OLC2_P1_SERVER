@@ -8,16 +8,18 @@ public class DeclaracionProcedimiento : Instruccion
     private readonly int fila;
     private readonly int columna;
     public string NombreProcedimiento { get; set; }
+    public string InstruccionesEnString { get; set; }
     public List<Parametro> ListaRetornos { get; set; }
     public List<Parametro> ListaParametros { get; set; }
     public List<Instruccion> ListaInstrucciones { get; set; }
 
-    public DeclaracionProcedimiento(string nombre_procedimiento, List<Parametro> lista_parametros, List<Parametro> lista_retornos, List<Instruccion> lista_instrucciones, int fila, int columna)
+    public DeclaracionProcedimiento(string nombre_procedimiento, List<Parametro> lista_parametros, List<Parametro> lista_retornos, List<Instruccion> lista_instrucciones, string ins_en_texto, int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;
         ListaRetornos = lista_retornos;
         ListaParametros = lista_parametros;
+        InstruccionesEnString = ins_en_texto;
         ListaInstrucciones = lista_instrucciones;
         NombreProcedimiento = nombre_procedimiento;
     }
@@ -33,7 +35,7 @@ public class DeclaracionProcedimiento : Instruccion
             // 3. Valido que la llave única generada no exista en la lista de procedimientos de la base de datos actual.
             if (!CQL.ExisteProcedimientoEnBD(NombreProcedimiento))
             {
-                CQL.RegistrarProcedimientoEnBD(new Procedimiento(key, ListaParametros, ListaRetornos, ListaInstrucciones));
+                CQL.RegistrarProcedimientoEnBD(new Procedimiento(key, ListaParametros, ListaRetornos, ListaInstrucciones, InstruccionesEnString));
                 CQL.AddLUPMessage("El procedimiento '"+ NombreProcedimiento +"' ha sido registrado correctamente en la base de datos.");
             }
             else

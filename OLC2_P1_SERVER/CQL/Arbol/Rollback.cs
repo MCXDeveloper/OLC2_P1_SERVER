@@ -2,45 +2,68 @@
 using System.IO;
 using System.Text;
 using Irony.Parsing;
-using System.Diagnostics;
 using OLC2_P1_SERVER.CHISON.Abstracto;
 using OLC2_P1_SERVER.CHISON.Estaticas;
 using OLC2_P1_SERVER.CHISON.Analizadores;
+using System.Collections.Generic;
 
 public class Rollback : Instruccion
 {
     private readonly int fila;
     private readonly int columna;
+    public static bool IsInitFlag { get; set; }
 
-    public Rollback(int fila, int columna)
+    public Rollback(bool isInit, int fila, int columna)
     {
         this.fila = fila;
+        IsInitFlag = isInit;
         this.columna = columna;
     }
 
     public object Ejecutar(Entorno ent)
     {
-        // 1. Obtengo el archivo 'Principal.chison' el cual se encarga de contener en un solo núcleo toda la información.
+        // 1. Defino la bandera de rollback para manipular de forma diferente los errores que surjan.
+        CQL.IsInitRollback = IsInitFlag;
+
+        // 2. Obtengo el archivo 'Principal.chison' el cual se encarga de contener en un solo núcleo toda la información.
         string path = System.Web.Hosting.HostingEnvironment.MapPath("~/ChisonFilesContainer/Principal.chison");
 
-        // 2. Verfico si existe el archivo maestro.
+        // 3. Verfico si existe el archivo maestro.
         if (File.Exists(path))
         {
-            string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
-            string contenido = string.Join("\n", lines);
+            // 4. Verifico que el archivo tenga contenido.
+            if (new FileInfo(path).Length != 0)
+            {
+                string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
+                string contenido = string.Join("\n", lines);
 
-            // 3. Una vez tengo el contenido del archivo maestro, procedo a enviarlo a su respectivo parseo.
-            BuildChisonParsing(contenido);
+                // 5. Una vez tengo el contenido del archivo maestro, procedo a enviarlo a su respectivo parseo.
+                BuildChisonParsing(contenido);
+            }
+            else
+            {
+                if (!IsInitFlag)
+                {
+                    CQL.AddLUPError("Semántico", "[ROLLBACK]", "Error.  El archivo principal se encuentra vacío.", fila, columna);
+                }                
+            }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[ROLLBACK]", "Error.  No existe archivo principal.", fila, columna);
+            if (!IsInitFlag)
+            {
+                CQL.AddLUPError("Semántico", "[ROLLBACK]", "Error.  No existe archivo principal.", fila, columna);
+            }
         }
+
+        // Creo la base de datos y la tabla de errores correspondiente a Chison únicamente si si hubieron errores.
+        CreateAndLoadChisonLog();
+        CQL.IsInitRollback = false;
 
         return new Nulo();
     }
 
-    public static object BuildChisonParsing(string entrada)
+    private object BuildChisonParsing(string entrada)
     {
         // +------------------------------------------------------------------------------------------------------------+
         // |                                                    Nota                                                    |
@@ -50,9 +73,6 @@ public class Rollback : Instruccion
         // | el texto reemplazando la sentencia importar por el contenido del archivo.  Una vez terminado esto, vuelve  |
         // | a regresar a esta función para volver a ser parseada la nueva entrada.                                     |
         // +------------------------------------------------------------------------------------------------------------+
-
-        // 1. Defino la bandera de rollback para manipular de forma diferente los errores que surjan.
-        CQL.RollbackFlag = true;
 
         CHI_Grammar gramatica = new CHI_Grammar();
         LanguageData lenguaje = new LanguageData(gramatica);
@@ -76,8 +96,10 @@ public class Rollback : Instruccion
 
                 if (parseResponse is null)
                 {
-                    CQL.AddLUPMessage("Rollback realizado exitosamente.");
-                    CQL.RollbackFlag = false;
+                    if (!IsInitFlag)
+                    {
+                        CQL.AddLUPMessage(" *** Rollback realizado exitosamente. *** ");
+                    }
                 }
                 else if (parseResponse is string)
                 {
@@ -92,7 +114,10 @@ public class Rollback : Instruccion
         }
         else
         {
-            CQL.AddLUPMessage("Error en Rollback. Hay errores léxicos/sintácticos.  Cadena inválida.");
+            if (!IsInitFlag)
+            {
+                CQL.AddLUPMessage("Error en Rollback. Hay errores léxicos/sintácticos.  Cadena inválida.");
+            }
 
             foreach (LogMessage err in arbol.ParserMessages)
             {
@@ -102,5 +127,38 @@ public class Rollback : Instruccion
         }
 
         return new Nulo();
+    }
+
+    private void CreateAndLoadChisonLog()
+    {
+        if (CQL.IsInitRollback && CQL.PilaErroresRollback.Count > 0)
+        {
+            string NombreBD = "ChisonLogger";
+            string NombreTabla = "ChisonErrors";
+
+            // 1. Primero verifico que no exista la base de datos con el nombre de 'ChisonLogger'.
+            if (!CQL.ExisteBaseDeDatos(NombreBD))
+            {
+                // 2. Creo la base de datos.
+                CQL.RegistrarBaseDeDatos(NombreBD);
+                CQL.BaseDatosEnUso = NombreBD;
+
+                // 3. Lleno con la información contenida en PilaErroresRollback.
+                Table tabLog = new Table(NombreTabla);
+
+                tabLog.AddColumn(new Columna(false, "tipo", new TipoDato(TipoDato.Tipo.STRING)));
+                tabLog.AddColumn(new Columna(false, "ubicacion", new TipoDato(TipoDato.Tipo.STRING)));
+                tabLog.AddColumn(new Columna(false, "descripcion", new TipoDato(TipoDato.Tipo.STRING)));
+                tabLog.AddColumn(new Columna(false, "fila", new TipoDato(TipoDato.Tipo.INT)));
+                tabLog.AddColumn(new Columna(false, "columna", new TipoDato(TipoDato.Tipo.INT)));
+
+                foreach (RollbackError err in CQL.PilaErroresRollback)
+                {
+                    tabLog.AddRow(new List<object>() { err.TipoError, err.Ubicacion, err.Descripcion, err.Fila, err.Columna });
+                }
+
+                CQL.RegistrarTabla(tabLog);
+            }
+        }
     }
 }

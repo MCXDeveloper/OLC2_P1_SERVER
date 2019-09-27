@@ -14,10 +14,25 @@ public class UserType : InstruccionBD
         ListaAtributos = lista_atributos;
     }
 
-    public string CrearChison()
+    public string CrearChison(int numTabs)
     {
-        // TODO | UserType | Escribir función de CrearChison.
-        throw new NotImplementedException();
+        List<string> ChisonAtributos = new List<string>();
+
+        string chison = new string('\t', numTabs + 1) + "<" + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"CQL-TYPE\" = \"OBJECT\", " + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"NAME\" = \"" + Identificador + "\", " + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"ATTRS\" = [" + Environment.NewLine;
+
+        foreach (AtributoUT aout in ListaAtributos)
+        {
+            ChisonAtributos.Add(aout.CrearChison(numTabs + 2));
+        }
+
+        chison += string.Join(", ", ChisonAtributos);
+        chison += new string('\t', numTabs + 2) + "]" + Environment.NewLine;
+        chison += new string('\t', numTabs + 1) + ">" + Environment.NewLine;
+
+        return chison;
     }
 
     public string CrearPaqueteLUP(string user)

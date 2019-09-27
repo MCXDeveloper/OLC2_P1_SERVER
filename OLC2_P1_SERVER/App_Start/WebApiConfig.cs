@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Diagnostics;
+using System.Web.Http;
 
 public static class WebApiConfig
 {
@@ -13,8 +14,9 @@ public static class WebApiConfig
         //CQL.UsuarioLogueado = "admin";
 
         // Cargo toda la información de los archivos de CHISON a memoria.
-        Rollback rb = new Rollback(-1, -1);
+        Rollback rb = new Rollback(true, -1, -1);
         rb.Ejecutar(null);
+        Debug.WriteLine("Chison Loader has finished.");
 
         // Web API configuration and services
         config.EnableCors();

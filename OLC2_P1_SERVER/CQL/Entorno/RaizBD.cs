@@ -36,10 +36,46 @@ public class RaizBD : InstruccionBD
 
     #endregion
 
-    public string CrearChison()
+    public string CrearChison(int numTabs)
     {
-        // TODO | RaizBD | Escribir función de CrearChison.
-        throw new NotImplementedException();
+        #region CHISON_DE_BASES_DE_DATOS
+
+        List<string> ChisonBDS = new List<string>();
+        string chisonDB = new string('\t', numTabs + 1) + "\"DATABASES\" = [" + Environment.NewLine;
+
+        foreach (KeyValuePair<string, Database> entryDB in ListaDatabase)
+        {
+            ChisonBDS.Add(entryDB.Value.CrearChison(numTabs + 1));
+        }
+
+        chisonDB += string.Join(", ", ChisonBDS);
+        chisonDB += new string('\t', numTabs + 1) + "], ";
+
+        #endregion
+
+        #region CHISON_DE_USUARIOS
+
+        List<string> ChisonUsuarios = new List<string>();
+        string chisonUS = new string('\t', numTabs + 1) + "\"USERS\" = [" + Environment.NewLine;
+
+        foreach (Usuario ux in CQL.ListaUsuariosDisponibles)
+        {
+            ChisonUsuarios.Add(ux.CrearChison(numTabs + 1));
+        }
+
+        chisonUS += string.Join(", ", ChisonUsuarios);
+        chisonUS += new string('\t', numTabs + 1) + "]" + Environment.NewLine;
+
+        #endregion
+
+        if (ChisonBDS.Count > 0 || ChisonUsuarios.Count > 0)
+        {
+            return "$<" + Environment.NewLine + chisonDB + Environment.NewLine + chisonUS + ">$";
+        }
+        else
+        {
+            return string.Empty;
+        }
     }
 
     public string CrearPaqueteLUP(string user)

@@ -13,9 +13,9 @@ public class CQL
     public static bool BatchFlag { get; set; }
     public static bool SelectFlag { get; set; }
     public static Table TablaEnUso { get; set; }
-    public static bool RollbackFlag { get; set; }
     public static bool TryCatchFlag { get; set; }
     public static DataRow TuplaEnUso { get; set; }
+    public static bool IsInitRollback { get; set; }
     public static string BaseDatosEnUso { get; set; }
     public static int BatchErrorCounter { get; set; }
     public static string UsuarioLogueado { get; set; }
@@ -91,18 +91,36 @@ public class CQL
     public static void RegistrarUsuarioEnBD(string nombre_usuario, string password)
     {
         Usuario user = RootBD.GetDatabase(BaseDatosEnUso).RegistrarUsuario(nombre_usuario, password);
+
+        if (!user.ListaDeBaseDeDatos.Contains(BaseDatosEnUso, StringComparer.InvariantCultureIgnoreCase))
+        {
+            user.ListaDeBaseDeDatos.Add(BaseDatosEnUso);
+        }
+
         ListaUsuariosDisponibles.Add(user);
     }
 
     public static void RegistrarUsuarioEnPermisos(string nombre_bd, string nombre_usuario)
     {
         Usuario user = ListaUsuariosDisponibles.Find(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
+
+        if (!user.ListaDeBaseDeDatos.Contains(nombre_bd, StringComparer.InvariantCultureIgnoreCase))
+        {
+            user.ListaDeBaseDeDatos.Add(nombre_bd);
+        }
+
         RootBD.GetDatabase(nombre_bd).RegistrarUsuarioAPermisos(user);
     }
 
     public static void EliminarUsuarioEnPermisos(string nombre_bd, string nombre_usuario)
     {
         Usuario user = ListaUsuariosDisponibles.Find(x => x.NombreUsuario.Equals(nombre_usuario, StringComparison.InvariantCultureIgnoreCase));
+
+        if (user.ListaDeBaseDeDatos.Contains(nombre_bd, StringComparer.InvariantCultureIgnoreCase))
+        {
+            user.ListaDeBaseDeDatos.Remove(nombre_bd);
+        }
+
         RootBD.GetDatabase(nombre_bd).EliminarUsuarioDePermisos(user);
     }
 
@@ -229,7 +247,7 @@ public class CQL
 
     public static void AddLUPError(string type, string location, string description, int line, int column)
     {
-        if (RollbackFlag)
+        if (IsInitRollback)
         {
             PilaErroresRollback.Add(new RollbackError(type, location, description, line, column));
         }
@@ -261,10 +279,10 @@ public class CQL
         TablaEnUso = null;
         TuplaEnUso = null;
         SelectFlag = false;
-        RollbackFlag = false;
         TryCatchFlag = false;
         RootBD = new RaizBD();
         BatchErrorCounter = 0;
+        IsInitRollback = false;
         BaseDatosEnUso = string.Empty;
         UsuarioLogueado = string.Empty;
         PilaRespuestas = new List<string>();

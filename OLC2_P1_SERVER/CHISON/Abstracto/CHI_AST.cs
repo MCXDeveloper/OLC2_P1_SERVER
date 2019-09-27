@@ -80,7 +80,7 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
 
                 if (arbol.ParserMessages.Count.Equals(0))
                 {
-                    ASTBuilder builder = new ASTBuilder();
+                    ASTBuilder builder = new ASTBuilder(CadenaFinal);
                     AST auxArbol = builder.Analizar(arbol.Root);
 
                     if (!(auxArbol is null))

@@ -115,9 +115,50 @@ public class Table : InstruccionBD
         }
     }
     
-    public string CrearChison()
+    public string CrearChison(int numTabs)
     {
-        throw new NotImplementedException();
+        List<string> ChisonColumnas = new List<string>();
+        List<string> ChisonValoresTabla = new List<string>();
+
+        string chison = new string('\t', numTabs + 1) + "<" + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"CQL-TYPE\" = \"TABLE\", " + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"NAME\" = \"" + NombreTabla +"\", " + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"COLUMNS\" = [" + Environment.NewLine;
+
+        /* COLUMNAS DE LA TABLA */
+        foreach (Columna col in Tabla.Columns)
+        {
+            ChisonColumnas.Add(col.CrearChison(numTabs + 2));
+        }
+
+        chison += string.Join(", ", ChisonColumnas);
+        chison += new string('\t', numTabs + 2) + "], " + Environment.NewLine;
+
+        /* DATOS DE LA TABLA */
+        chison += new string('\t', numTabs + 2) + "\"DATA\" = [" + Environment.NewLine;
+
+        foreach (DataRow row in Tabla.Rows)
+        {
+            string subchison = new string('\t', numTabs + 3) + "<" + Environment.NewLine;
+
+            foreach (DataColumn col in Tabla.Columns)
+            {
+                string tabColumn = "\"" + col.ColumnName + "\"";
+                bool isLastColumn = Tabla.Columns[Tabla.Columns.Count - 1].Equals(col);
+                string chisonval = row[col.ColumnName] is string ? "\"" + row[col.ColumnName].ToString() + "\"" : row[col.ColumnName].ToString();
+
+                subchison += new string('\t', numTabs + 4) + tabColumn + " = " + chisonval + (isLastColumn ? Environment.NewLine : ", " + Environment.NewLine);
+            }
+
+            subchison += new string('\t', numTabs + 3) + ">" + Environment.NewLine;
+            ChisonValoresTabla.Add(subchison);
+        }
+
+        chison += string.Join(", ", ChisonValoresTabla);
+        chison += new string('\t', numTabs + 2) + "]" + Environment.NewLine;
+        chison += new string('\t', numTabs + 1) + ">" + Environment.NewLine;
+
+        return chison;
     }
 
     public string CrearPaqueteLUP(string user)

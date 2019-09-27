@@ -25,7 +25,7 @@ public class QueryPackage : LUP_Instruccion
 
         if (arbol.ParserMessages.Count.Equals(0))
         {
-            ASTBuilder builder = new ASTBuilder();
+            ASTBuilder builder = new ASTBuilder(Consulta);
             AST auxArbol = builder.Analizar(arbol.Root);
 
             if (!(auxArbol is null))
