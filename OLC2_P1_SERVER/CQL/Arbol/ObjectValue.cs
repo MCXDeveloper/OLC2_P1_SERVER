@@ -70,6 +70,7 @@ public class ObjectValue : Expresion
         {
             TipoDato atrType = ut.ListaAtributos[i].Tipo;
             TipoDato valType = ListaExpresiones[i].GetTipo(ent);
+            object valValue = ListaExpresiones[i].Ejecutar(ent);
 
             // 2. Se valida si el tipo de dato del atributo es cualquiera de los detallados abajo ya que estos pueden recibir dos valores:
             // - Uno del mismo tipo
@@ -105,11 +106,34 @@ public class ObjectValue : Expresion
             {
                 if (!valType.GetRealTipo().Equals(atrType.GetRealTipo()))
                 {
-                    return false;
+                    object value = CasteoImplicito(atrType, valType, valValue);
+
+                    if (value is Nulo || value is Exception)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        ListaExpresiones[i] = new Primitivo(value);
+                    }
                 }
             }
         }
 
         return true;
+    }
+
+    private object CasteoImplicito(TipoDato tipoDeclaracion, TipoDato tipoValor, object valor)
+    {
+        if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.INT) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToInt32((double)valor);
+        }
+        else if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return Convert.ToDouble((int)valor);
+        }
+
+        return new Nulo();
     }
 }

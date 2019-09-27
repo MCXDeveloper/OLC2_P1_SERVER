@@ -26,6 +26,7 @@ namespace OLC2_P1_SERVER.Analizadores
             KeyTerm r_as = ToTerm("\"AS\"");
             KeyTerm r_pk = ToTerm("\"PK\"");
             KeyTerm r_true = ToTerm("TRUE");
+            KeyTerm r_null = ToTerm("NULL");
             KeyTerm open_file = ToTerm("${");
             KeyTerm close_file = ToTerm("}$");
             KeyTerm r_int = ToTerm("\"INT\"");
@@ -98,7 +99,7 @@ namespace OLC2_P1_SERVER.Analizadores
             StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.AllowsAllEscapes);
             RegexBasedTerminal procedure_content = new RegexBasedTerminal("procedure_content", "\\$[^\\$]*\\$");
             RegexBasedTerminal fecha = new RegexBasedTerminal("fecha", "'\\d{4}-((0\\d)|(1[012]))-(([012]\\d)|3[01])'");
-            RegexBasedTerminal hora = new RegexBasedTerminal("hora", "'(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])'");
+            RegexBasedTerminal hora = new RegexBasedTerminal("hora", "'(0|0[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])'");
 
             #endregion
 
@@ -198,6 +199,7 @@ namespace OLC2_P1_SERVER.Analizadores
                 | hora
                 | r_true
                 | r_false
+                | r_null
                 ;
 
             TIPO_DATO.Rule

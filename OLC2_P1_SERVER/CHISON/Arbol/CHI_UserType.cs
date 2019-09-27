@@ -1,5 +1,6 @@
 ﻿using OLC2_P1_SERVER.CHISON.Abstracto;
 using OLC2_P1_SERVER.CHISON.Estaticas;
+using OLC2_P1_SERVER.CHISON.Manejadores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,12 +39,16 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
         private List<string> ObtenerTextoAtributos(List<object> listAtrs)
         {
             List<string> resp = new List<string>();
+            List<CHI_Atributo> listObjAtrs = new List<CHI_Atributo>();
 
             foreach (object atr in listAtrs)
             {
                 CHI_Instruccion ci = (CHI_Instruccion)atr;
+                listObjAtrs.Add((CHI_Atributo)ci);
                 resp.Add("\t" + (string)ci.Ejecutar() + (atr.Equals(listAtrs.Last()) ? "" : ","));
             }
+
+            StaticChison.ObjetosRecopilados.Add(new KeyValuePair<string, List<CHI_Atributo>>(NombreUserType, listObjAtrs));
 
             return resp;
         }

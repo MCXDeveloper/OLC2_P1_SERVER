@@ -23,7 +23,7 @@ public class CQL
 
     public static void testing()
     {
-        Debug.WriteLine("hehe");
+        Debug.WriteLine(string.Join(Environment.NewLine, PilaRespuestas));
     }
 
     #region FUNCIONES_DE_LOGIN

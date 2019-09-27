@@ -278,43 +278,43 @@ namespace OLC2_P1_SERVER.Analizadores
                 {
                     return false;
                 }
-                /*else if (EstoyAca(actual.ChildNodes[0], "null"))
+                else if (EstoyAca(actual.ChildNodes[0], "null"))
                 {
                     return null;
-                }*/
+                }
             }
 
             else if (EstoyAca(actual, "TIPO_DATO"))
             {
-                if (EstoyAca(actual.ChildNodes[0], "int"))
+                if (EstoyAca(actual.ChildNodes[0], "\"int\""))
                 {
                     return new CHIDataType(CHITipoDato.INT, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "double"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"double\""))
                 {
                     return new CHIDataType(CHITipoDato.DOUBLE, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "string"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"string\""))
                 {
                     return new CHIDataType(CHITipoDato.STRING, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "boolean"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"boolean\""))
                 {
                     return new CHIDataType(CHITipoDato.BOOLEAN, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "date"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"date\""))
                 {
                     return new CHIDataType(CHITipoDato.DATE, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "time"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"time\""))
                 {
                     return new CHIDataType(CHITipoDato.TIME, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "counter"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"counter\""))
                 {
                     return new CHIDataType(CHITipoDato.COUNTER, "");
                 }
-                else if (EstoyAca(actual.ChildNodes[0], "cursor"))
+                else if (EstoyAca(actual.ChildNodes[0], "\"cursor\""))
                 {
                     return new CHIDataType(CHITipoDato.CURSOR, "");
                 }

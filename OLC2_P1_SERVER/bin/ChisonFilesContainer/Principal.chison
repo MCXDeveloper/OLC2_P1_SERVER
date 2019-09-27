@@ -2,190 +2,304 @@ $<
     "DATABASES"= [
         <
             "NAME" = "Database1",
-            "Data" = [
-                <
-                    "CQL-TYPE" = "OBJECT",
-                    "NAME" = "Direccion",
-                    "ATTRS" = [
-                        < 
-                            "NAME" = "Apartamento",
-                            "TYPE" = "String" 
-                        >,
-                        < 
-                            "NAME" = "Zona",
-                            "TYPE" = "String"
-                        >,
-                        < 
-                            "NAME" = "Nivel",
-                            "TYPE" = "Int"
-                        >
-                    ]
-                >,
-                <
-                    "CQL-TYPE" = "TABLE",
-                    "NAME" = "Alumno",
-                    "COLUMNS" = [
-                        <
-                            "NAME" = "Carnet",
-                            "TYPE" = "Counter",
-                            "PK" = TRUE      
-                        >,
-                        <
-                            "NAME" = "Nombre",
-                            "TYPE" = "String",
-                            "PK" = FALSE      
-                        >,
-                        <
-                            "NAME" = "Edad",
-                            "TYPE" = "Int",
-                            "PK" = FALSE      
-                        >,
-                        <
-                            "NAME" = "Cursos_Aprobados",
-                            "TYPE" = "Set<String>",
-                            "PK" = FALSE      
-                        >,
-                        <
-                            "NAME" = "Direccion",
-                            "TYPE" = "Direccion",
-                            "PK" = FALSE      
-                        >
-                    ],
-					"DATA" = [
-						${ alumnos.chison }$
-					]
-                >,      
-                <
-                    "ATTRS" = [
-                        < 
-                            "NAME" = "Nombre",
-                            "TYPE" = "String" 
-                        >,
-                        < 
-                            "NAME" = "Aficion",
-                            "TYPE" = "Int"
-                        >,
-                        < 
-                            "NAME" = "Pais",
-                            "TYPE" = "String"
-                        >
-                    ],
-                    "CQL-TYPE" = "OBJECT",
-                    "NAME" = "Equipo"                    
-                >,
-                <
-                    "CQL-TYPE" = "OBJECT",
-                    "NAME" = "Resultado",
-                    "ATTRS" = [
-                        < 
-                            "NAME" = "local",
-                            "TYPE" = "Int" 
-                        >,
-                        < 
-                            "NAME" = "visita",
-                            "TYPE" = "Int"
-                        >
-                    ]
-                >,
-                <
-                    "CQL-TYPE" = "TABLE",
-                    "NAME" = "Partido",
-                    "DATA" = [
-                        ${ partido.chison }$
-                    ],  
-                    "COLUMNS" = [
-                        < 
-                            "NAME" = "Hora",
-                            "TYPE" = "Time",
-                            "PK" = TRUE      
-                        >,
-                        < 
-                            "NAME" = "Fecha",
-                            "TYPE" = "Date",
-                            "PK" = TRUE      
-                        >,
-                        < 
-                            "NAME" = "Local",
-                            "TYPE" = "Equipo" ,
-                            "PK" = FALSE
-                        >,
-                        < 
-                            "NAME" = "Visita",
-                            "TYPE" = "Equipo",
-                            "PK" = FALSE
-                        >,
-                        < 
-                            "NAME" = "Resultado",
-                            "TYPE" = "Resultado",
-                            "PK" = FALSE
+            "DATA" = [
 
+            ]
+        >,
+        <
+            "NAME" = "Database2",
+            "DATA" = [
+
+            ]
+        >,
+        <
+            "NAME" = "Database3",
+            "DATA" = [
+
+            ]
+        >,
+        <
+            "NAME" = "Disquera",
+            "DATA" = [
+                <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Nacionalidad",
+                    "ATTRS" = [
+                        <
+                            "NAME" = "pais",
+                            "TYPE" = "STRING"
+                        >,
+                        <
+                            "NAME" = "prefijo",
+                            "TYPE" = "INT"
+                        >,
+                        <
+                            "NAME" = "tercermundo",
+                            "TYPE" = "BOOLEAN"
                         >
                     ]
-                >,                
+                >,
                 <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Persona",
                     "ATTRS" = [
-                        < 
-                            "NAME" = "Tipo",
-                            "TYPE" = "String" 
+                        <
+                            "NAME" = "nombre",
+                            "TYPE" = "STRING"
                         >,
-                        < 
-                            "NAME" = "Marca",
-                            "TYPE" = "String"
+                        <
+                            "NAME" = "apellido",
+                            "TYPE" = "STRING"
                         >,
-                        < 
-                            "NAME" = "Precio",
-                            "TYPE" = "Double"
+                        <
+                            "NAME" = "nac_ionalidad",
+                            "TYPE" = "Nacionalidad"
+                        >
+                    ]
+                >,
+                <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Estudiante",
+                    "ATTRS" = [
+                        <
+                            "NAME" = "carnet",
+                            "TYPE" = "INT"
                         >,
-                        < 
-                            "NAME" = "Tallas",
-                            "TYPE" = "Set<Double>"
+                        <
+                            "NAME" = "per_sona",
+                            "TYPE" = "Persona"
+                        >,
+                        <
+                            "NAME" = "direccion",
+                            "TYPE" = "STRING"
+                        >,
+                        <
+                            "NAME" = "estudia",
+                            "TYPE" = "BOOLEAN"
+                        >
+                    ]
+                >,
+                <
+                    "CQL-TYPE" = "TABLE",
+                    "NAME" = "Cancion",
+                    "COLUMNS" = [
+                        <
+                            "NAME" = "numcancion",
+                            "TYPE" = "INT",
+                            "PK" = True
+                        >,
+                        <
+                            "NAME" = "emisoras",
+                            "TYPE" = "Map<STRING,STRING>",
+                            "PK" = False
+                        >,
+                        <
+                            "NAME" = "autor",
+                            "TYPE" = "Estudiante",
+                            "PK" = False
                         >
                     ],
-                    "CQL-TYPE" = "OBJECT",
-                    "NAME" = "Articulo"
-                    
-                >,
-                <                    
                     "DATA" = [
-                        ${ tiendaropa.chison }$
-                    ],  
-                    "NAME" = "TiendaRopa",
-                    "CQL-TYPE" = "TABLE",                    
-                    "COLUMNS" = [
-                        < 
-                            "NAME" = "ID",
-                            "TYPE" = "Int",
-                            "PK" = TRUE      
+                        <
+                            "numcancion" = 1,
+                            "emisoras" = <"NomEmisora" = "FABU","Ubicacion" = "Guatemala">,
+                            "autor" =
+                                 <
+									"direccion" = "SanCristobal",
+									"estudia" = True,
+									"per_sona" =
+										<
+											"apellido" = "Sic",
+											"nombre" = "Miguel",
+											"nac_ionalidad" =
+													<
+														"prefijo" = 0,
+														"pais" = "COREA DEL SUR",
+														"tercermundo" = False
+													>
+										>,
+									"carnet" = 201055623
+                                 >
                         >,
-                        < 
-                            "NAME" = "Articulo",
-                            "TYPE" = "Articulo",
-                            "PK" =  FALSE
+                        <
+                            "numcancion" = 3,
+                            "emisoras" = <"NomEmisora" = "FABU","Ubicacion" = "EEUU","Empleados" = "20","Gerente" = "Castillo">,
+                            "autor" =
+                                 <
+                            "direccion" = "Mixco",
+                            "estudia" = True,
+                            "per_sona" =
+                                 <
+                            "apellido" = "Leman",
+                            "nombre" = "Pablo",
+                            "nac_ionalidad" =
+                                 <
+                            "prefijo" = 865,
+                            "pais" = "Alemania",
+                            "tercermundo" = True
+                                 >
+                                 >,
+                            "carnet" = 201366548
+                                 >
+                        >,
+                        <
+                            "numcancion" = 4,
+                            "emisoras" = <"NomEmisora" = "FABU","Ubicacion" = "Guatemala">,
+                            "autor" =
+                                 <
+                            "direccion" = "San Lucas",
+                            "estudia" = False,
+                            "per_sona" =
+                                 <
+                            "apellido" = "Contreras",
+                            "nombre" = "Carlos",
+                            "nac_ionalidad" =
+                                 <
+                            "prefijo" = 763,
+                            "pais" = "Japon",
+                            "tercermundo" = True
+                                 >
+                                 >,
+                            "carnet" = 201133147
+                                 >
                         >
                     ]
                 >
-			]
-		>,    
-        <
-			"NAME"= "Database2",
-			"Data"= [
-				${ bd2data.chison }$
-			]
-		>,
-        <
-			"Data"= [],
-			"NAME"= "Database3"
-        >
-    ],
-    "USERS"= [
-		<            
-            "PERMISSIONS"= [],
-            "NAME"="Fernando",
-            "PASSWORD"= "5678"
+            ]
         >,
         <
-            "NAME"="Lilly",
-            "PASSWORD"= "Collins",
+            "NAME" = "Aplicaciones",
+            "DATA" = [
+                <
+                    "CQL-TYPE" = "OBJECT",
+                    "NAME" = "Desarrolador",
+                    "ATTRS" = [
+                        <
+                            "NAME" = "nombre",
+                            "TYPE" = "STRING"
+                        >,
+                        <
+                            "NAME" = "tiempos",
+                            "TYPE" = "List<TIME>"
+                        >
+                    ]
+                >,
+                <
+                    "CQL-TYPE" = "TABLE",
+                    "NAME" = "Nota",
+                    "COLUMNS" = [
+                        <
+                            "NAME" = "numero_nota",
+                            "TYPE" = "COUNTER",
+                            "PK" = True
+                        >,
+                        <
+                            "NAME" = "id_cliente",
+                            "TYPE" = "INT",
+                            "PK" = True
+                        >,
+                        <
+                            "NAME" = "fechas",
+                            "TYPE" = "List<DATE>",
+                            "PK" = False
+                        >,
+                        <
+                            "NAME" = "fecha_creacion",
+                            "TYPE" = "DATE",
+                            "PK" = False
+                        >
+                    ],
+                    "DATA" = [
+                        <
+                            "fechas" = ['1987-01-25','1996-01-11'],
+                            "numero_nota" = 0,
+                            "id_cliente" = 11,
+                            "fecha_creacion" = '2012-01-11'
+                        >,
+                        <
+                            "fechas" = ['2000-01-11'],
+                            "numero_nota" = 2,
+                            "id_cliente" = 33,
+                            "fecha_creacion" = '2010-08-25'
+                        >,
+                        <
+                            "fechas" = ['2002-01-11','2001-01-11'],
+                            "numero_nota" = 3,
+                            "id_cliente" = 44,
+                            "fecha_creacion" = null
+                        >
+                    ]
+                >
+            ]
+        >,
+        <
+            "NAME" = "Colegio",
+            "DATA" = [
+                <
+                    "CQL-TYPE" = "TABLE",
+                    "NAME" = "Clase",
+                    "COLUMNS" = [
+                        <
+                            "NAME" = "id_clase",
+                            "TYPE" = "COUNTER",
+                            "PK" = True
+                        >,
+                        <
+                            "NAME" = "nombre_clase",
+                            "TYPE" = "STRING",
+                            "PK" = False
+                        >,
+                        <
+                            "NAME" = "duracion",
+                            "TYPE" = "TIME",
+                            "PK" = False
+                        >,
+                        <
+                            "NAME" = "alumnos",
+                            "TYPE" = "INT",
+                            "PK" = False
+                        >
+                    ],
+                    "DATA" = [
+                        <
+                            "id_clase" = 0,
+                            "nombre_clase" = "MATEACTUALIZADO",
+                            "alumnos" = 95,
+                            "duracion" = '01:57:00'
+                        >,
+                        <
+                            "id_clase" = 2,
+                            "nombre_clase" = "MATEACTUALIZADO",
+                            "alumnos" = 70,
+                            "duracion" = '01:57:00'
+                        >,
+                        <
+                            "id_clase" = 5,
+                            "nombre_clase" = "MATEACTUALIZADO",
+                            "alumnos" = 19,
+                            "duracion" = '01:57:00'
+                        >,
+                        <
+                            "id_clase" = 6,
+                            "nombre_clase" = "MATEACTUALIZADO",
+                            "alumnos" = 15,
+                            "duracion" = '01:57:00'
+                        >
+                    ]
+                >
+             ]
+        >
+    ],
+    "USERS" = [
+        <
+            "NAME" = "Fernando",
+            "PASSWORD" = "5678",
+            "PERMISSIONS"= [
+            ]
+        >,
+        <
+            "NAME" = "Lilly",
+            "PASSWORD" = "Collins",
             "PERMISSIONS"= [
                 <
                     "NAME" = "Database1"
@@ -193,8 +307,8 @@ $<
             ]
         >,
         <
-            "NAME"="Luis",
-            "PASSWORD"= "1234",
+            "NAME" = "Luis",
+            "PASSWORD" = "1234",
             "PERMISSIONS"= [
                 <
                     "NAME" = "Database1"
@@ -205,8 +319,8 @@ $<
             ]
         >,
         <
-            "NAME"="Admin",
-            "PASSWORD"= "admin",
+            "NAME" = "Admin",
+            "PASSWORD" = "admin",
             "PERMISSIONS"= [
                 <
                     "NAME" = "Database1"
@@ -216,8 +330,17 @@ $<
                 >,
                 <
                     "NAME" = "Database3"
+                >,
+                <
+                    "NAME" = "Disquera"
+                >,
+                <
+                    "NAME" = "Aplicaciones"
+                >,
+                <
+                    "NAME" = "Colegio"
                 >
             ]
         >
-	]
+    ]
 >$

@@ -71,8 +71,7 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
             else
             {
                 string CadenaFinal = string.Join("\n", StaticChison.CadenaSalida);
-
-                Debug.WriteLine(CadenaFinal);
+                //Debug.WriteLine(CadenaFinal);
 
                 Grammar gramatica = new Grammar();
                 LanguageData lenguaje = new LanguageData(gramatica);
@@ -102,18 +101,24 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
                 }
                 else
                 {
+                    Debug.WriteLine("*************************************************");
+                    Debug.WriteLine("*************************************************");
                     Debug.WriteLine("Hay errores lexicos o sintacticos.");
                     Debug.WriteLine("El arbol de Irony no se construyó.");
                     Debug.WriteLine("La cadena es inválida.");
+                    Debug.WriteLine("*************************************************");
+                    Debug.WriteLine("*************************************************");
 
                     foreach (LogMessage err in arbol.ParserMessages)
                     {
                         //CQL.AddLUPError("Sintáctico", "Parser", err.Message, err.Location.Line, err.Location.Column);
+                        Debug.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                         Debug.WriteLine("Tipo de Error: Sintáctico.");
                         Debug.WriteLine("Ubicación: Parser.");
                         Debug.WriteLine("Descripcion: " + err.Message);
                         Debug.WriteLine("Linea: " + err.Location.Line);
                         Debug.WriteLine("Columna: " + err.Location.Column);
+                        Debug.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                     }
                 }
 

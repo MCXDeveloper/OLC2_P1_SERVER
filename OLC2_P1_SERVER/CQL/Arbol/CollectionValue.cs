@@ -340,11 +340,51 @@ public class CollectionValue : Expresion
 
     private bool ValidateSameType(List<Expresion> RepresentacionListSet, TipoDato FirstElementDataType, Entorno ent)
     {
-        return !(RepresentacionListSet.Any(rm => !rm.GetTipo(ent).GetRealTipo().Equals(FirstElementDataType.GetRealTipo())));
+        bool firstValidation = !(RepresentacionListSet.Any(rm => !rm.GetTipo(ent).GetRealTipo().Equals(FirstElementDataType.GetRealTipo())));
+
+        if (!firstValidation)
+        {
+            for (int i = 0; i < RepresentacionListSet.Count; i++)
+            {
+                Expresion exp = RepresentacionListSet[i];
+                TipoDato expTipoDato = exp.GetTipo(ent);
+
+                if (!expTipoDato.GetRealTipo().Equals(FirstElementDataType.GetRealTipo()))
+                {
+                    object value = CasteoImplicito(FirstElementDataType, exp.GetTipo(ent), exp.Ejecutar(ent));
+
+                    if (value is Nulo || value is Exception)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        RepresentacionListSet[i] = new Primitivo(value);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     private bool ValidateUniqueValues(List<Expresion> RepresentacionListSet, object FirstElementDataValue, Entorno ent)
     {
         return !RepresentacionListSet.GroupBy(x => x.Ejecutar(ent)).Any(e => e.Count() > 1);
     }
+
+    private object CasteoImplicito(TipoDato tipoDeclaracion, TipoDato tipoValor, object valor)
+    {
+        if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.INT) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToInt32((double)valor);
+        }
+        else if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return Convert.ToDouble((int)valor);
+        }
+
+        return new Nulo();
+    }
+
 }

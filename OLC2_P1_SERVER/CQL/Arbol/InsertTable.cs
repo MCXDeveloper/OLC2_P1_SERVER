@@ -323,7 +323,20 @@ public class InsertTable : Instruccion
 
         foreach (Expresion exp in ListaValores)
         {
-            list.Add(exp.Ejecutar(ent));
+            object val = exp.Ejecutar(ent);
+
+            if (val is Date)
+            {
+                list.Add(((Date)val).GetParsedDate());
+            }
+            else if (val is Time)
+            {
+                list.Add(((Time)val).GetTimeInDateTime());
+            }
+            else
+            {
+                list.Add(val);
+            }
         }
 
         return list;

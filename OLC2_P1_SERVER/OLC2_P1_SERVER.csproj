@@ -390,8 +390,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ChisonFilesContainer\bd2Data.chison" />
-    <Content Include="ChisonFilesContainer\estudiantes.chison" />
-    <Content Include="ChisonFilesContainer\jeansData.chison" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -79,6 +79,7 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
             foreach (object item in listValores)
             {
                 CHI_Value ciValue = new CHI_Value((List<CHI_Val>)item);
+                ciValue.ListaColumnas = (List<object>)ObjetoColumnas;
                 listAuxVal.Add("INSERT INTO " + NombreTabla + (string)ciValue.Ejecutar() + Environment.NewLine);
             }
 

@@ -1,6 +1,8 @@
-﻿using OLC2_P1_SERVER.CHISON.Manejadores;
+﻿using OLC2_P1_SERVER.CHISON.Arbol;
+using OLC2_P1_SERVER.CHISON.Manejadores;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -13,6 +15,7 @@ namespace OLC2_P1_SERVER.CHISON.Estaticas
         public static List<string> CadenaSalida { get; set; }
         public static List<CHI_Error> PilaErrores { get; set; }
         public static string[] CadenaEntradaSeparada { get; set; }
+        public static List<KeyValuePair<string, List<CHI_Atributo>>> ObjetosRecopilados { get; set; }
 
         public static void InitializeStaticEnvironment()
         {
@@ -20,6 +23,7 @@ namespace OLC2_P1_SERVER.CHISON.Estaticas
             CadenaEntrada = string.Empty;
             CadenaSalida = new List<string>();
             PilaErrores = new List<CHI_Error>();
+            ObjetosRecopilados = new List<KeyValuePair<string, List<CHI_Atributo>>>();
         }
 
         public static void AddError(string tipo, string ubicacion, string descripcion, int fila, int columna)
