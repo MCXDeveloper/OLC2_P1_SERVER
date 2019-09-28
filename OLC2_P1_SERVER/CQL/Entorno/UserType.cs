@@ -37,13 +37,13 @@ public class UserType : InstruccionBD
 
     public string CrearPaqueteLUP(string user)
     {
-        string response = "[+TYPE]";
+        string response = "[+TYPEX]";
         response += "[+NAME]"+ Identificador +"[-NAME]";
         foreach (AtributoUT aut in ListaAtributos)
         {
             response += "[+ATTRIBUTES]" + aut.Identificador + "[-ATTRIBUTES]";
         }
-        response += "[-TYPE]";
+        response += "[-TYPEX]";
         return response;
     }
 

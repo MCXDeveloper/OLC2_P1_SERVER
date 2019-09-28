@@ -14,6 +14,7 @@
         <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
         <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
         <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
+        <script type="text/javascript" src="javascripts/arbol/StructPackage.js"></script>
         <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
         <script type="text/javascript" src="javascripts/blockly_compressed.js"></script>
         <script type="text/javascript" src="javascripts/blocks_compressed.js"></script>
@@ -236,7 +237,7 @@
             }
 
             $(document).ready(function(){
-                //GetWorkTree();
+                GetWorkTree();
             });
 
         </script>
@@ -454,6 +455,7 @@
                                     if (data != "") {
                                         
                                         alert("Paquete recibido: \n\n" + data);
+                                        console.log(data);
 
                                         // Parseo el mensaje de LUP que debería de venir en data.
                                         let ast = LUPGrammar.parse(data);

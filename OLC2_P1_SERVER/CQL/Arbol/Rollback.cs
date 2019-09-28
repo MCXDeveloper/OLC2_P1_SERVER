@@ -58,7 +58,7 @@ public class Rollback : Instruccion
 
         // Creo la base de datos y la tabla de errores correspondiente a Chison únicamente si si hubieron errores.
         CreateAndLoadChisonLog();
-        CQL.IsInitRollback = false;
+        CQL.RestartSession();
 
         return new Nulo();
     }

@@ -21,8 +21,8 @@
 \[\-TABLE\]                     		return 'close_table';
 \[\+TYPES\]                     		return 'open_types';
 \[\-TYPES\]                     		return 'close_types';
-\[\+TYPE\]                     			return 'open_type';
-\[\-TYPE\]                     			return 'close_type';
+\[\+TYPEX\]                     		return 'open_type';
+\[\-TYPEX\]                     		return 'close_type';
 "[+NAME]"[^\[]*"[-NAME]"          		return 'name_package';
 "[+COLUMNS]"[^\[]*"[-COLUMNS]"          return 'columns_package';
 "[+ATTRIBUTES]"[^\[]*"[-ATTRIBUTES]"    return 'attributes_package';
@@ -30,7 +30,7 @@
 \[\+LINE\](.*)\[\-LINE\]            	return 'error_line';
 \[\+COLUMN]\](.*)\[\-COLUMN]\]      	return 'error_column';
 \[\+LOCATION]\](.*)\[\-LOCATION]\]  	return 'error_location';
-\[\+TYPE]\](.*)\[\-TYPE]\]          	return 'error_type';
+"[+TYPE]"[^\[]*"[-TYPE]"				return 'error_type';
 \[\+DESC]\](.*)\[\-DESC]\]          	return 'error_description';
 "[+DATA]"[^\[]*"[-DATA]"            	return 'data_package';
 "[+MESSAGE]"[^\[]*"[-MESSAGE]"      	return 'message_package';

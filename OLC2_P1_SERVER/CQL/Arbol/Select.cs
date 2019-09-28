@@ -104,7 +104,17 @@ public class Select : Instruccion
                             // Agrego a la pila de respuestas el resultado del select.
                             if (!IsFuncionAgregacion)
                             {
-                                CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
+                                if (tablaTemp4.Tabla != null)
+                                {
+                                    if (tablaTemp4.Tabla.Rows.Count > 0)
+                                    {
+                                        CQL.AddLUPData(GetSelectInAscii(tablaTemp4));
+                                    }
+                                    else
+                                    {
+                                        CQL.AddLUPMessage("No se pudo ejecutar SELECT.  No hay filas en la tabla '" + NombreTabla + "' que mostrar.");
+                                    }
+                                }
                             }
 
                             return tablaTemp4;

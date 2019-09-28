@@ -290,6 +290,23 @@ public class CQL
         PilaErroresRollback = new List<RollbackError>();
     }
 
+    public static void RestartSession()
+    {
+        WhereFlag = false;
+        BatchFlag = false;
+        TablaEnUso = null;
+        TuplaEnUso = null;
+        SelectFlag = false;
+        TryCatchFlag = false;
+        BatchErrorCounter = 0;
+        IsInitRollback = false;
+        BaseDatosEnUso = string.Empty;
+        BaseDatosEnUso = string.Empty;
+        UsuarioLogueado = string.Empty;
+        UsuarioLogueado = string.Empty;
+        PilaRespuestas = new List<string>();
+    }
+
     public static string TransformEntornoToTable(Entorno ent)
     {
         DataTable dt = new DataTable();
