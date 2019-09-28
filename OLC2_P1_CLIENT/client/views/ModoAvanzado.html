@@ -185,6 +185,15 @@
         <!-- ACCION DE CREAR ARBOL DE ESTRUCTURA -->
         <script type="text/javascript">
 
+            function IsJsonString(str) {
+                try {
+                    JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
+
             function GetWorkTree() {
 
                 $.get("/getActualUser", function(usuario){
@@ -227,9 +236,12 @@
                                     let ast = LUPGrammar.parse(data);
 
                                     ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin, finalStructTree){
-                                        
                                         if (finalStructTree) {
-                                            $('#jstree_demo_div').jstree(JSON.parse(finalStructTree.replace(/'/g,'"')));
+                                            if (!IsJsonString(finalStructTree)) {
+                                                $('#jstree_demo_div').jstree(JSON.parse(finalStructTree.replace(/'/g,'"')));
+                                            }else{
+                                                alert("Error. \n\n No se pudo construir el árbol de trabajo.");
+                                            }
                                         }
                                     });
 

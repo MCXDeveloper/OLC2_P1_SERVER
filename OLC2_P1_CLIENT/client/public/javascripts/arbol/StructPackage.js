@@ -12,11 +12,17 @@ class StructPackage {
 
         let dbsJSON = [];
 
-        dbsArr.forEach(element => {
-            dbsJSON.push("{ 'text' : '" + element.name + "', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ { 'text' : 'TABLAS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetTablesJSON(element.lista_tablas) +" ] }, { 'text' : 'OBJETOS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetObjectsJSON(element.lista_types) +" ] }, { 'text' : 'PROCEDIMIENTOS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetProcsJSON(element.lista_procs) +" ] } ] }");
-        });
+        if (!(dbsArr === undefined || dbsArr.length == 0)) {
+            
+            dbsArr.forEach(element => {
+                dbsJSON.push("{ 'text' : '" + element.name + "', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ { 'text' : 'TABLAS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetTablesJSON(element.lista_tablas) +" ] }, { 'text' : 'OBJETOS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetObjectsJSON(element.lista_types) +" ] }, { 'text' : 'PROCEDIMIENTOS', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetProcsJSON(element.lista_procs) +" ] } ] }");
+            });
 
-        return dbsJSON.join(", ");
+            return dbsJSON.join(", ");
+
+        }
+
+        return "";
 
     }
 
@@ -24,11 +30,18 @@ class StructPackage {
         
         let tablesJSON = [];
 
-        tablesArray.forEach(element => {
-            tablesJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetColAtrJSON(element.lista_columnas) +" ] }");
-        });
+        if (!(tablesArray === undefined || tablesArray.length == 0)) {
+            
+            tablesArray.forEach(element => {
+                console.log(element.lista_columnas);
+                tablesJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetColAtrJSON(element.lista_columnas) +" ] }");
+            });
 
-        return tablesJSON.join(", ");
+            return tablesJSON.join(", ");
+
+        }
+
+        return "";
 
     }
 
@@ -36,11 +49,17 @@ class StructPackage {
 
         let objsJSON = [];
 
-        objsArray.forEach(element => {
-            objsJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetColAtrJSON(element.lista_atributos) +" ] }");
-        });
+        if (!(objsArray === undefined || objsArray.length == 0)) {
+            
+            objsArray.forEach(element => {
+                objsJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetColAtrJSON(element.lista_atributos) +" ] }");
+            });
 
-        return objsJSON.join(", ");
+            return objsJSON.join(", ");
+
+        }
+
+        return "";
 
     }
 
@@ -48,11 +67,17 @@ class StructPackage {
         
         let procsJSON = [];
 
-        procsArray.forEach(element => {
-            procsJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ ] }");
-        });
+        if (!(procsArray === undefined || procsArray.length == 0)) {
+            
+            procsArray.forEach(element => {
+                procsJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ ] }");
+            });
 
-        return procsJSON.join(", ");
+            return procsJSON.join(", ");
+
+        }
+
+        return "";
 
     }
 
@@ -61,7 +86,8 @@ class StructPackage {
         let _json_ = [];
 
         array.forEach(element => {
-            _json_.push("{ 'text' : "+ element +" }");
+            console.log("Elemento: ", element);
+            _json_.push("{ 'text' : '"+ element +"' }");
         });
 
         return _json_.join(", ");

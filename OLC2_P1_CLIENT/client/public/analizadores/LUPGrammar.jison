@@ -11,8 +11,8 @@
 
 \[\+ERROR\]                         	return 'open_error';
 \[\-ERROR\]                         	return 'close_error';
-\[\+DATABASES\]                     	return 'open_databases';
-\[\-DATABASES\]                     	return 'close_databases';
+\[\+DATABASES\]                    		return 'open_dbs';
+\[\-DATABASES\]                    		return 'close_dbs';
 \[\+DATABASE\]                     		return 'open_database';
 \[\-DATABASE\]                     		return 'close_database';
 \[\+TABLES\]                     		return 'open_tables';
@@ -24,9 +24,9 @@
 \[\+TYPE\]                     			return 'open_type';
 \[\-TYPE\]                     			return 'close_type';
 "[+NAME]"[^\[]*"[-NAME]"          		return 'name_package';
-\[\+COLUMNS\](.*)\[\-COLUMNS\]          return 'columns_package';
-\[\+ATTRIBUTES\](.*)\[\-ATTRIBUTES\]	return 'attributes_package';
-\[\+PROCEDURES\](.*)\[\-PROCEDURES\]    return 'procedures_package';
+"[+COLUMNS]"[^\[]*"[-COLUMNS]"          return 'columns_package';
+"[+ATTRIBUTES]"[^\[]*"[-ATTRIBUTES]"    return 'attributes_package';
+"[+PROCEDURES]"[^\[]*"[-PROCEDURES]"    return 'procedures_package';
 \[\+LINE\](.*)\[\-LINE\]            	return 'error_line';
 \[\+COLUMN]\](.*)\[\-COLUMN]\]      	return 'error_column';
 \[\+LOCATION]\](.*)\[\-LOCATION]\]  	return 'error_location';
@@ -61,17 +61,18 @@ INSTRUCCION
 	| login_package                                                                                     { $$ = new LoginPackage($1.replace(/\[\+LOGIN]|\[\-LOGIN]/g, "")); }
 	| logout_package                                                                                    { $$ = new LoginPackage($1.replace(/\[\+LOGOUT]|\[\-LOGOUT]/g, "")); }
 	| open_error error_line error_column error_type error_location error_description close_error        { $$ = new ErrorPackage({ fila: $2.replace(/\[\+LINE]|\[\-LINE]/g, ""), columna: $3.replace(/\[\+COLUMN]|\[\-COLUMN]/g, ""), tipo_error: $4.replace(/\[\+TYPE]|\[\-TYPE]/g, ""), ubicacion: $5.replace(/\[\+LOCATION]|\[\-LOCATION]/g, ""), descripcion: $6.replace(/\[\+DESC]|\[\-DESC]/g, "") }); }
-	| open_databases LISTA_BDS													    					{ $$ = new StructPackage($2); }
+	| open_dbs LISTA_BDS close_dbs									    								{ $$ = new StructPackage($2); }
+	| open_dbs close_dbs									    										{ $$ = new StructPackage([]); }
 ;
 
 LISTA_BDS
-	: LISTA_BDS DATABASE																				{ $$ = $1;  $$.push($2); }
+	: LISTA_BDS DATABASE 																				{ $$ = $1;  $$.push($2); }
 	| DATABASE																							{ $$ = [];  $$.push($1); }
-	| close_databases																					{ $$ = []; }
 ;
 
 DATABASE
-	: open_database + name_package + TABLES_BLOCK + TYPES_BLOCK + LISTA_PROCEDURES + close_database		{ $$ = { name: $2, lista_tablas: $3, lista_types: $4, lista_procs: $5 }; }
+	: open_database name_package TABLES_BLOCK TYPES_BLOCK LISTA_PROCEDURES close_database				{ $$ = { name: $2.replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_tablas: $3, lista_types: $4, lista_procs: $5 }; }
+	| open_database name_package TABLES_BLOCK TYPES_BLOCK close_database								{ $$ = { name: $2.replace(/\[\+NAME]|\[\-NAME]/g, ""), lista_tablas: $3, lista_types: $4, lista_procs: [] }; }
 ;
 
 TABLES_BLOCK

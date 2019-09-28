@@ -186,28 +186,37 @@ public class Database : InstruccionBD
         response += "[+NAME]"+ NombreBD +"[-NAME]";
 
         // Tablas de la base de datos.
-        response += "[+TABLES]";
-        foreach (Table tab in ListaTablas)
+        if (ListaTablas.Count > 0)
         {
-            response += tab.CrearPaqueteLUP(user);
+            response += "[+TABLES]";
+            foreach (Table tab in ListaTablas)
+            {
+                response += tab.CrearPaqueteLUP(user);
+            }
+            response += "[-TABLES]";
         }
-        response += "[-TABLES]";
 
         // UserTypes de la base de datos.
-        response += "[+TYPES]";
-        foreach (UserType ut in ListaUserTypes)
+        if (ListaUserTypes.Count > 0)
         {
-            response += ut.CrearPaqueteLUP(user);
+            response += "[+TYPES]";
+            foreach (UserType ut in ListaUserTypes)
+            {
+                response += ut.CrearPaqueteLUP(user);
+            }
+            response += "[-TYPES]";
         }
-        response += "[-TYPES]";
 
         // Procedimientos de la base de datos.
-        response += "[+PROCEDURES]";
-        foreach (Procedimiento proc in ListaProcedimientos)
+        if (ListaProcedimientos.Count > 0)
         {
-            response += proc.CrearPaqueteLUP(user);
+            response += "[+PROCEDURES]";
+            foreach (Procedimiento proc in ListaProcedimientos)
+            {
+                response += proc.CrearPaqueteLUP(user);
+            }
+            response += "[-PROCEDURES]";
         }
-        response += "[-PROCEDURES]";
 
         response += "[-DATABASE]";
 
