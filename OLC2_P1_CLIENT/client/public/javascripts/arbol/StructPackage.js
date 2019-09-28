@@ -86,7 +86,6 @@ class StructPackage {
         let _json_ = [];
 
         array.forEach(element => {
-            console.log("Elemento: ", element);
             _json_.push("{ 'text' : '"+ element +"' }");
         });
 

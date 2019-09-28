@@ -469,6 +469,8 @@
 
                                     if (data != "") {
 
+                                        alert("Paquete recibido: \n\n" + data);
+
                                         // Parseo el mensaje de LUP que debería de venir en data.
                                         let ast = LUPGrammar.parse(data);
 
@@ -566,9 +568,9 @@
                                 },
                                 success: function(data){
 
-                                    alert(data);
-
                                     if (data != "") {
+
+                                        alert("Paquete recibido: \n\n" + data);
 
                                         // Parseo el mensaje de LUP que debería de venir en data.
                                         let ast = LUPGrammar.parse(data);

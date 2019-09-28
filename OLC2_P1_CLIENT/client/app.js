@@ -47,7 +47,7 @@ app.get('/', function(req, res){
         return res.redirect('/Home');
     }
     res.sendFile('index.html', { root: path.join(__dirname, './views') });
-    //res.sendFile('ModoAvanzado.html', { root: path.join(__dirname, './views') });
+    //res.sendFile('ModoPrincipiante.html', { root: path.join(__dirname, './views') });
 });
 
 app.get('/getActualUser', function(req, res){

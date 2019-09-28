@@ -14,11 +14,27 @@
         <script type="text/javascript" src="javascripts/arbol/ErrorPackage.js"></script>
         <script type="text/javascript" src="javascripts/arbol/LoginPackage.js"></script>
         <script type="text/javascript" src="javascripts/arbol/MessagePackage.js"></script>
+        <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
         <script type="text/javascript" src="javascripts/blockly_compressed.js"></script>
         <script type="text/javascript" src="javascripts/blocks_compressed.js"></script>
         <script type="text/javascript" src="javascripts/javascript_compressed.js"></script>
-        <script type="text/javascript" src="javascripts/es.js"></script>
-        <script type="text/javascript" src="grammar/LUPGrammar.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Use.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/NormalInsert.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SpecialInsert.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaSelect.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaWhere.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaUpdate.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaDelete.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaLimit.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaOrderBy.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/SentenciaSelectAll.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Asignaciones.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Relacionales.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Aritmeticas.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Logicas.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/LogicaNot.js"></script>
+        <script type="text/javascript" src="javascripts/blockly/Primitivos.js"></script>
+        <script type="text/javascript" src="javascripts/en.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="stylesheets/tabs.css" type="text/css" rel="stylesheet">
@@ -104,8 +120,11 @@
                     </div>
                     <div class="col-md-9">
                         <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Editor de texto</h3>
+                            <div class="panel-heading clearfix">
+                                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Editor de texto</h4>
+                                <div class="btn-group pull-right">
+                                    <a id="btn-ejecutar"><i class="fa fa-2x fa-fw fa-play text-success"></i></a>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div id="blocklyDiv" style="height: 480px; width: 820px;"></div>
@@ -139,34 +158,85 @@
         
         <!-- AREA DE SCRIPTS -->
 
-        <!-- ARBOL DE TRABAJO - JSTREE -->
+        <!-- ACCION DE CREAR ARBOL DE ESTRUCTURA -->
         <script type="text/javascript">
 
-            $(document).ready(function(){
+            function IsJsonString(str) {
+                try {
+                    JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
 
-                $(function () { $('#jstree_demo_div').jstree(); });
+            function GetWorkTree() {
 
-                $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-                    console.log(data.selected);
-                });
+                $.get("/getActualUser", function(usuario){
 
-                $('#jstree_demo_div').jstree({ 'core' : {
-                    'data' : [
-                        'Simple root node',
-                        {
-                            'text' : 'Root node 2',
-                            'state' : {
-                                'opened' : true,
-                                'selected' : true
+                    if(usuario) {
+
+                        let lupito = LUPBuilder.BuildStructPackage(usuario);
+
+                        $.ajax({
+                            type: 'POST',
+                            url : "http://localhost:58899/api/CQL",
+                            data: { LUPMessage : lupito },
+                            timeout: 300000,
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                $.unblockUI();
                             },
-                            'children' : [
-                                { 'text' : 'Child 1' },
-                                'Child 2'
-                            ]
-                        }
-                    ]
-                } });
+                            beforeSend: function(){
+                                alert("Paquete a enviar: \n\n" + lupito);
+                                $.blockUI({
+                                    message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                    css: {
+                                        border: 'none',
+                                        padding: '15px',
+                                        backgroundColor: '#000',
+                                        '-webkit-border-radius': '10px',
+                                        '-moz-border-radius': '10px',
+                                        opacity: .5,
+                                        color: '#fff'
+                                    }
+                                });
+                            },
+                            success: function(data){
+                                
+                                alert("Paquete recibido: \n\n" + data);
 
+                                if (data != "") {
+
+                                    // Parseo el mensaje de LUP que debería de venir en data.
+                                    let ast = LUPGrammar.parse(data);
+
+                                    ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin, finalStructTree){
+                                        if (finalStructTree) {
+                                            if (!IsJsonString(finalStructTree)) {
+                                                $('#jstree_demo_div').jstree(JSON.parse(finalStructTree.replace(/'/g,'"')));
+                                            }else{
+                                                alert("Error. \n\n No se pudo construir el árbol de trabajo.");
+                                            }
+                                        }
+                                    });
+
+                                }else{
+                                    alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Struct.");
+                                }
+
+                                $.unblockUI();
+
+                            }
+                        });
+                    }else{
+                        alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                    }
+                });
+            }
+
+            $(document).ready(function(){
+                //GetWorkTree();
             });
 
         </script>
@@ -242,46 +312,249 @@
             }
 
         </script>
+
+        <!-- ACCION DE BOTON CERRAR SESIÓN -->
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btn-cerrar-sesion').on('click', function(){
+
+                    $.get("/getActualUser", function(usuario){
+
+                        if(usuario) {
+
+                            let lupito = LUPBuilder.BuildLogout(usuario);
+
+                            $.ajax({
+
+                                type: 'POST',
+                                url : "http://localhost:58899/api/CQL",
+                                data: { LUPMessage : lupito },
+                                timeout: 5000,
+
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                    $.unblockUI();
+                                },
+
+                                beforeSend: function(){
+                                    alert("Paquete a enviar: \n\n" + lupito);
+                                    $.blockUI({
+                                        message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                },
+
+                                success: function(data){
+
+                                    if (data != "") {
+                                        
+                                        alert("Paquete recibido: \n\n" + data);
+
+                                        // Parseo el mensaje de LUP que debería de venir en data.
+                                        let ast = LUPGrammar.parse(data);
+
+                                        ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
+
+                                            if (finalLogin) {
+
+                                                $.get("/logout", function(datax){
+                                                    if(datax === 'done') {
+                                                        window.location.href = "/";
+                                                    }
+                                                });
+
+                                            }else{
+                                                alert("Error. No se puede desloguear del sistema.");
+                                            }
+
+                                        });
+
+                                    }else{
+                                        alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Logout.");
+                                    }
+
+                                    $.unblockUI();
+                                }
+
+                            });
+
+                        }else{
+                            alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                        }
+
+                    });
+
+                });
+
+            });
+
+        </script>
+
+        <!-- ACCION DE BOTON EJECUTAR -->
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                $('#btn-ejecutar').on('click', function(){
+                    let codigo = GetBlocklyCode();
+                    if (codigo != "") {
+                        SendToServer(codigo);
+                    }else{
+                        alert("Error.  Debes dibujar estructuras de blockly para enviarlo al servidor.");
+                    }
+                });
+
+                function SendToServer(input) {
+
+                    $('#consola-de-salida').val("");
+                    $('#consola-de-errores').val("");
+
+                    $.get("/getActualUser", function(usuario){
+
+                        if(usuario) {
+
+                            let lupito = LUPBuilder.BuildQueryPackage(usuario, input);
+
+                            $.ajax({
+                                type: 'POST',
+                                url : "http://localhost:58899/api/CQL",
+                                data: { LUPMessage : lupito },
+                                timeout: 300000,
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert(Helper.GetErrorMessage(jqXHR, textStatus))
+                                    $.unblockUI();
+                                },
+                                beforeSend: function(){
+                                    alert("Paquete a enviar: \n\n" + lupito);
+                                    $.blockUI({
+                                        message: ' <img src="https://i.imgur.com/GCNyjJY.gif" width="100" height="100"><strong>Por favor espere un momento...<strong>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                },
+                                success: function(data){
+
+                                    if (data != "") {
+                                        
+                                        alert("Paquete recibido: \n\n" + data);
+
+                                        // Parseo el mensaje de LUP que debería de venir en data.
+                                        let ast = LUPGrammar.parse(data);
+
+                                        ast.ejecutar(function(finalMessages, finalErrors, finalData, finalLogin){
+
+                                            console.log(finalMessages);
+                                            console.log(finalErrors);
+                                            console.log(finalData);
+                                            console.log(finalLogin);
+
+                                            // Agrego los mensajes en la pestaña de Consola de Salida.
+                                            if(finalMessages) {
+                                                let consola = $('#consola-de-salida');
+                                                consola.val(consola.val() + finalMessages);
+                                            }
+
+                                            // Agrego las consultas en nuevas consolas.
+                                            if(finalData.length != 0) {
+                                                $.each(finalData, function( key, value ) {
+                                                    let _id_ = createNewConsole(null, null, null);
+                                                    $('#' + _id_).val(value);
+                                                });
+                                            }
+
+                                            // Agrego los errores en la pestaña de errores.
+                                            if(finalErrors) {
+                                                $.post("/buildTable", {querydata:finalErrors}, function(datax){
+                                                    $('#consola-de-errores').val(datax);
+                                                });
+                                            }
+
+                                        });
+
+                                    }else{
+                                        alert("Error.  No se recibió ninguna respuesta del servidor sobre la petición de Query.");
+                                    }
+
+                                    $.unblockUI();
+                                }
+                            });
+
+                        }else{
+                            alert("Error. No se pudo obtener el nombre del usuario actualmente logueado.");
+                        }
+
+                    });
+
+                }
+
+            });
+
+        </script>
     
         <!-- AREA DE XML's -->
         <xml id="toolbox" style="display: none">
-            <category name="DML">
+            <category name="SENTENCIAS">
+                <block type="sentencia_use" colour="120"></block>
+                <block type="sentencia_insert_normal" colour="120"></block>
+                <block type="sentencia_insert_especial" colour="120"></block>
                 <block type="sentencia_select" colour="120"></block>
+                <block type="sentencia_where" colour="120"></block>
+                <block type="sentencia_update" colour="120"></block>
+                <block type="sentencia_delete" colour="120"></block>
+                <block type="sentencia_limit" colour="120"></block>
+                <block type="sentencia_order_by" colour="120"></block>
+            </category>
+            <category name="ATRIBUTOS">
+                <block type="all_block" colour="125"></block>
+                <block type="expresion" colour="125"></block>
+                <block type="expresion_otro" colour="125"></block>
+            </category>
+            <category name="OPERADORES">
+                <block type="relacionales" colour="130"></block>
+                <block type="aritmeticas" colour="130"></block>
+                <block type="logicas" colour="130"></block>
+                <block type="logica_not" colour="130"></block>
+                <block type="asignacion" colour="130"></block>
+                <block type="up_down_relacionales" colour="130"></block>
+                <block type="up_down_aritmeticas" colour="130"></block>
+                <block type="up_down_logicas" colour="130"></block>
+                <block type="up_down_asignacion" colour="130"></block>
+            </category>
+            <category name="VALORES">
+                <block type="entero" colour="135"></block>
+                <block type="decimal" colour="135"></block>
+                <block type="booleano" colour="135"></block>
+                <block type="expresion" colour="135"></block>
             </category>
         </xml>
-        <script>
-            
-            Blockly.Blocks['sentencia_select'] = {
-            init: function() {
-                this.appendValueInput("ins_select")
-                    .setCheck("String")
-                    .appendField("SELECT");
-                this.appendValueInput("ins_from")
-                    .setCheck("String")
-                    .appendField("FROM");
-                this.setNextStatement(true, "String");
-                this.setColour(120);
-            this.setTooltip("");
-            this.setHelpUrl("");
-            }
-            };
 
-            Blockly.JavaScript['sentencia_select'] = function(block) {
-            var value_ins_select = Blockly.JavaScript.valueToCode(block, 'ins_select', Blockly.JavaScript.ORDER_ATOMIC);
-            var value_ins_from = Blockly.JavaScript.valueToCode(block, 'ins_from', Blockly.JavaScript.ORDER_ATOMIC);
-            // TODO: Assemble JavaScript into code variable.
-            var code = '...;\n';
-            return code;
-            };
+        <!-- AREA DE BLOCKLY -->
+        <script>
+            var demoWorkspace = Blockly.inject('blocklyDiv', { media: 'media/', toolbox: document.getElementById('toolbox') });
             
-            
-            var demoWorkspace = Blockly.inject('blocklyDiv',
-            {
-                media: 'media/',
-                toolbox: document.getElementById('toolbox')
-            });
-        
-            //Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), demoWorkspace);
+            function GetBlocklyCode() {
+                // Generate JavaScript code and display it.
+                Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+                var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+                return code;
+            }
         </script>
 
     </body>
