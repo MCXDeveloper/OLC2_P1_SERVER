@@ -602,6 +602,33 @@ public class Operacion : Exception, Expresion, Instruccion
         {
             return (double)op1 - (double)op2;
         }
+        else if (op1 is XList && op2 is XList)
+        {
+            XList xOp1 = (XList)op1;
+            foreach (object obj in ((XList)op2).ListaElementos)
+            {
+                xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+            }
+            return xOp1;
+        }
+        else if (op1 is XSet && op2 is XSet)
+        {
+            XSet xOp1 = (XSet)op1;
+            foreach (object obj in ((XSet)op2).ListaElementos)
+            {
+                xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+            }
+            return xOp1;
+        }
+        else if (op1 is Map && op2 is XSet)
+        {
+            Map xOp1 = (Map)op1;
+            foreach (object obj in ((XSet)op2).ListaElementos)
+            {
+                xOp1.Remove(obj);
+            }
+            return xOp1;
+        }
         else
         {
             string mensaje = "La operación RESTA no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.";
@@ -669,6 +696,33 @@ public class Operacion : Exception, Expresion, Instruccion
             {
                 return ("false" + (string)op2);
             }
+        }
+        else if (op1 is XList && op2 is XList)
+        {
+            XList xOp1 = (XList)op1;
+            foreach (object obj in ((XList)op2).ListaElementos)
+            {
+                xOp1.Insert(obj);
+            }
+            return xOp1;
+        }
+        else if (op1 is XSet && op2 is XSet)
+        {
+            XSet xOp1 = (XSet)op1;
+            foreach (object obj in ((XSet)op2).ListaElementos)
+            {
+                xOp1.Insert(obj);
+            }
+            return xOp1;
+        }
+        else if (op1 is Map && op2 is Map)
+        {
+            Map xOp1 = (Map)op1;
+            foreach (KeyValuePair<object, object> entry in ((Map)op2).ListaElementos)
+            {
+                xOp1.Insert(entry.Key, entry.Value);
+            }
+            return xOp1;
         }
         else
         {
