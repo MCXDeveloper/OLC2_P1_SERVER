@@ -23,11 +23,6 @@ public class CQL
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }
     public static List<RollbackError> PilaErroresRollback { get; set; }
     
-    public static void testing()
-    {
-        Debug.WriteLine(string.Join(Environment.NewLine, PilaRespuestas));
-    }
-
     #region FUNCIONES_DE_LOGIN
 
     public static bool ExisteUsuarioLogueado()

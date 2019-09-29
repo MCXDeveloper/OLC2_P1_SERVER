@@ -50,7 +50,7 @@ public class QueryPackage : LUP_Instruccion
 
             foreach (LogMessage err in arbol.ParserMessages)
             {
-                CQL.AddLUPError("Sintáctico", "Parser", err.Message, err.Location.Line, err.Location.Column);
+                CQL.AddLUPError("Sintáctico", "[CQL_PARSER]", err.Message, err.Location.Line, err.Location.Column);
             }
         }
 
