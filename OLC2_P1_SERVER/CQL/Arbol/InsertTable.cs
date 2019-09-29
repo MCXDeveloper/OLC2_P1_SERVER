@@ -71,7 +71,7 @@ public class InsertTable : Instruccion
                             if (!CQL.BatchFlag)
                             {
                                 // 5. Procedo a realizar la inserción de los valores.
-                                tablita.AddRow(GetEvaluatedValues(ent));
+                                tablita.AddRow(GetEvaluatedValues(ent), fila, columna);
                             }
                         }   
                     }

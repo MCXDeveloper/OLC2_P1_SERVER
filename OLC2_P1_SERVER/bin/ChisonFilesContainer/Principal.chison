@@ -10,12 +10,12 @@ $<
 						<
 							"NAME" = "id", 
 							"TYPE" = "Int", 
-							"PK" = False
+							"PK" = True
 						>
 , 						<
 							"NAME" = "nombre", 
 							"TYPE" = "String", 
-							"PK" = False
+							"PK" = True
 						>
 , 						<
 							"NAME" = "carnet", 

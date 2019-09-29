@@ -37,4 +37,9 @@ public class Time
     {
         return GetParsedTime().Seconds;
     }
+
+    public override string ToString()
+    {
+        return Tiempo;
+    }
 }

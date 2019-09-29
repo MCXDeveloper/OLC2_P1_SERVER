@@ -69,7 +69,7 @@ public class Table : InstruccionBD
         return x;
     }
 
-    public void AddRow(List<object> ListValues)
+    public void AddRow(List<object> ListValues, int fila, int columna)
     {
         DataRow row = Tabla.NewRow();
 
@@ -78,7 +78,14 @@ public class Table : InstruccionBD
             row[((Columna)Tabla.Columns[i]).NombreColumna] = ((Columna)Tabla.Columns[i]).TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.COUNTER) ? null : ListValues[i];
         }
 
-        Tabla.Rows.Add(row);
+        try
+        {
+            Tabla.Rows.Add(row);
+        }
+        catch (Exception ex)
+        {
+            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", ex.Message, fila, columna);
+        }
     }
 
     public void AddRow(List<string> ListFields, List<object> ListValues)

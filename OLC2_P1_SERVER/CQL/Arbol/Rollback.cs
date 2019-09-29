@@ -6,6 +6,7 @@ using OLC2_P1_SERVER.CHISON.Abstracto;
 using OLC2_P1_SERVER.CHISON.Estaticas;
 using OLC2_P1_SERVER.CHISON.Analizadores;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class Rollback : Instruccion
 {
@@ -104,6 +105,7 @@ public class Rollback : Instruccion
                 else if (parseResponse is string)
                 {
                     string nuevaCadena = (string)parseResponse;
+                    Debug.WriteLine(nuevaCadena);
                     BuildChisonParsing(nuevaCadena);
                 }
             }
@@ -154,7 +156,7 @@ public class Rollback : Instruccion
 
                 foreach (RollbackError err in CQL.PilaErroresRollback)
                 {
-                    tabLog.AddRow(new List<object>() { err.TipoError, err.Ubicacion, err.Descripcion, err.Fila, err.Columna });
+                    tabLog.AddRow(new List<object>() { err.TipoError, err.Ubicacion, err.Descripcion, err.Fila, err.Columna }, fila, columna);
                 }
 
                 CQL.RegistrarTabla(tabLog);

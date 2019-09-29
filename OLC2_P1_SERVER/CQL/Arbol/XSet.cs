@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Linq;
-
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 public class XSet
@@ -115,7 +115,22 @@ public class XSet
 
     public bool Contains(object elemento)
     {
-        return ListaElementos.Contains(elemento);
+        if (elemento is Date || elemento is Time || elemento is Map || elemento is XList || elemento is XSet || elemento is Objeto)
+        {
+            foreach (object obj in ListaElementos)
+            {
+                if (JsonConvert.SerializeObject(obj).Equals(JsonConvert.SerializeObject(elemento), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        else
+        {
+            return ListaElementos.Contains(elemento);
+        }
     }
 
     private bool ValidarTipoElemento(object elemento)
@@ -146,22 +161,18 @@ public class XSet
         }
         else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.MAP))
         {
-            //TODO | XSet | validar los tipos internos del valor cuando es MAP
             return (elemento is Map);
         }
         else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.SET))
         {
-            //TODO | XSet | validar los tipos internos del valor cuando es SET
             return (elemento is XSet);
         }
         else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.LIST))
         {
-            //TODO | XSet | validar los tipos internos del valor cuando es LIST
             return (elemento is XList);
         }
         else if (TipoDatoSet.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
         {
-            //TODO | XSet | validar los tipos internos del valor cuando es OBJECT
             return (elemento is Objeto);
         }
 
@@ -170,6 +181,38 @@ public class XSet
 
     private void SortList()
     {
-        ListaElementos.Sort();
+        object pivote = ListaElementos[0];
+
+        if (pivote is int || pivote is double || pivote is string || pivote is bool)
+        {
+            ListaElementos.Sort();
+        }
+        else if (ListaElementos[0] is Date)
+        {
+            List<Date> dl = ListaElementos.ConvertAll(x => (Date)x);
+            List<DateTime> dtl = dl.ConvertAll(x => x.GetParsedDate());
+            dtl.Sort();
+            List<Date> dlConverted = dtl.ConvertAll(x => new Date(x.Date.ToString("yyyy-MM-dd")));
+            ListaElementos = dlConverted.ConvertAll(x => (object)x);
+        }
+        else if (ListaElementos[0] is Time)
+        {
+            List<Time> dl = ListaElementos.ConvertAll(x => (Time)x);
+            List<DateTime> dtl = dl.ConvertAll(x => x.GetTimeInDateTime());
+            dtl.Sort();
+            List<Time> dlConverted = dtl.ConvertAll(x => new Time(x.TimeOfDay.ToString(@"hh\:mm\:ss")));
+            ListaElementos = dlConverted.ConvertAll(x => (object)x);
+        }
+    }
+
+    public override string ToString()
+    {
+        if (ListaElementos != null)
+        {
+            List<string> ValoresEnString = ListaElementos.ConvertAll(x => x.ToString());
+            return "{ " + string.Join(", ", ValoresEnString) + " }";
+        }
+
+        return "{ }";
     }
 }

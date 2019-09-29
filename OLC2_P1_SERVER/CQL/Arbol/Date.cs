@@ -31,4 +31,9 @@ public class Date
     {
         return GetParsedDate().Year;
     }
+
+    public override string ToString()
+    {
+        return Fecha;
+    }
 }

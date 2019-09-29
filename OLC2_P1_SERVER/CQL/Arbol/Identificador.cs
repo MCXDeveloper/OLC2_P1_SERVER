@@ -19,7 +19,8 @@ public class Identificador : Expresion
         if (!(objSim is Nulo))
         {
             Variable sim = (Variable)objSim;
-            return (sim.GetValor() is Nulo) ? sim : sim.GetValor();
+            // TODO - hice un cambio aqui
+            return sim.GetValor();
         }
 
         return new Nulo();

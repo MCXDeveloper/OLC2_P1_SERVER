@@ -78,6 +78,8 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
                 Parser parser = new Parser(lenguaje);
                 ParseTree arbol = parser.Parse(CadenaFinal);
 
+                Debug.WriteLine(CadenaFinal);
+
                 if (arbol.ParserMessages.Count.Equals(0))
                 {
                     ASTBuilder builder = new ASTBuilder(CadenaFinal);

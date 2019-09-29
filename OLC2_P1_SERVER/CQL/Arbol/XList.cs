@@ -150,4 +150,15 @@ public class XList
 
         return false;
     }
+
+    public override string ToString()
+    {
+        if (ListaElementos != null)
+        {
+            List<string> ValoresEnString = ListaElementos.ConvertAll(x => x.ToString());
+            return "{% " + string.Join(", ", ValoresEnString) + " %}";
+        }
+
+        return "{%  %}";
+    }
 }

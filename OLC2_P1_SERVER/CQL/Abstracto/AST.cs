@@ -32,6 +32,7 @@ public class AST : Instruccion
             }
         }
 
+        CQL.testing();
         return new Nulo();
     }
 

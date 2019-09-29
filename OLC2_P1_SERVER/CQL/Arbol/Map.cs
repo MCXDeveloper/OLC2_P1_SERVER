@@ -208,4 +208,27 @@ public class Map
 
         return false;
     }
+
+    public override string ToString()
+    {
+        if (ListaElementos != null)
+        {
+            string MapInString = "{";
+            List<string> ValoresMap = new List<string>();
+
+            foreach (KeyValuePair<object, object> kvp in ListaElementos)
+            {
+                string MapKey = kvp.Key is string ? "\"" + kvp.Key.ToString() + "\"" : kvp.Key.ToString();
+                string MapVal = kvp.Value is string ? "\"" + kvp.Value.ToString() + "\"" : kvp.Value.ToString();
+                ValoresMap.Add($" {MapKey} : {MapVal} ");
+            }
+
+            MapInString += ValoresMap.Count > 0 ? string.Join(", ", ValoresMap) : "";
+            MapInString += "}";
+
+            return MapInString;
+        }
+
+        return "{ }";
+    }
 }
