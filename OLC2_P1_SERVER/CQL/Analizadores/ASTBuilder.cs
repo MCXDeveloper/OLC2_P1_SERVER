@@ -8,9 +8,9 @@ using static Asignacion;
 
 public class ASTBuilder
 {
-    public string CadenaEntrada { get; set; }
-    public bool AccesoObjetoFlag { get; set; }
-
+    public static string CadenaEntrada { get; set; }
+    public static bool AccesoObjetoFlag { get; set; }
+    
     public ASTBuilder(string entrada)
     {
         CadenaEntrada = entrada;
@@ -22,24 +22,33 @@ public class ASTBuilder
         return (AST)Recorrido(raiz);
     }
 
-    public object Recorrido(ParseTreeNode actual)
+    static object Recorrido(ParseTreeNode actual)
+    {
+        object response = null;
+        Thread hilo = new Thread(() => { response = RecorridoAuxiliar(actual); }, 2000000);
+        hilo.Start();
+        hilo.Join();
+        return response;
+    }
+
+    static object RecorridoAuxiliar(ParseTreeNode actual)
     {
         if (EstoyAca(actual, "INICIO"))
         {
-            return new AST((List<Instruccion>)Recorrido(actual.ChildNodes[0]));
+            return new AST((List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[0]));
         }
         else if (EstoyAca(actual, "LISTA_INSTRUCCIONES"))
         {
             List<Instruccion> instrucciones = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                instrucciones.Add((Instruccion)Recorrido(hijo));
+                instrucciones.Add((Instruccion)RecorridoAuxiliar(hijo));
             }
             return instrucciones;
         }
         else if (EstoyAca(actual, "INSTRUCCION"))
         {
-            return Recorrido(actual.ChildNodes[0]);
+            return RecorridoAuxiliar(actual.ChildNodes[0]);
         }
         else if (EstoyAca(actual, "DECLARACION"))
         {
@@ -47,10 +56,10 @@ public class ASTBuilder
             {
                 case 2:
                     // TIPO + LISTA_VARIABLES
-                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), GetFila(actual.ChildNodes[0], 0), GetColumna(actual.ChildNodes[0], 0));
+                    return new Declaracion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]), GetFila(actual.ChildNodes[0], 0), GetColumna(actual.ChildNodes[0], 0));
                 default:
                     // TIPO + LISTA_VARIABLES + igual + EXPRESION
-                    return new Declaracion((TipoDato)Recorrido(actual.ChildNodes[0]), (List<string>)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
+                    return new Declaracion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
             }
         }
         else if (EstoyAca(actual, "ASIGNACION"))
@@ -59,10 +68,10 @@ public class ASTBuilder
             {
                 case 3:
                     // variable + igual + EXPRESION
-                    return new Asignacion(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new Asignacion(ObtenerLexema(actual, 0), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
                     // variable + punto + LISTA_ACCESO + igual + EXPRESION
-                    return new Asignacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), TipoAsignacion.AS_NORMAL, (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Asignacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), TipoAsignacion.AS_NORMAL, (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "CREATE_TYPE"))
@@ -70,9 +79,9 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 6:
-                    return new CreateUserType(false, ObtenerLexema(actual, 2), (List<AtributoUT>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateUserType(false, ObtenerLexema(actual, 2), (List<AtributoUT>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new CreateUserType(true, ObtenerLexema(actual, 2), (List<AtributoUT>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateUserType(true, ObtenerLexema(actual, 2), (List<AtributoUT>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_ATR_TYPE"))
@@ -80,13 +89,13 @@ public class ASTBuilder
             List<AtributoUT> lista_atr_type = new List<AtributoUT>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_atr_type.Add((AtributoUT)Recorrido(hijo));
+                lista_atr_type.Add((AtributoUT)RecorridoAuxiliar(hijo));
             }
             return lista_atr_type;
         }
         else if (EstoyAca(actual, "ATR_TYPE"))
         {
-            return new AtributoUT((TipoDato)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 0));
+            return new AtributoUT((TipoDato)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 0));
         }
         else if (EstoyAca(actual, "LISTA_VARIABLES"))
         {
@@ -102,37 +111,37 @@ public class ASTBuilder
             List<Expresion> lista_acceso = new List<Expresion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_acceso.Add((Expresion)Recorrido(hijo));
+                lista_acceso.Add((Expresion)RecorridoAuxiliar(hijo));
             }
             return lista_acceso;
         }
         else if (EstoyAca(actual, "LOG"))
         {
-            return new Log((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+            return new Log((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
         }
         else if (EstoyAca(actual, "SENTENCIA_DO_WHILE"))
         {
-            return new DoWhile((Expresion)Recorrido(actual.ChildNodes[6]), (List<Instruccion>)Recorrido(actual.ChildNodes[2]));
+            return new DoWhile((Expresion)RecorridoAuxiliar(actual.ChildNodes[6]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[2]));
         }
         else if (EstoyAca(actual, "SENTENCIA_IF"))
         {
             if (actual.ChildNodes.Count == 1)
             {
-                return new If((Instruccion)Recorrido(actual.ChildNodes[0]));
+                return new If((Instruccion)RecorridoAuxiliar(actual.ChildNodes[0]));
             }
             else if (actual.ChildNodes.Count == 3)
             {
-                return new If((Instruccion)Recorrido(actual.ChildNodes[0]), (List<Instruccion>)Recorrido(actual.ChildNodes[1]), (Instruccion)Recorrido(actual.ChildNodes[2]));
+                return new If((Instruccion)RecorridoAuxiliar(actual.ChildNodes[0]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[1]), (Instruccion)RecorridoAuxiliar(actual.ChildNodes[2]));
             }
             else
             {
                 if (EstoyAca(actual.ChildNodes[1], "LISTA_ELSE_IF"))
                 {
-                    return new If((Instruccion)Recorrido(actual.ChildNodes[0]), (List<Instruccion>)Recorrido(actual.ChildNodes[1]));
+                    return new If((Instruccion)RecorridoAuxiliar(actual.ChildNodes[0]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[1]));
                 }
                 else
                 {
-                    return new If((Instruccion)Recorrido(actual.ChildNodes[0]), (Instruccion)Recorrido(actual.ChildNodes[1]));
+                    return new If((Instruccion)RecorridoAuxiliar(actual.ChildNodes[0]), (Instruccion)RecorridoAuxiliar(actual.ChildNodes[1]));
                 }
             }
         }
@@ -141,42 +150,42 @@ public class ASTBuilder
             List<Instruccion> lista_else_if = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_else_if.Add((Instruccion)Recorrido(hijo));
+                lista_else_if.Add((Instruccion)RecorridoAuxiliar(hijo));
             }
             return lista_else_if;
         }
         else if (EstoyAca(actual, "IF"))
         {
-            return new Else((Expresion)Recorrido(actual.ChildNodes[2]), (List<Instruccion>)Recorrido(actual.ChildNodes[5]));
+            return new Else((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[5]));
         }
         else if (EstoyAca(actual, "ELSE_IF"))
         {
-            return new Else((Expresion)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]));
+            return new Else((Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[6]));
         }
         else if (EstoyAca(actual, "ELSE"))
         {
-            return new Else((List<Instruccion>)Recorrido(actual.ChildNodes[2]));
+            return new Else((List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[2]));
         }
         else if (EstoyAca(actual, "SENTENCIA_SWITCH"))
         {
-            return new Switch((Expresion)Recorrido(actual.ChildNodes[2]), (List<Instruccion>)Recorrido(actual.ChildNodes[5]), (List<Instruccion>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new Switch((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[5]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "SENTENCIA_WHILE"))
         {
-            return new While((Expresion)Recorrido(actual.ChildNodes[2]), (List<Instruccion>)Recorrido(actual.ChildNodes[5]));
+            return new While((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[5]));
         }
         else if (EstoyAca(actual, "LISTA_CASES"))
         {
             List<Instruccion> lista_cases = new List<Instruccion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_cases.Add((Instruccion)Recorrido(hijo));
+                lista_cases.Add((Instruccion)RecorridoAuxiliar(hijo));
             }
             return lista_cases;
         }
         else if (EstoyAca(actual, "CASE"))
         {
-            return new Case((Expresion)Recorrido(actual.ChildNodes[1]), (List<Instruccion>)Recorrido(actual.ChildNodes[4]));
+            return new Case((Expresion)RecorridoAuxiliar(actual.ChildNodes[1]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[4]));
         }
         else if (EstoyAca(actual, "SENTENCIA_INC_DEC"))
         {
@@ -185,7 +194,7 @@ public class ASTBuilder
                 case 2:
                     return new Operacion(new Identificador(ObtenerLexema(actual, 0)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
-                    return new Operacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new Operacion(new AccesoObjeto(false, ObtenerLexema(actual, 0), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1)), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "LISTA_EXPRESIONES"))
@@ -193,13 +202,13 @@ public class ASTBuilder
             List<Expresion> lista_expresiones = new List<Expresion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_expresiones.Add((Expresion)Recorrido(hijo));
+                lista_expresiones.Add((Expresion)RecorridoAuxiliar(hijo));
             }
             return lista_expresiones;
         }
         else if (EstoyAca(actual, "SENTENCIA_ACCESO"))
         {
-            AccesoObjeto ao = new AccesoObjeto(AccesoObjetoFlag, ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+            AccesoObjeto ao = new AccesoObjeto(AccesoObjetoFlag, ObtenerLexema(actual, 0), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
             AccesoObjetoFlag = false;
             return ao;
         }
@@ -224,28 +233,28 @@ public class ASTBuilder
                             AccesoObjetoFlag = true;
                         }
 
-                        return Recorrido(actual.ChildNodes[0]);
+                        return RecorridoAuxiliar(actual.ChildNodes[0]);
                     }
 
                 case 3:
 
                     if (EstoyAca(actual.ChildNodes[1], "in"))
                     {
-                        return new CheckInList((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+                        return new CheckInList((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
                     {
-                        return new CollectionValue((List<AtributosMap>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new CollectionValue((List<AtributosMap>)RecorridoAuxiliar(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        CollectionValue cv = new CollectionValue((List<Expresion>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
+                        CollectionValue cv = new CollectionValue((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
                         cv.IsList = EstoyAca(actual.ChildNodes[0], "[") ? true : false;
                         return cv;
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "EXPRESION"))
                     {
-                        return Recorrido(actual.ChildNodes[1]);
+                        return RecorridoAuxiliar(actual.ChildNodes[1]);
                     }
                     else
                     {
@@ -261,11 +270,11 @@ public class ASTBuilder
                         {
                             if (EstoyAca(actual.ChildNodes[1], "."))
                             {
-                                return new AccesoColumna(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                                return new AccesoColumna(ObtenerLexema(actual, 0), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                             }
                             else
                             {
-                                return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                                return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                             }
                         }
                     }
@@ -273,31 +282,31 @@ public class ASTBuilder
                     break;
 
                 case 2:
-                    return new Estructura((TipoDato)Recorrido(actual.ChildNodes[1]));
+                    return new Estructura((TipoDato)RecorridoAuxiliar(actual.ChildNodes[1]));
                 case 4:
 
                     if (EstoyAca(actual.ChildNodes[0], "identificador"))
                     {
-                        return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new AccesoCollection(ObtenerLexema(actual, 0), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
-                        return new CasteoExplicito((TipoDato)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new CasteoExplicito((TipoDato)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
 
                 default:
 
                     if (EstoyAca(actual.ChildNodes[1], "?"))
                     {
-                        return new OperadorTernario((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+                        return new OperadorTernario((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "in"))
                     {
-                        return new CheckInList((Expresion)Recorrido(actual.ChildNodes[0]), (List<Expresion>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 1), GetColumna(actual, 1));
+                        return new CheckInList((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 1), GetColumna(actual, 1));
                     }
                     else
                     {
-                        return new ObjectValue((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 4), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new ObjectValue((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 4), GetFila(actual, 0), GetColumna(actual, 0));
                     }
             }
         }
@@ -306,39 +315,39 @@ public class ASTBuilder
             List<AtributosMap> lista_atr_map = new List<AtributosMap>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_atr_map.Add((AtributosMap)Recorrido(hijo));
+                lista_atr_map.Add((AtributosMap)RecorridoAuxiliar(hijo));
             }
             return lista_atr_map;
         }
         else if (EstoyAca(actual, "ATR_MAP"))
         {
-            return new AtributosMap((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]));
+            return new AtributosMap((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]));
         }
         else if (EstoyAca(actual, "EXPRESION_ARITMETICA"))
         {
             if (actual.ChildNodes.Count == 2)
             {
-                return new Operacion((Expresion)Recorrido(actual.ChildNodes[1]), Operacion.TipoOperacion.NEGATIVO, GetFila(actual, 0), GetColumna(actual, 0));
+                return new Operacion((Expresion)RecorridoAuxiliar(actual.ChildNodes[1]), Operacion.TipoOperacion.NEGATIVO, GetFila(actual, 0), GetColumna(actual, 0));
             }
             else
             {
-                return new Operacion((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+                return new Operacion((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
             }
 
         }
         else if (EstoyAca(actual, "EXPRESION_RELACIONAL"))
         {
-            return new Operacion((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+            return new Operacion((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
         }
         else if (EstoyAca(actual, "EXPRESION_LOGICA"))
         {
             if (actual.ChildNodes.Count == 2)
             {
-                return new Operacion((Expresion)Recorrido(actual.ChildNodes[1]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 0)), GetFila(actual, 0), GetColumna(actual, 0));
+                return new Operacion((Expresion)RecorridoAuxiliar(actual.ChildNodes[1]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 0)), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else
             {
-                return new Operacion((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
+                return new Operacion((Expresion)RecorridoAuxiliar(actual.ChildNodes[0]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), Operacion.GetTipoOperacion(ObtenerLexema(actual, 1)), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "TIPO"))
@@ -347,15 +356,15 @@ public class ASTBuilder
             {
                 if (EstoyAca(actual.ChildNodes[0], "set"))
                 {
-                    return new TipoDato(TipoDato.Tipo.SET, new SetType((TipoDato)Recorrido(actual.ChildNodes[2])));
+                    return new TipoDato(TipoDato.Tipo.SET, new SetType((TipoDato)RecorridoAuxiliar(actual.ChildNodes[2])));
                 }
                 else if (EstoyAca(actual.ChildNodes[0], "list"))
                 {
-                    return new TipoDato(TipoDato.Tipo.LIST, new ListType((TipoDato)Recorrido(actual.ChildNodes[2])));
+                    return new TipoDato(TipoDato.Tipo.LIST, new ListType((TipoDato)RecorridoAuxiliar(actual.ChildNodes[2])));
                 }
                 else
                 {
-                    return new TipoDato(TipoDato.Tipo.MAP, new MapType((TipoDato)Recorrido(actual.ChildNodes[2]), (TipoDato)Recorrido(actual.ChildNodes[4])));
+                    return new TipoDato(TipoDato.Tipo.MAP, new MapType((TipoDato)RecorridoAuxiliar(actual.ChildNodes[2]), (TipoDato)RecorridoAuxiliar(actual.ChildNodes[4])));
                 }
             }
             else
@@ -485,7 +494,7 @@ public class ASTBuilder
             List<Expresion> lista_acceso = new List<Expresion>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_acceso.Add((Expresion)Recorrido(hijo));
+                lista_acceso.Add((Expresion)RecorridoAuxiliar(hijo));
             }
             return lista_acceso;
         }
@@ -495,40 +504,40 @@ public class ASTBuilder
             {
                 if (actual.ChildNodes.Count == 4)
                 {
-                    return new FuncionInsert((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new FuncionInsert((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
                 }
                 else
                 {
-                    return new FuncionInsert((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new FuncionInsert((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 }
             }
             else if (EstoyAca(actual.ChildNodes[0], "set"))
             {
-                return new FuncionSet((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionSet((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "substring"))
             {
-                return new FuncionSubstring((Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionSubstring((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "remove"))
             {
-                return new FuncionRemove((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionRemove((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "contains"))
             {
-                return new FuncionContains((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionContains((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "startswith"))
             {
-                return new FuncionStartsWith((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionStartsWith((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "endswith"))
             {
-                return new FuncionEndsWith((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionEndsWith((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "get"))
             {
-                return new FuncionGet((Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new FuncionGet((Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else if (EstoyAca(actual.ChildNodes[0], "size"))
             {
@@ -581,20 +590,20 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "DECLARACION_FUNCION"))
         {
-            return new DeclaracionFuncion((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Instruccion>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 2), GetColumna(actual, 2));
+            return new DeclaracionFuncion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), ObtenerLexema(actual, 1), (List<Parametro>)RecorridoAuxiliar(actual.ChildNodes[3]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[6]), GetFila(actual, 2), GetColumna(actual, 2));
         }
         else if (EstoyAca(actual, "LISTA_PARAMETROS"))
         {
             List<Parametro> lista_params = new List<Parametro>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_params.Add((Parametro)Recorrido(hijo));
+                lista_params.Add((Parametro)RecorridoAuxiliar(hijo));
             }
             return lista_params;
         }
         else if (EstoyAca(actual, "PARAMETRO"))
         {
-            return new Parametro((TipoDato)Recorrido(actual.ChildNodes[0]), ObtenerLexema(actual, 1));
+            return new Parametro((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), ObtenerLexema(actual, 1));
         }
         else if (EstoyAca(actual, "LLAMADA_FUNCION"))
         {
@@ -603,7 +612,7 @@ public class ASTBuilder
                 case 3:
                     return new LlamadaFuncion(ObtenerLexema(actual, 0), new List<Expresion>(), GetFila(actual, 1), GetColumna(actual, 1));
                 default:
-                    return new LlamadaFuncion(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+                    return new LlamadaFuncion(ObtenerLexema(actual, 0), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
             }
         }
         else if (EstoyAca(actual, "DECLARACION_PROCEDIMIENTO"))
@@ -611,11 +620,11 @@ public class ASTBuilder
             int inicio = actual.ChildNodes[10].Span.Location.Position;
             int longitud = actual.ChildNodes[10].Span.Length;
             string instxt = CadenaEntrada.Substring(inicio, longitud);
-            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)Recorrido(actual.ChildNodes[3]), (List<Parametro>)Recorrido(actual.ChildNodes[7]), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), instxt, GetFila(actual, 0), GetColumna(actual, 0));
+            return new DeclaracionProcedimiento(ObtenerLexema(actual, 1), (List<Parametro>)RecorridoAuxiliar(actual.ChildNodes[3]), (List<Parametro>)RecorridoAuxiliar(actual.ChildNodes[7]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[10]), instxt, GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "LLAMADA_PROCEDIMIENTO"))
         {
-            return new LlamadaProcedimiento(ObtenerLexema(actual, 1), (List<Expresion>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new LlamadaProcedimiento(ObtenerLexema(actual, 1), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "SENTENCIA_DB_CREATE"))
         {
@@ -634,13 +643,13 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 6:
-                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 case 9:
-                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)RecorridoAuxiliar(actual.ChildNodes[7]), GetFila(actual, 0), GetColumna(actual, 0));
                 case 12:
-                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), (List<string>)Recorrido(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(false, ObtenerLexema(actual, 2), (List<Columna>)RecorridoAuxiliar(actual.ChildNodes[4]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[9]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)Recorrido(actual.ChildNodes[7]), (List<string>)Recorrido(actual.ChildNodes[12]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new CreateTable(true, ObtenerLexema(actual, 5), (List<Columna>)RecorridoAuxiliar(actual.ChildNodes[7]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[12]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_COLUMNAS"))
@@ -648,7 +657,7 @@ public class ASTBuilder
             List<Columna> lista_columnas = new List<Columna>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_columnas.Add((Columna)Recorrido(hijo));
+                lista_columnas.Add((Columna)RecorridoAuxiliar(hijo));
             }
             return lista_columnas;
         }
@@ -657,9 +666,9 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 2:
-                    return new Columna(false, ObtenerLexema(actual, 0), (TipoDato)Recorrido(actual.ChildNodes[1]));
+                    return new Columna(false, ObtenerLexema(actual, 0), (TipoDato)RecorridoAuxiliar(actual.ChildNodes[1]));
                 default:
-                    return new Columna(true, ObtenerLexema(actual, 0), (TipoDato)Recorrido(actual.ChildNodes[1]));
+                    return new Columna(true, ObtenerLexema(actual, 0), (TipoDato)RecorridoAuxiliar(actual.ChildNodes[1]));
             }
         }
         else if (EstoyAca(actual, "LISTA_IDENTIFICADORES"))
@@ -687,11 +696,11 @@ public class ASTBuilder
         {
             if (EstoyAca(actual.ChildNodes[3], "add"))
             {
-                return new AlterTable(ObtenerLexema(actual, 2), (List<Columna>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new AlterTable(ObtenerLexema(actual, 2), (List<Columna>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
             else
             {
-                return new AlterTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                return new AlterTable(ObtenerLexema(actual, 2), (List<string>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "SENTENCIA_TB_DROP"))
@@ -713,9 +722,9 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 7:
-                    return new InsertTable(ObtenerLexema(actual, 2), (List<Expresion>)Recorrido(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new InsertTable(ObtenerLexema(actual, 2), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new InsertTable(ObtenerLexema(actual, 2), (List<string>)Recorrido(actual.ChildNodes[4]), (List<Expresion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new InsertTable(ObtenerLexema(actual, 2), (List<string>)RecorridoAuxiliar(actual.ChildNodes[4]), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "SENTENCIA_TB_SELECT"))
@@ -728,7 +737,7 @@ public class ASTBuilder
 
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, null, GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
@@ -745,22 +754,22 @@ public class ASTBuilder
                     {
                         if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                         {
-                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
                         }
                         else
                         {
-                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, null, GetFila(actual, 0), GetColumna(actual, 0));
                         }
                     }
                     else
                     {
                         if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                         {
-                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
                         }
                         else
                         {
-                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, GetFila(actual, 0), GetColumna(actual, 0));
                         }
                     }
 
@@ -770,11 +779,11 @@ public class ASTBuilder
 
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, null, (List<Order>)RecorridoAuxiliar(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
-                        return new Select(null, ObtenerLexema(actual, 3), null, null, (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select(null, ObtenerLexema(actual, 3), null, null, (List<Order>)RecorridoAuxiliar(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
 
                 // | r_select + por + r_from + identificador + r_where + EXPRESION + r_limit + EXPRESION
@@ -783,11 +792,11 @@ public class ASTBuilder
 
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
-                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[7]), null, GetFila(actual, 0), GetColumna(actual, 0));
                     }
 
                 // | r_select + por + r_from + identificador + r_where + EXPRESION + r_order + r_by + LISTA_ORDER
@@ -800,22 +809,22 @@ public class ASTBuilder
                     {
                         if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                         {
-                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, (List<Order>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
                         }
                         else
                         {
-                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), null, (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select(null, ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), null, (List<Order>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
                         }
                     }
                     else
                     {
                         if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                         {
-                            return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[8]), (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), null, (Expresion)RecorridoAuxiliar(actual.ChildNodes[8]), (List<Order>)RecorridoAuxiliar(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
                         }
                         else
                         {
-                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)Recorrido(actual.ChildNodes[8]), (List<Order>)Recorrido(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
+                            return new Select(null, ObtenerLexema(actual, 3), null, (Expresion)RecorridoAuxiliar(actual.ChildNodes[8]), (List<Order>)RecorridoAuxiliar(actual.ChildNodes[6]), GetFila(actual, 0), GetColumna(actual, 0));
                         }
                     }
 
@@ -824,11 +833,11 @@ public class ASTBuilder
                 default:
                     if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new Select((List<Expresion>)Recorrido(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[10]), (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]), ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[10]), (List<Order>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
                     else
                     {
-                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)Recorrido(actual.ChildNodes[5]), (Expresion)Recorrido(actual.ChildNodes[10]), (List<Order>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                        return new Select(null, ObtenerLexema(actual, 3), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[10]), (List<Order>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
             }
         }
@@ -839,11 +848,11 @@ public class ASTBuilder
                 case 3:
                     return new DeleteTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
                 case 5:
-                    return new DeleteTable(ObtenerLexema(actual, 2), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new DeleteTable(ObtenerLexema(actual, 2), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 case 7:
-                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), ObtenerLexema(actual, 6), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (Expresion)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (Expresion)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_ORDER"))
@@ -851,7 +860,7 @@ public class ASTBuilder
             List<Order> lista_columnas = new List<Order>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_columnas.Add((Order)Recorrido(hijo));
+                lista_columnas.Add((Order)RecorridoAuxiliar(hijo));
             }
             return lista_columnas;
         }
@@ -871,7 +880,7 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_RETURN"))
         {
-            return new Return((List<Expresion>)Recorrido(actual.ChildNodes[1]));
+            return new Return((List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[1]));
         }
         else if (EstoyAca(actual, "SENTENCIA_CONTINUE"))
         {
@@ -879,11 +888,11 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_FOR"))
         {
-            return new For((Instruccion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), (Instruccion)Recorrido(actual.ChildNodes[6]), (List<Instruccion>)Recorrido(actual.ChildNodes[9]));
+            return new For((Instruccion)RecorridoAuxiliar(actual.ChildNodes[2]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]), (Instruccion)RecorridoAuxiliar(actual.ChildNodes[6]), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[9]));
         }
         else if (EstoyAca(actual, "FUNCION_AGREGACION"))
         {
-            return new FuncionAgregacion((TipoFuncionAgregacion)Recorrido(actual.ChildNodes[0]), (Select)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+            return new FuncionAgregacion((TipoFuncionAgregacion)RecorridoAuxiliar(actual.ChildNodes[0]), (Select)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
         }
         else if (EstoyAca(actual, "TIPO_FUN_AGG"))
         {
@@ -910,7 +919,7 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_TRY_CATCH"))
         {
-            return new TryCatch((List<Instruccion>)Recorrido(actual.ChildNodes[2]), (TipoExcepcion)Recorrido(actual.ChildNodes[6]), ObtenerLexema(actual, 7), (List<Instruccion>)Recorrido(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new TryCatch((List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[2]), (TipoExcepcion)RecorridoAuxiliar(actual.ChildNodes[6]), ObtenerLexema(actual, 7), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[10]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "TIPO_EXCEPCION"))
         {
@@ -997,16 +1006,16 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_THROW"))
         {
-            return new SentenciaThrow((TipoExcepcion)Recorrido(actual.ChildNodes[2]));
+            return new SentenciaThrow((TipoExcepcion)RecorridoAuxiliar(actual.ChildNodes[2]));
         }
         else if (EstoyAca(actual, "SENTENCIA_TB_UPDATE"))
         {
             switch (actual.ChildNodes.Count)
             {
                 case 3:
-                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)Recorrido(actual.ChildNodes[3]), (Expresion)Recorrido(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
+                    return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)RecorridoAuxiliar(actual.ChildNodes[3]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_ASIGNACION_COLUMNA"))
@@ -1014,7 +1023,7 @@ public class ASTBuilder
             List<AsignacionColumna> lista_asignaciones = new List<AsignacionColumna>();
             foreach (ParseTreeNode hijo in actual.ChildNodes)
             {
-                lista_asignaciones.Add((AsignacionColumna)Recorrido(hijo));
+                lista_asignaciones.Add((AsignacionColumna)RecorridoAuxiliar(hijo));
             }
             return lista_asignaciones;
         }
@@ -1023,14 +1032,14 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 3:
-                    return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]));
+                    return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]));
                 default:
-                    return new AsignacionColumna(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), (TipoAsignacion)Recorrido(actual.ChildNodes[4]), (Expresion)Recorrido(actual.ChildNodes[5]));
+                    return new AsignacionColumna(ObtenerLexema(actual, 0), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[4]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]));
             }
         }
         else if (EstoyAca(actual, "DECLARACION_CURSOR"))
         {
-            return new DeclaracionCursor(ObtenerLexema(actual, 1), (Select)Recorrido(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new DeclaracionCursor(ObtenerLexema(actual, 1), (Select)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "ACCION_CURSOR"))
         {
@@ -1047,15 +1056,15 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "SENTENCIA_FOREACH"))
         {
-            return new ForEach((List<Parametro>)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (List<Instruccion>)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new ForEach((List<Parametro>)RecorridoAuxiliar(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "ASIGNACION_MULTIPLE"))
         {
-            return new AsignacionMultiple((List<string>)Recorrido(actual.ChildNodes[0]), (LlamadaProcedimiento)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+            return new AsignacionMultiple((List<string>)RecorridoAuxiliar(actual.ChildNodes[0]), (LlamadaProcedimiento)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
         }
         else if (EstoyAca(actual, "SENTENCIA_BATCH"))
         {
-            return new Batch((List<Instruccion>)Recorrido(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
+            return new Batch((List<Instruccion>)RecorridoAuxiliar(actual.ChildNodes[2]), GetFila(actual, 0), GetColumna(actual, 0));
         }
         else if (EstoyAca(actual, "SENTENCIA_COMMIT"))
         {

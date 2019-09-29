@@ -9,7 +9,7 @@ public class QueryPackage : LUP_Instruccion
 {
     public string Usuario { get; set; }
     public string Consulta { get; set; }
-    
+
     public QueryPackage(string user, string consulta)
     {
         Usuario = user;
@@ -48,7 +48,7 @@ public class QueryPackage : LUP_Instruccion
             CQL.AddLUPMessage("El arbol de Irony no se construyó.");
             CQL.AddLUPMessage("La cadena es inválida.");
 
-            foreach(LogMessage err in arbol.ParserMessages)
+            foreach (LogMessage err in arbol.ParserMessages)
             {
                 CQL.AddLUPError("Sintáctico", "Parser", err.Message, err.Location.Line, err.Location.Column);
             }

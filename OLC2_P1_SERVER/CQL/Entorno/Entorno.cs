@@ -9,7 +9,7 @@ public class Entorno
     public Entorno Anterior { get; private set; }
     public Hashtable TablaVariables { get; private set; }
     public Hashtable TablaFunciones { get; private set; }
-
+    
     public Entorno(Entorno anterior)
     {
         Anterior = anterior;
@@ -75,7 +75,5 @@ public class Entorno
         {
             CQL.AddLUPMessage("El simbolo '" + id + "' no ha sido declarado en el entorno actual ni en alguno externo.");
         }
-
     }
-
 }
