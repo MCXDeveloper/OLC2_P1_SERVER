@@ -31,29 +31,38 @@ public class LlamadaFuncion : Expresion
         // | DE LA FUNCIÓN QUE SE ESTÁ EJECUTANDO**.                                                                          |
         // +------------------------------------------------------------------------------------------------------------------+
 
-        if (CQL.PilaFunciones.Count == 0)
-        {
-            string id = GenerarIdentificadorFuncion(ent);
-            object func = ent.ObtenerFuncion(id);
+        object retorno = new Nulo();
 
-            if (!(func is Nulo))
+        Thread hilo = new Thread(() => {
+
+            if (CQL.PilaFunciones.Count == 0)
             {
-                Funcion f = (Funcion)func;
-                CQL.PilaFunciones.Push(f);
-                return ExecuteFunction(f, ent);
+                string id = GenerarIdentificadorFuncion(ent);
+                object func = ent.ObtenerFuncion(id);
+
+                if (!(func is Nulo))
+                {
+                    Funcion f = (Funcion)func;
+                    CQL.PilaFunciones.Push(f);
+                    retorno = ExecuteFunction(f, ent);
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '" + NombreFuncion + "' (Key: " + id + ") en el entorno.", fila, columna);
+                }
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '" + NombreFuncion + "' (Key: " + id + ") en el entorno.", fila, columna);
+                Funcion f = CQL.PilaFunciones.Peek();
+                retorno = ExecuteFunction(f, ent);
             }
-        }
-        else
-        {
-            Funcion f = CQL.PilaFunciones.Peek();
-            return ExecuteFunction(f, ent);
-        }
-        
-        return new Nulo();
+            
+        }, 2000000000);
+
+        hilo.Start();
+        hilo.Join();
+
+        return retorno;
     }
 
     private object ExecuteFunction(Funcion f, Entorno ent)
