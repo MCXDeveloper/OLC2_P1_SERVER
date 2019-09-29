@@ -569,7 +569,9 @@ public class Grammar : Irony.Parsing.Grammar
 
         LLAMADA_PROCEDIMIENTO.Rule = r_call + identificador + par_a + LISTA_EXPRESIONES + par_c;
 
-        LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c;
+        LLAMADA_FUNCION.Rule = identificador + par_a + LISTA_EXPRESIONES + par_c
+            | identificador + par_a + par_c
+            ;
 
         DECLARACION_FUNCION.Rule = TIPO + identificador + par_a + LISTA_PARAMETROS + par_c + llave_a + LISTA_INSTRUCCIONES + llave_c;
 

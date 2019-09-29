@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 
-public class LlamadaFuncion : Expresion
+public class LlamadaFuncion : Instruccion, Expresion
 {
     private readonly int fila;
     private readonly int columna;
