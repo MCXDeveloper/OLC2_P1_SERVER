@@ -478,7 +478,9 @@ public class Grammar : Irony.Parsing.Grammar
 
         LISTA_ASIGNACION_COLUMNA.Rule = MakePlusRule(LISTA_ASIGNACION_COLUMNA, coma, ASIGNACION_COLUMNA);
 
-        ASIGNACION_COLUMNA.Rule = identificador + TIPO_ASIGNACION + EXPRESION;
+        ASIGNACION_COLUMNA.Rule = identificador + TIPO_ASIGNACION + EXPRESION
+            | identificador + cor_a + EXPRESION + cor_c + TIPO_ASIGNACION + EXPRESION
+            ;
 
         SENTENCIA_THROW.Rule = r_throw + r_new + TIPO_EXCEPCION;
 

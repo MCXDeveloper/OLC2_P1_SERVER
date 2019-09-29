@@ -1010,7 +1010,13 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "ASIGNACION_COLUMNA"))
         {
-            return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]));
+            switch (actual.ChildNodes.Count)
+            {
+                case 3:
+                    return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)Recorrido(actual.ChildNodes[1]), (Expresion)Recorrido(actual.ChildNodes[2]));
+                default:
+                    return new AsignacionColumna(ObtenerLexema(actual, 0), (Expresion)Recorrido(actual.ChildNodes[2]), (TipoAsignacion)Recorrido(actual.ChildNodes[4]), (Expresion)Recorrido(actual.ChildNodes[5]));
+            }
         }
         else if (EstoyAca(actual, "DECLARACION_CURSOR"))
         {
