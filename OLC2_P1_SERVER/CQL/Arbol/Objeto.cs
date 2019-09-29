@@ -20,4 +20,20 @@ public class Objeto
         AtributoObjeto result = ListaAtributosObjeto.Find(x => x.Nombre.Equals(NombreAtributo));
         return (result is null) ? new Nulo() : (onlyValue ? result.Valor : result);
     }
+
+    public override string ToString()
+    {
+        string objString = "{ ";
+        List<string> listAtr = new List<string>();
+
+        foreach (AtributoObjeto ao in ListaAtributosObjeto)
+        {
+            listAtr.Add("\""+ ao.Nombre +"\" : " + (ao.Valor is string ? "\""+ ao.Valor.ToString() +"\"" : ao.Valor.ToString()));
+        }
+
+        objString += string.Join(", ", listAtr);
+        objString += " }";
+
+        return objString;
+    }
 }

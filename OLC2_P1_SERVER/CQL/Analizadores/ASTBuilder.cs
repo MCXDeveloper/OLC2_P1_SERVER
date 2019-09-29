@@ -239,7 +239,9 @@ public class ASTBuilder
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "LISTA_EXPRESIONES"))
                     {
-                        return new CollectionValue((List<Expresion>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
+                        CollectionValue cv = new CollectionValue((List<Expresion>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
+                        cv.IsList = EstoyAca(actual.ChildNodes[0], "[") ? true : false;
+                        return cv;
                     }
                     else if (EstoyAca(actual.ChildNodes[1], "EXPRESION"))
                     {

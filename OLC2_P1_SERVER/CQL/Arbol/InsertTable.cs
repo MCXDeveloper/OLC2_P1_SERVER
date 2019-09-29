@@ -339,53 +339,24 @@ public class InsertTable : Instruccion
     {
         List<object> list = new List<object>();
 
-        for (int i = 0; i < ListaValores.Count; i++)
+        foreach (Expresion exp in ListaValores)
         {
-            Expresion exp = ListaValores[i];
+            object val = exp.Ejecutar(ent);
 
-            if (exp is CollectionValue)
+            if (val is Date)
             {
-                CollectionValue cv = (CollectionValue)exp;
-
-                // 1. Obtengo la columna de la tabla para verificar su tipo de dato.
-                Columna col = CQL.ObtenerColumnaDeTabla(NombreTabla, ListaCampos[i]);
-
-                // 2. Verifico el tipo de dato de la columna para establecer la bandera para diferenciar List de Set.
-                if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.LIST))
-                {
-                    cv.IsList = true;
-                }
-                else if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.SET))
-                {
-                    cv.IsList = false;
-                }
-
-                list.Add(cv.Ejecutar(ent));
+                list.Add(((Date)val).GetParsedDate());
+            }
+            else if (val is Time)
+            {
+                list.Add(((Time)val).GetTimeInDateTime());
             }
             else
             {
-                object val = exp.Ejecutar(ent);
-
-                if (val is Date)
-                {
-                    list.Add(((Date)val).GetParsedDate());
-                }
-                else if (val is Time)
-                {
-                    list.Add(((Time)val).GetTimeInDateTime());
-                }
-                else if (val is CollectionValue)
-                {
-
-
-                }
-                else
-                {
-                    list.Add(val);
-                }
+                list.Add(val);
             }
         }
-
+        
         return list;
     }
 
