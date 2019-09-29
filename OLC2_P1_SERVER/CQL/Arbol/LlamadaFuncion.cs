@@ -22,76 +22,43 @@ public class LlamadaFuncion : Expresion
 
     public object Ejecutar(Entorno ent)
     {
-        // +------------------------------------------------------------------------------------------------------------------+
-        // |                                                       NOTA                                                       |
-        // +------------------------------------------------------------------------------------------------------------------+
-        // | En esta parte, primero se verifica si la pila de funciones está vacía.  Si lo está, entonces buscamos la función |
-        // | en el entorno y la agregamos a la pila.  Esto nos ayudará a no volver a buscar en el entorno cuando se vuelva a  |
-        // | llamar la función y la recursividad la haga más rápido.  **ESTO NO FUNCIONA SI SE LLAMA A OTRA FUNCIÓN DENTRO    |
-        // | DE LA FUNCIÓN QUE SE ESTÁ EJECUTANDO**.                                                                          |
-        // +------------------------------------------------------------------------------------------------------------------+
+        string id = GenerarIdentificadorFuncion(ent);
+        object func = ent.ObtenerFuncion(id);
 
-        object retorno = new Nulo();
+        if (!(func is Nulo))
+        {
+            Funcion f = (Funcion)func;
+            Entorno local = new Entorno(AST.global);
 
-        Thread hilo = new Thread(() => {
-
-            if (CQL.PilaFunciones.Count == 0)
+            if (ListaValores.Count == f.ListaParametros.Count)
             {
-                string id = GenerarIdentificadorFuncion(ent);
-                object func = ent.ObtenerFuncion(id);
-
-                if (!(func is Nulo))
+                for (int i = 0; i < ListaValores.Count; i++)
                 {
-                    Funcion f = (Funcion)func;
-                    CQL.PilaFunciones.Push(f);
-                    retorno = ExecuteFunction(f, ent);
+                    object valorVariable = ListaValores[i].Ejecutar(ent);
+                    string nombreVariable = f.ListaParametros[i].NombreParametro;
+                    TipoDato tipoVariable = f.ListaParametros[i].TipoDatoParametro;
+                    local.Agregar(nombreVariable, new Variable(tipoVariable, nombreVariable, valorVariable));
                 }
-                else
+
+                foreach (Instruccion ins in f.ListaInstrucciones)
                 {
-                    CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '" + NombreFuncion + "' (Key: " + id + ") en el entorno.", fila, columna);
+                    object result = ins.Ejecutar(local);
+
+                    if (result is Return)
+                    {
+                        object resp = ((Return)result).Ejecutar(local);
+                        return resp;
+                    }
                 }
             }
             else
             {
-                Funcion f = CQL.PilaFunciones.Peek();
-                retorno = ExecuteFunction(f, ent);
-            }
-            
-        }, 2000000000);
-
-        hilo.Start();
-        hilo.Join();
-
-        return retorno;
-    }
-
-    private object ExecuteFunction(Funcion f, Entorno ent)
-    {
-        Entorno local = new Entorno(AST.global);
-
-        if (ListaValores.Count == f.ListaParametros.Count)
-        {
-            for (int i = 0; i < ListaValores.Count; i++)
-            {
-                object valorVariable = ListaValores[i].Ejecutar(ent);
-                string nombreVariable = f.ListaParametros[i].NombreParametro;
-                TipoDato tipoVariable = f.ListaParametros[i].TipoDatoParametro;
-                local.Agregar(nombreVariable, new Variable(tipoVariable, nombreVariable, valorVariable));
-            }
-
-            foreach (Instruccion ins in f.ListaInstrucciones)
-            {
-                object result = ins.Ejecutar(local);
-
-                if (result is Return)
-                {
-                    return ((Return)result).Ejecutar(local);
-                }
+                CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '" + NombreFuncion + "'.  La cantidad de parámetros no coincide.", fila, columna);
             }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '" + NombreFuncion + "'.  La cantidad de parámetros no coincide.", fila, columna);
+            CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error.  No existe la función con el nombre de '" + NombreFuncion + "' (Key: " + id + ") en el entorno.", fila, columna);
         }
 
         return new Nulo();

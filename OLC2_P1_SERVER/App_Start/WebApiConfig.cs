@@ -11,7 +11,7 @@ public static class WebApiConfig
         // Agrego el usuario admin.
         CQL.ListaUsuariosDisponibles.Add(new Usuario("admin", "admin"));
 
-        CQL.UsuarioLogueado = "admin";
+        //CQL.UsuarioLogueado = "admin";
 
         // Cargo toda la información de los archivos de CHISON a memoria.
         //Rollback rb = new Rollback(true, -1, -1);
