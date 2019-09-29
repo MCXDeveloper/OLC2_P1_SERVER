@@ -494,6 +494,8 @@ public class Grammar : Irony.Parsing.Grammar
 
         SENTENCIA_TB_DELETE.Rule = r_delete + r_from + identificador
             | r_delete + r_from + identificador + r_where + EXPRESION
+            | r_delete + identificador + cor_a + EXPRESION + cor_c + r_from + identificador
+            | r_delete + identificador + cor_a + EXPRESION + cor_c + r_from + identificador + r_where + EXPRESION
             ;
 
         SENTENCIA_TB_SELECT.Rule = r_select + por + r_from + identificador

@@ -71,7 +71,7 @@ public class XList
         return false;
     }
 
-    public bool Remove(int posicion)
+    public object Remove(int posicion)
     {
         if(ListaElementos.ElementAtOrDefault(posicion) != null)
         {
@@ -80,7 +80,17 @@ public class XList
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[LIST]", "No se puede eliminar un elemento en una posición inexistente.", fila, columna);
+            if (!CQL.BatchFlag)
+            {
+                string mensaje = "No se puede eliminar un elemento en una posición inexistente.";
+                CQL.AddLUPError("Semántico", "[LIST]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+                return new IndexOutException(mensaje);
+            }
+            else
+            {
+                CQL.BatchErrorCounter++;
+            }
         }
 
         return false;

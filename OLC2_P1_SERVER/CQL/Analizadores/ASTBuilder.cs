@@ -832,8 +832,12 @@ public class ASTBuilder
             {
                 case 3:
                     return new DeleteTable(ObtenerLexema(actual, 2), GetFila(actual, 0), GetColumna(actual, 0));
-                default:
+                case 5:
                     return new DeleteTable(ObtenerLexema(actual, 2), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                case 7:
+                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new DeleteTable(ObtenerLexema(actual, 1), (Expresion)Recorrido(actual.ChildNodes[3]), ObtenerLexema(actual, 6), (Expresion)Recorrido(actual.ChildNodes[8]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_ORDER"))
