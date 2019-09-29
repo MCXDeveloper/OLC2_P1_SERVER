@@ -39,7 +39,7 @@ public class Declaracion : Instruccion
         {
             foreach(string variable in ListaVariables)
             {
-                object simbolo = ent.ObtenerVariable(variable);
+                object simbolo = ent.ObtenerVariableEnActual(variable);
 
                 if (simbolo is Nulo)
                 {
@@ -59,7 +59,7 @@ public class Declaracion : Instruccion
             for(int i = 0; i < ListaVariables.Count; i++)
             {
                 string nombre_variable = ListaVariables.ElementAt(i);
-                object simbolo = ent.ObtenerVariable(nombre_variable);
+                object simbolo = ent.ObtenerVariableEnActual(nombre_variable);
 
                 if (simbolo is Nulo)
                 {
@@ -326,15 +326,15 @@ public class Declaracion : Instruccion
                     {
                         if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.INT))
                         {
-                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, new Primitivo(0)));
+                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, 0));
                         }
                         else if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
                         {
-                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, new Primitivo(0.0)));
+                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, 0.0));
                         }
                         else if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
                         {
-                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, new Primitivo(false)));
+                            ent.Agregar(nombre_variable, new Variable(Tipo, nombre_variable, false));
                         }
                         else
                         {

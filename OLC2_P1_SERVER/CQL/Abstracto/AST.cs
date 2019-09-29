@@ -172,6 +172,11 @@ public class AST : Instruccion
                 AsignacionMultiple x = (AsignacionMultiple)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is LlamadaFuncion)
+            {
+                LlamadaFuncion x = (LlamadaFuncion)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is Batch)
             {
                 Batch x = (Batch)ins;

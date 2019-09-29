@@ -37,7 +37,7 @@ public class For : Instruccion
                 }
                 else
                 {
-                    ins.Ejecutar(ent);
+                    ins.Ejecutar(local);
                 }
             }
 

@@ -296,17 +296,17 @@ public class Grammar : Irony.Parsing.Grammar
         CommentTerminal COMENTARIO_DE_LINEA = new CommentTerminal("COMENTARIO_DE_LINEA", "//", "\n", "\r\n");
 
         RegisterOperators(1, Associativity.Right, igual);
-        RegisterOperators(2, Associativity.Right, interrogacion);
+        RegisterOperators(2, Associativity.Right, interrogacion, dospu);
         RegisterOperators(3, Associativity.Left, or);
         RegisterOperators(4, Associativity.Left, and);
         RegisterOperators(5, Associativity.Left, xor);
         RegisterOperators(6, Associativity.Left, igualdad, diferente);
         RegisterOperators(7, Associativity.Neutral, mayor, menor, mayor_igual, menor_igual);
         RegisterOperators(8, Associativity.Left, mas, menos);
-        RegisterOperators(9, Associativity.Left, por, div, mod);
+        RegisterOperators(9, Associativity.Left, por, div, mod, pot);
         RegisterOperators(10, Associativity.Right, not);
         RegisterOperators(11, Associativity.Neutral, inc, dec);
-        RegisterOperators(12, Associativity.Left, par_a, par_c);
+        RegisterOperators(12, Associativity.Neutral, par_a, par_c);
 
         NonGrammarTerminals.Add(COMENTARIO_DE_LINEA);
         NonGrammarTerminals.Add(COMENTARIO_MULTIPLE);

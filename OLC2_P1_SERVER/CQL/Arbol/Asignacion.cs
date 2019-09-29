@@ -80,35 +80,52 @@ public class Asignacion : Instruccion
 
         if (!(simbolo is Nulo))
         {
-            Variable elemento = (Variable)simbolo;
-            TipoDato ValorType = ObtenerTipoDatoDeValor(elemento, ent);
+            Variable sim = (Variable)simbolo;
+            TipoDato varType = ObtenerTipoDatoDeVariable(sim, ent);
+            TipoDato valorType = Valor.GetTipo(ent);
 
-            if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.EXCEPCION))
+            if (valorType.GetRealTipo().Equals(TipoDato.Tipo.EXCEPCION))
             {
                 return Valor.Ejecutar(ent);
             }
             else
             {
-                if (elemento.GetTipo().Equals(TipoDato.Tipo.STRING) || elemento.GetTipo().Equals(TipoDato.Tipo.MAP) || elemento.GetTipo().Equals(TipoDato.Tipo.SET) || elemento.GetTipo().Equals(TipoDato.Tipo.LIST) || elemento.GetTipo().Equals(TipoDato.Tipo.OBJECT))
+                if (
+                    varType.GetRealTipo().Equals(TipoDato.Tipo.STRING) ||
+                    varType.GetRealTipo().Equals(TipoDato.Tipo.MAP) || 
+                    varType.GetRealTipo().Equals(TipoDato.Tipo.SET) || 
+                    varType.GetRealTipo().Equals(TipoDato.Tipo.LIST) ||
+                    varType.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
                 {
-                    if (ValorType.GetRealTipo().Equals(elemento.GetTipo()) || ValorType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
+                    if (valorType.GetRealTipo().Equals(varType.GetRealTipo()) || valorType.GetRealTipo().Equals(TipoDato.Tipo.NULO))
                     {
-                        RealizarAsignacion(elemento, ValorType, ent);
+                        RealizarAsignacion(sim, varType, ent);
                     }
                     else
                     {
-                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + valorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + varType.GetRealTipo().ToString() + "'.", fila, columna);
                     }
                 }
                 else
                 {
-                    if (ValorType.GetRealTipo().Equals(elemento.GetTipo()))
+                    if (valorType.GetRealTipo().Equals(varType.GetRealTipo()))
                     {
-                        RealizarAsignacion(elemento, ValorType, ent);
+                        RealizarAsignacion(sim, varType, ent);
                     }
                     else
                     {
-                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + ValorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + elemento.GetTipo().ToString() + "'.", fila, columna);
+                        // Verifico si se puede hacer casteo implícito.
+                        object value = CasteoImplicito(varType, valorType, Valor.Ejecutar(ent));
+
+                        if (value is Nulo)
+                        {
+                            CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Un valor de tipo '" + valorType.GetRealTipo().ToString() + "' no puede ser asignado a una variable de tipo '" + varType.GetRealTipo().ToString() + "'.", fila, columna);
+                        }
+                        else
+                        {
+                            Valor = new Primitivo(value);
+                            RealizarAsignacion(sim, varType, ent);
+                        }
                     }
                 }
             }
@@ -215,7 +232,7 @@ public class Asignacion : Instruccion
         return new Nulo();
     }
 
-    private TipoDato ObtenerTipoDatoDeValor(Variable elemento, Entorno ent)
+    private TipoDato ObtenerTipoDatoDeVariable(Variable elemento, Entorno ent)
     {
         if (elemento.GetTipo().Equals(TipoDato.Tipo.LIST) && Valor is CollectionValue)
         {
@@ -269,5 +286,19 @@ public class Asignacion : Instruccion
                 }
                 break;
         }
+    }
+
+    private object CasteoImplicito(TipoDato tipoDeclaracion, TipoDato tipoValor, object valor)
+    {
+        if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.INT) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToInt32((double)valor);
+        }
+        else if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return ((int)valor) * 1.0;
+        }
+
+        return new Nulo();
     }
 }

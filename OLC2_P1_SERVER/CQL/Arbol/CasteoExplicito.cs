@@ -48,6 +48,10 @@ public class CasteoExplicito : Expresion
             {
                 result = CastTime((Time)Valor.Ejecutar(ent));
             }
+            else if (ValorType.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
+            {
+                result = CastBoolean((bool)Valor.Ejecutar(ent));
+            }
         }
         else
         {
@@ -60,6 +64,20 @@ public class CasteoExplicito : Expresion
         }
 
         return result;
+    }
+
+    private object CastBoolean(bool val)
+    {
+        if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return val ? 1 : 0;
+        }
+        else if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return double.Parse(val ? "1.0" : "0.0");
+        }
+
+        return new Nulo();
     }
 
     public TipoDato GetTipo(Entorno ent)
@@ -86,9 +104,13 @@ public class CasteoExplicito : Expresion
         {
             return new TipoDato(TipoDato.Tipo.TIME);
         }
+        else if (valor is bool)
+        {
+            return new TipoDato(TipoDato.Tipo.BOOLEAN);
+        }
         else
         {
-            return new TipoDato(TipoDato.Tipo.DESCONOCIDO);
+            return new TipoDato(TipoDato.Tipo.NULO);
         }
     }
 
@@ -99,7 +121,8 @@ public class CasteoExplicito : Expresion
             (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE)) ||
             (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.TIME))   ||
             (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.DATE))   ||
-            (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.STRING))
+            (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.STRING)) ||
+            (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
         );
     }
 
@@ -149,6 +172,10 @@ public class CasteoExplicito : Expresion
         {
             return val.ToString();
         }
+        else if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToDouble(val);
+        }
 
         return new Nulo();
     }
@@ -158,6 +185,10 @@ public class CasteoExplicito : Expresion
         if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.STRING))
         {
             return val.ToString();
+        }
+        else if (TipoCasteo.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return Convert.ToInt32(val);
         }
 
         return new Nulo();

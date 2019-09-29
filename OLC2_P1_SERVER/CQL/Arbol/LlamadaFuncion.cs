@@ -31,22 +31,38 @@ public class LlamadaFuncion : Instruccion, Expresion
 
             if (ListaValores.Count == f.ListaParametros.Count)
             {
+                bool ParamsCorrect = true;
+
                 for (int i = 0; i < ListaValores.Count; i++)
                 {
-                    object valorVariable = ListaValores[i].Ejecutar(ent);
+                    // Verifico si la variable que voy a crear no existe en el entorno local.
                     string nombreVariable = f.ListaParametros[i].NombreParametro;
-                    TipoDato tipoVariable = f.ListaParametros[i].TipoDatoParametro;
-                    local.Agregar(nombreVariable, new Variable(tipoVariable, nombreVariable, valorVariable));
+                    object sim = local.ObtenerVariableEnActual(nombreVariable);
+                    if (sim is Nulo)
+                    {
+                        object valorVariable = ListaValores[i].Ejecutar(ent);
+                        TipoDato tipoVariable = f.ListaParametros[i].TipoDatoParametro;
+                        local.Agregar(nombreVariable, new Variable(tipoVariable, nombreVariable, valorVariable));
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[LLAMADA_FUNCION]", "Error en la llamada a función '" + NombreFuncion + "'.  Se está intentando crear una variable que ya existe en el entorno de la función.", fila, columna);
+                        ParamsCorrect = false;
+                        break;
+                    }
                 }
 
-                foreach (Instruccion ins in f.ListaInstrucciones)
+                if (ParamsCorrect)
                 {
-                    object result = ins.Ejecutar(local);
-
-                    if (result is Return)
+                    foreach (Instruccion ins in f.ListaInstrucciones)
                     {
-                        object resp = ((Return)result).Ejecutar(local);
-                        return resp;
+                        object result = ins.Ejecutar(local);
+
+                        if (result is Return)
+                        {
+                            object resp = ((Return)result).Ejecutar(local);
+                            return resp;
+                        }
                     }
                 }
             }

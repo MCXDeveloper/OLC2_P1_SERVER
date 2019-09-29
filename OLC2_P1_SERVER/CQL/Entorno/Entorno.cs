@@ -43,6 +43,17 @@ public class Entorno
         return new Nulo();
     }
 
+    public object ObtenerVariableEnActual(string id)
+    {
+        Variable encontrado = (Variable)(TablaVariables[id]);
+        if (encontrado != null)
+        {
+            return encontrado;
+        }
+
+        return new Nulo();
+    }
+
     public object ObtenerFuncion(string id)
     {
         for (Entorno e = this; e != null; e = e.Anterior)
