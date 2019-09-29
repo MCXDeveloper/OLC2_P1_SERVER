@@ -103,6 +103,7 @@ namespace OLC2_P1_SERVER.CHISON.Abstracto
                 }
                 else
                 {
+                    // TODO | creo que tengo que corregir esto pero aun no se :s
                     Debug.WriteLine("*************************************************");
                     Debug.WriteLine("*************************************************");
                     Debug.WriteLine("Hay errores lexicos o sintacticos.");

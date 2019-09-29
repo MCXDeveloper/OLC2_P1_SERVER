@@ -229,7 +229,11 @@ public class ASTBuilder
 
                 case 3:
 
-                    if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
+                    if (EstoyAca(actual.ChildNodes[1], "in"))
+                    {
+                        return new CheckInList((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), GetFila(actual, 1), GetColumna(actual, 1));
+                    }
+                    else if (EstoyAca(actual.ChildNodes[1], "LISTA_ATR_MAP"))
                     {
                         return new CollectionValue((List<AtributosMap>)Recorrido(actual.ChildNodes[1]), GetFila(actual, 0), GetColumna(actual, 0));
                     }
@@ -284,6 +288,10 @@ public class ASTBuilder
                     if (EstoyAca(actual.ChildNodes[1], "?"))
                     {
                         return new OperadorTernario((Expresion)Recorrido(actual.ChildNodes[0]), (Expresion)Recorrido(actual.ChildNodes[2]), (Expresion)Recorrido(actual.ChildNodes[4]), GetFila(actual, 1), GetColumna(actual, 1));
+                    }
+                    else if (EstoyAca(actual.ChildNodes[1], "in"))
+                    {
+                        return new CheckInList((Expresion)Recorrido(actual.ChildNodes[0]), (List<Expresion>)Recorrido(actual.ChildNodes[3]), GetFila(actual, 1), GetColumna(actual, 1));
                     }
                     else
                     {

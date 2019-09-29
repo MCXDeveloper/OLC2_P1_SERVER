@@ -20,9 +20,10 @@ public class CQL
     public static int BatchErrorCounter { get; set; }
     public static string UsuarioLogueado { get; set; }
     public static List<string> PilaRespuestas { get; set; }
+    public static Stack<Funcion> PilaFunciones { get; set; }
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }
     public static List<RollbackError> PilaErroresRollback { get; set; }
-
+    
     public static void testing()
     {
         Debug.WriteLine(string.Join(Environment.NewLine, PilaRespuestas));
@@ -286,6 +287,7 @@ public class CQL
         BaseDatosEnUso = string.Empty;
         UsuarioLogueado = string.Empty;
         PilaRespuestas = new List<string>();
+        PilaFunciones = new Stack<Funcion>();
         ListaUsuariosDisponibles = new List<Usuario>();
         PilaErroresRollback = new List<RollbackError>();
     }
@@ -305,6 +307,7 @@ public class CQL
         UsuarioLogueado = string.Empty;
         UsuarioLogueado = string.Empty;
         PilaRespuestas = new List<string>();
+        PilaFunciones = new Stack<Funcion>();
     }
 
     public static string TransformEntornoToTable(Entorno ent)

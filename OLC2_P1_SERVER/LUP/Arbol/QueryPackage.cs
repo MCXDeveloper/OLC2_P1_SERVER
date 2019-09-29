@@ -30,8 +30,8 @@ public class QueryPackage : LUP_Instruccion
 
             if (!(auxArbol is null))
             {
-                object parseResponse = auxArbol.Ejecutar(new Entorno(null));
-                        
+                object parseResponse = auxArbol.Ejecutar((AST.global is null) ? new Entorno(null) : AST.global);
+
                 if (parseResponse is Nulo)
                 {
                     CQL.AddLUPMessage("Análisis realizado exitosamente.");

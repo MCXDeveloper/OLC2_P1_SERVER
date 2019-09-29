@@ -224,6 +224,7 @@
     <Compile Include="CQL\Arbol\AsignacionMultiple.cs" />
     <Compile Include="CQL\Arbol\AtributoObjeto.cs" />
     <Compile Include="CQL\Arbol\Batch.cs" />
+    <Compile Include="CQL\Arbol\CheckInList.cs" />
     <Compile Include="CQL\Arbol\ColumnaTabla.cs" />
     <Compile Include="CQL\Arbol\Commit.cs" />
     <Compile Include="CQL\Arbol\CreateDatabase.cs" />

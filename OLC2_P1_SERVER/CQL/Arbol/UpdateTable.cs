@@ -239,7 +239,7 @@ public class UpdateTable : Instruccion
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[SELECT]", "Error.  La operación WHERE en la consulta a la tabla '" + NombreTabla + "' no retorna un valor booleano.", fila, columna);
+                    CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error.  La operación WHERE en la consulta a la tabla '" + NombreTabla + "' no retorna un valor booleano.", fila, columna);
                     break;
                 }
             }

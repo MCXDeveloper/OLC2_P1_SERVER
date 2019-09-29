@@ -687,6 +687,8 @@ public class Grammar : Irony.Parsing.Grammar
             | par_a + TIPO + par_c + EXPRESION
             | identificador + cor_a + EXPRESION + cor_c
             | llave_a + LISTA_EXPRESIONES + llave_c + r_as + identificador
+            | EXPRESION + r_in + par_a + LISTA_EXPRESIONES + par_c
+            | EXPRESION + r_in + EXPRESION
             | EXPRESION + interrogacion + EXPRESION + dospu + EXPRESION
             ;
         
