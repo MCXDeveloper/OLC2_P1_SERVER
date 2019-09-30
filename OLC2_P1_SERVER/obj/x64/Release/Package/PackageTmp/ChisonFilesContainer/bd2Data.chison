@@ -1,0 +1,168 @@
+<
+  	"CQL-TYPE" = "OBJECT",
+  	"NAME" = "Mascota",
+  	"ATTRS" = [
+  		< 
+		    "NAME" = "Nombre",
+    		"TYPE" = "String" 
+  		>,
+  		< 
+    		"NAME" = "Edad",
+    		"TYPE" = "Int" 
+  		>,
+  		< 
+    		"NAME" = "Estado",
+    		"TYPE" = "Int" 
+  		>
+
+  	]
+>,
+<
+  	"CQL-TYPE" = "OBJECT",
+  	"NAME" = "Veterinaria",
+  	"ATTRS" = [
+  		< 
+		    "NAME" = "Nombre",
+    		"TYPE" = "String" 
+  		>,
+  		< 
+    		"NAME" = "Direccion",
+    		"TYPE" = "String" 
+  		>,
+  		< 
+    		"NAME" = "Pacientes",
+    		"TYPE" = "Set<Mascota>" 
+  		>
+  	]
+>,
+<
+    "CQL-TYPE" = "PROCEDURE",
+    "NAME" = "GetNewVeterinaria",
+    "PARAMETERS" = [    
+        <
+            "NAME" = "@Pacientes",
+            "TYPE" = "Set",
+            "AS"   = In
+        >,
+	    <
+            "NAME" = "@Nombre",
+            "TYPE" = "String",
+            "AS"   = In
+        >,
+	    <
+            "NAME" = "@Veterinaria",
+            "TYPE" = "Veterinaria",
+            "AS"   = Out
+        >
+    ],
+    "INSTR" = $ 
+                Veterinaria @vet = new Veterinaria;
+				@vet.nombre = @Nombre;
+				@vet.Pacientes = @Pacientes;
+				return vet;				
+            $
+>,
+<                    
+    "DATA" = [
+        <"ID" = 1>,
+        <"ID" = 2>,
+        <"ID" = 3>,
+        <"ID" = 4>,
+        <"ID" = 5>,
+        <"ID" = 6>,
+        <"ID" = 7>,
+        <"ID" = 8>,
+        <"ID" = 9>,
+        <"ID" = 10>,
+        <"ID" = 11>,
+        <"ID" = 12>,
+        <"ID" = 13>,
+        <"ID" = 14>,
+        <"ID" = 15>,
+        <"ID" = 16>,
+        <"ID" = 17>,
+        <"ID" = 18>,
+        <"ID" = 19>
+    ],  
+    "NAME" = "Primos",
+    "CQL-TYPE" = "TABLE",                    
+    "COLUMNS" = [
+        < 
+            "NAME" = "ID",
+            "TYPE" = "Int",
+            "PK" = TRUE      
+        >
+    ]
+>, 
+<
+    "CQL-TYPE" = "PROCEDURE",
+    "NAME" = "OrderList",
+    "PARAMETERS" = [    
+        <
+            "NAME" = "@asc",
+            "TYPE" = "Boolean",
+            "AS"   = In
+        >
+    ],
+    "INSTR" = $ 
+                List @arr = [5,6,4,7,3,8,2,9,1,10];
+        
+				if(@asc){
+					for (int @i = 0; @i < @arr.size(); @i++) {
+						for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
+						{
+							if (@arr.get(@j) > @arr.get(@j+1)) 
+							{ 
+								// intercambia las posiciones
+								int @temp = @arr.get(@j); 
+								@arr.set(@j,@arr.get(@j+1)); 
+								@arr.set(@j+1,@temp);
+							} 
+						}
+					}
+				}else{
+					for (int @i = 0; @i < @arr.size(); @i++) {
+						for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
+						{
+							if (@arr.get(@j) < @arr.get(@j+1)) 
+							{ 
+								// intercambia las posiciones
+								int @temp = @arr.get(@j); 
+								@arr.set(@j,@arr.get(@j+1)); 
+								@arr.set(@j+1,@temp);
+							} 
+						}
+					}
+				}
+
+				for(int @cont =0;@cont<@arr.size(); @cont++){
+					log(@arr.get(@cont));
+				}           
+            $
+>,
+<    
+    "NAME" = "EliminarPrimos",
+    "PARAMETERS" = [],
+    "INSTR" = $                        
+                int @cant = Count(<<select * from Primos>>);
+                log("La tabla primos tiene " + @cant + " valores");
+
+                Set @primos = new Set<Int>;
+
+                for(int @t=1; @t<=@cant; @t++){
+                    for(int @i=2;@i<@t;@i++) {
+                        if(@t%@i==0){
+                            @primos.insert(@t);
+                        }
+                    }
+                }
+
+                //delete from Primos where id in @primos;
+
+                @cant = Count(<<select * from Primos>>);
+                log("La tabla primos tiene " + @cant + " valores");
+
+                select * from primos;
+            $,
+    "CQL-TYPE" = "PROCEDURE"
+>
