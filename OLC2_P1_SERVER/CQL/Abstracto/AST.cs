@@ -178,6 +178,11 @@ public class AST : Instruccion
                 LlamadaFuncion x = (LlamadaFuncion)ins;
                 x.Ejecutar(ent);
             }
+            else if (ins is LlamadaProcedimiento)
+            {
+                LlamadaProcedimiento x = (LlamadaProcedimiento)ins;
+                x.Ejecutar(ent);
+            }
             else if (ins is Batch)
             {
                 Batch x = (Batch)ins;

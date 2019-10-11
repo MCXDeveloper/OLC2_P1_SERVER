@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-public class LlamadaProcedimiento : Expresion
+public class LlamadaProcedimiento : Instruccion, Expresion
 {
     private readonly int fila;
     private readonly int columna;
@@ -247,7 +247,7 @@ public class LlamadaProcedimiento : Expresion
     private object EjecutarProcedimiento(Procedimiento proc, Entorno ent)
     {
         // 1. Creo un nuevo entorno para ejecutar el procedimiento.
-        Entorno local = new Entorno(null);
+        Entorno local = new Entorno(AST.global);
 
         // 2. Agrego los valores recibidos en la lista de expresiones y se lo asigno a las variables definidas en los parametros.
         List<Parametro> listParams = proc.ListaParametros;

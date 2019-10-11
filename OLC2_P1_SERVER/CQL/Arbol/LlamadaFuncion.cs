@@ -82,7 +82,8 @@ public class LlamadaFuncion : Instruccion, Expresion
 
     public TipoDato GetTipo(Entorno ent)
     {
-        Funcion func = (Funcion)ent.ObtenerFuncion(GenerarIdentificadorFuncion(ent));
+        string identificador = GenerarIdentificadorFuncion(ent);
+        Funcion func = (Funcion)ent.ObtenerFuncion(identificador);
         return func.TipoDatoFuncion;
     }
 

@@ -58,8 +58,17 @@ public class ASTBuilder
                     // TIPO + LISTA_VARIABLES
                     return new Declaracion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]), GetFila(actual.ChildNodes[0], 0), GetColumna(actual.ChildNodes[0], 0));
                 default:
-                    // TIPO + LISTA_VARIABLES + igual + EXPRESION
-                    return new Declaracion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
+                    if (EstoyAca(actual.ChildNodes[2], "is"))
+                    {
+                        // TIPO + LISTA_VARIABLES + r_is + SENTENCIA_TB_SELECT
+                        List<string> listVar = (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]);
+                        return new DeclaracionCursor(listVar[0], (Select)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
+                    }
+                    else
+                    {
+                        // TIPO + LISTA_VARIABLES + igual + EXPRESION
+                        return new Declaracion((TipoDato)RecorridoAuxiliar(actual.ChildNodes[0]), (List<string>)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 2), GetColumna(actual, 2));
+                    }    
             }
         }
         else if (EstoyAca(actual, "ASIGNACION"))
@@ -408,6 +417,10 @@ public class ASTBuilder
                 else if (EstoyAca(actual.ChildNodes[0], "counter"))
                 {
                     return new TipoDato(TipoDato.Tipo.COUNTER);
+                }
+                else if (EstoyAca(actual.ChildNodes[0], "cursor"))
+                {
+                    return new TipoDato(TipoDato.Tipo.CURSOR);
                 }
                 else
                 {

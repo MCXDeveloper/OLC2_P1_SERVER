@@ -25,8 +25,6 @@ public class For : Instruccion
 
         while ((bool)condicion.Ejecutar(ent))
         {
-            incrementador.Ejecutar(ent);
-
             Entorno local = new Entorno(ent);
 
             foreach (Instruccion ins in lista_instrucciones)
@@ -41,6 +39,7 @@ public class For : Instruccion
                 }
             }
 
+            incrementador.Ejecutar(ent);
         }
 
         return new Nulo();

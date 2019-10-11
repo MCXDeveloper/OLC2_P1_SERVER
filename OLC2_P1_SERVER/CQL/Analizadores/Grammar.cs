@@ -414,7 +414,7 @@ public class Grammar : Irony.Parsing.Grammar
         LISTA_INSTRUCCIONES.Rule = MakePlusRule(LISTA_INSTRUCCIONES, INSTRUCCION);
 
         INSTRUCCION.Rule = DECLARACION + puco
-            | DECLARACION_CURSOR + puco
+            //| DECLARACION_CURSOR + puco
             | SENTENCIA_ACCESO + puco
             | ASIGNACION_MULTIPLE + puco
             | ASIGNACION + puco
@@ -466,7 +466,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         SENTENCIA_FOREACH.Rule = r_for + r_each + par_a + LISTA_PARAMETROS + par_c + r_in + variable + llave_a + LISTA_INSTRUCCIONES + llave_c;
 
-        DECLARACION_CURSOR.Rule = r_cursor + variable + r_is + SENTENCIA_TB_SELECT;
+        //DECLARACION_CURSOR.Rule = r_cursor + variable + r_is + SENTENCIA_TB_SELECT;
 
         ACCION_CURSOR.Rule = r_open + variable
             | r_close + variable
@@ -590,6 +590,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         DECLARACION.Rule = TIPO + LISTA_VARIABLES
             | TIPO + LISTA_VARIABLES + igual + EXPRESION
+            | TIPO + LISTA_VARIABLES + r_is + SENTENCIA_TB_SELECT
             ;
 
         ASIGNACION.Rule = variable + TIPO_ASIGNACION + EXPRESION

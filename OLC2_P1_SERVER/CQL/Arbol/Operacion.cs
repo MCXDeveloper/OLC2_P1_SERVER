@@ -128,6 +128,22 @@ public class Operacion : Exception, Expresion, Instruccion
         {
             return new TipoDato(TipoDato.Tipo.TIME);
         }
+        else if (valor is Map)
+        {
+            return new TipoDato(TipoDato.Tipo.MAP);
+        }
+        else if (valor is XList)
+        {
+            return new TipoDato(TipoDato.Tipo.LIST);
+        }
+        else if (valor is XSet)
+        {
+            return new TipoDato(TipoDato.Tipo.SET);
+        }
+        else if (valor is Objeto)
+        {
+            return new TipoDato(TipoDato.Tipo.OBJECT);
+        }
         else if (valor is Exception)
         {
             return new TipoDato(TipoDato.Tipo.EXCEPCION);
