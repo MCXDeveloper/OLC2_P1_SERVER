@@ -62,7 +62,9 @@ public class LlamadaFuncion : Instruccion, Expresion
                         }
                         else
                         {
-                            ins.Ejecutar(local);
+                            object resp = ins.Ejecutar(local);
+                            if (resp is Return)
+                                return ((Return)resp).Ejecutar(local);
                         }
                     }
                 }

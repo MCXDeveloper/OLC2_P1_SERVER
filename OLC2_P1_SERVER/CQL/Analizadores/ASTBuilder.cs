@@ -637,7 +637,13 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "LLAMADA_PROCEDIMIENTO"))
         {
-            return new LlamadaProcedimiento(ObtenerLexema(actual, 1), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+            switch (actual.ChildNodes.Count)
+            {
+                case 4:
+                    return new LlamadaProcedimiento(ObtenerLexema(actual, 1), new List<Expresion>(), GetFila(actual, 0), GetColumna(actual, 0));
+                default:
+                    return new LlamadaProcedimiento(ObtenerLexema(actual, 1), (List<Expresion>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
+            }
         }
         else if (EstoyAca(actual, "SENTENCIA_DB_CREATE"))
         {

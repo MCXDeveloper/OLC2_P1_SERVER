@@ -45,16 +45,8 @@ public class DeclaracionFuncion : Instruccion
 
         if (simbolo is Nulo)
         {
-            // 3. Verifico que la función tenga un retorno
-            if (VerificarQueExistaRetorno())
-            {
-                // 4. Agrego el símbolo de función en el entorno.
-                ent.Agregar(key, new Funcion(TipoDatoFuncion, NombreFuncion, ListaParametros, ListaInstrucciones));
-            }
-            else
-            {
-                CQL.AddLUPError("Semántico", "[DECLARACION_FUNCION]", "Error.  Toda declaración de función debe retornar un valor del tipo del que fue declarada.", fila, columna);
-            }            
+            // 3. Agrego el símbolo de función en el entorno.
+            ent.Agregar(key, new Funcion(TipoDatoFuncion, NombreFuncion, ListaParametros, ListaInstrucciones));
         }
         else
         {
