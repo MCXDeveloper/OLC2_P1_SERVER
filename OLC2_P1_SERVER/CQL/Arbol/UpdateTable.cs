@@ -176,31 +176,97 @@ public class UpdateTable : Instruccion
             {
                 TipoDato.Tipo valueType = ac.ValorColumna.GetTipo(ent).GetRealTipo();
 
-                // Verifico que AsignacionColumna no sea del tipo 'identificador[expresion]' ya que requiere una validación diferente.
-                if (ac.ValorPosicionObjeto is Nulo)
+                // Verifico que AsignacionColumna no sea del tipo 'identificador.LISTA_ACCESO'
+                if (ac.ListaAccesoColumna is null)
                 {
-                    if (!valueType.Equals(TipoDato.Tipo.NULO))
+                    // Verifico que AsignacionColumna no sea del tipo 'identificador[expresion]' ya que requiere una validación diferente.
+                    if (ac.ValorPosicionObjeto is Nulo)
                     {
-                        if (!(
-                            (valueType.Equals(TipoDato.Tipo.INT) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(int))) ||
-                            (valueType.Equals(TipoDato.Tipo.DOUBLE) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(double))) ||
-                            (valueType.Equals(TipoDato.Tipo.BOOLEAN) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(bool))) ||
-                            (valueType.Equals(TipoDato.Tipo.STRING) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(string))) ||
-                            ((valueType.Equals(TipoDato.Tipo.DATE) || valueType.Equals(TipoDato.Tipo.TIME)) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(DateTime))) ||
-                            ((valueType.Equals(TipoDato.Tipo.MAP) || valueType.Equals(TipoDato.Tipo.SET) || valueType.Equals(TipoDato.Tipo.LIST) || valueType.Equals(TipoDato.Tipo.OBJECT)) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(object)))
-                        ))
+                        if (!valueType.Equals(TipoDato.Tipo.NULO))
                         {
-                            return false;
+                            if (!(
+                                (valueType.Equals(TipoDato.Tipo.INT) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(int))) ||
+                                (valueType.Equals(TipoDato.Tipo.DOUBLE) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(double))) ||
+                                (valueType.Equals(TipoDato.Tipo.BOOLEAN) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(bool))) ||
+                                (valueType.Equals(TipoDato.Tipo.STRING) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(string))) ||
+                                ((valueType.Equals(TipoDato.Tipo.DATE) || valueType.Equals(TipoDato.Tipo.TIME)) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(DateTime))) ||
+                                ((valueType.Equals(TipoDato.Tipo.MAP) || valueType.Equals(TipoDato.Tipo.SET) || valueType.Equals(TipoDato.Tipo.LIST) || valueType.Equals(TipoDato.Tipo.OBJECT)) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(object)))
+                            ))
+                            {
+                                if (!(valueType.Equals(TipoDato.Tipo.INT) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(double)) || valueType.Equals(TipoDato.Tipo.DOUBLE) && tablaOriginal.Columns[ac.NombreColumna].DataType.Equals(typeof(int))))
+                                {
+                                    return false;
+                                }
+                            }
                         }
+                    }
+                    else
+                    {
+                        bool collectionValidation = VerificarTipoDatoConCollection(tablaOriginal, ac, valueType, tablaOriginal.Rows[i], ent);
+                        if (!collectionValidation)
+                            return false;
                     }
                 }
                 else
                 {
-                    bool objValidation = VerificarTipoDatoConObjetoCollection(tablaOriginal, ac, valueType, tablaOriginal.Rows[i], ent);
+                    bool objValidation = VerificarTipoDatoConObjeto(tablaOriginal, ac, ac.ValorColumna.GetTipo(ent), valueType, tablaOriginal.Rows[i], ent);
                     if (!objValidation)
                         return false;
                 }
             }
+        }
+
+        return true;
+    }
+
+    private bool VerificarTipoDatoConObjeto(DataTable tablaOriginal, AsignacionColumna ac, TipoDato tipoDato, TipoDato.Tipo valueType, DataRow rowsi, Entorno ent)
+    {
+        // 1. Verifico que la columna si sea de tipo Objeto para poder acceder a la lista de atributos.
+        TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
+        TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
+
+        if (TipoCol.Equals(TipoDato.Tipo.OBJECT))
+        {
+            Objeto obj = (Objeto)rowsi[ac.NombreColumna];
+
+            // 2. Para poder reutilizar la clase de AccesoObjeto se va a crear una variable temporal en el entorno a la cual se va a agregar el objeto de la tupla
+            // actual y la lista de acceso de AsignacionColumna.  Una vez hecho esto, se realiza la función de Ejecutar para obtener el valor del objeto y hacer
+            // la respectiva validación.  Al finalizar, se elimina la variable temporal del entorno.
+            ent.Agregar(ac.NombreColumna, new Variable(new TipoDato(TipoDato.Tipo.OBJECT), ac.NombreColumna, obj));
+
+            AccesoObjeto ao = new AccesoObjeto(true, ac.NombreColumna, ac.ListaAccesoColumna, fila, columna);
+            object objAtrValue = ao.Ejecutar(ent);
+
+            ent.EliminarVariable(ac.NombreColumna);
+
+            if (!(objAtrValue is Nulo))
+            {
+                if (!(
+                    objAtrValue is string && (valueType.Equals(TipoDato.Tipo.STRING) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is Date && (valueType.Equals(TipoDato.Tipo.DATE) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is Time && (valueType.Equals(TipoDato.Tipo.TIME) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is Map && (valueType.Equals(TipoDato.Tipo.MAP) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is XList && (valueType.Equals(TipoDato.Tipo.LIST) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is XSet && (valueType.Equals(TipoDato.Tipo.SET) || valueType.Equals(TipoDato.Tipo.NULO)) ||
+                    objAtrValue is Objeto && ((valueType.Equals(TipoDato.Tipo.OBJECT) && tipoDato.GetElemento().Equals(((Objeto)objAtrValue).TipoDatoObjeto.GetElemento())) || valueType.Equals(TipoDato.Tipo.NULO))
+                ))
+                {
+                    if (!((objAtrValue is int || objAtrValue is double) && (valueType.Equals(TipoDato.Tipo.INT) || valueType.Equals(TipoDato.Tipo.DOUBLE))))
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. No se puede actualizar el valor en el atributo indicado.", fila, columna);
+                return false;
+            }
+        }
+        else
+        {
+            CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. No se puede actualizar el valor en el atributo indicado ya que el elemento no es de tipo Objeto.", fila, columna);
+            return false;
         }
 
         return true;
@@ -224,46 +290,61 @@ public class UpdateTable : Instruccion
 
                 foreach (AsignacionColumna ac in ListaAsignaciones)
                 {
-                    if (ac.ValorPosicionObjeto is Nulo)
+                    if (ac.ListaAccesoColumna != null)
                     {
-                        object valorcito = ObtenerValorFinal(ac, tablaOriginal.Rows[i][ac.NombreColumna], ac.ValorColumna.Ejecutar(ent), ent);
-                        tablaOriginal.Rows[i][ac.NombreColumna] = valorcito;
+                        Objeto objetito = (Objeto)tablaOriginal.Rows[i][ac.NombreColumna];
+                        ent.Agregar(ac.NombreColumna, new Variable(new TipoDato(TipoDato.Tipo.OBJECT), ac.NombreColumna, objetito));
+
+                        AccesoObjeto ao = new AccesoObjeto(false, ac.NombreColumna, ac.ListaAccesoColumna, fila, columna);
+                        object objAtrValue = ao.Ejecutar(ent);
+                        AtributoObjeto atrObj = (AtributoObjeto)objAtrValue;
+
+                        foreach (AtributoObjeto atrObjItem in objetito.ListaAtributosObjeto)
+                        {
+                            if (atrObjItem.Nombre.Equals(atrObj.Nombre))
+                            {
+                                atrObjItem.Valor = ac.ValorColumna.Ejecutar(ent);
+                                break;
+                            }
+                        }
+
+                        ent.EliminarVariable(ac.NombreColumna);
                     }
                     else
                     {
-                        object clave = ac.ValorPosicionObjeto.Ejecutar(ent);
-                        
-                        TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
-                        TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
+                        if (ac.ValorPosicionObjeto is Nulo)
+                        {
+                            object valorcito = ObtenerValorFinal(ac, tablaOriginal.Rows[i][ac.NombreColumna], ac.ValorColumna.Ejecutar(ent), ent);
+                            tablaOriginal.Rows[i][ac.NombreColumna] = valorcito;
+                        }
+                        else
+                        {
+                            object clave = ac.ValorPosicionObjeto.Ejecutar(ent);
 
-                        if (TipoCol.Equals(TipoDato.Tipo.MAP))
-                        {
-                            Map mapita = (Map)tablaOriginal.Rows[i][ac.NombreColumna];
-                            object oldValue = mapita.Get(clave);
-                            object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                            mapita.Set(clave, valorcito);
-                        }
-                        else if (TipoCol.Equals(TipoDato.Tipo.OBJECT))
-                        {
-                            Objeto obj = (Objeto)tablaOriginal.Rows[i][ac.NombreColumna];
-                            AtributoObjeto atrobj = obj.ListaAtributosObjeto.Find(x => x.Nombre.Equals(clave));
-                            object oldValue = atrobj.Valor;
-                            object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                            atrobj.Valor = valorcito;
-                        }
-                        else if (TipoCol.Equals(TipoDato.Tipo.LIST))
-                        {
-                            XList lx = (XList)tablaOriginal.Rows[i][ac.NombreColumna];
-                            object oldValue = lx.Get((int)clave);
-                            object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                            lx.Set((int)clave, valorcito);
-                        }
-                        else if (TipoCol.Equals(TipoDato.Tipo.SET))
-                        {
-                            XSet lx = (XSet)tablaOriginal.Rows[i][ac.NombreColumna];
-                            object oldValue = lx.Get((int)clave);
-                            object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                            lx.Set((int)clave, valorcito);
+                            TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
+                            TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
+
+                            if (TipoCol.Equals(TipoDato.Tipo.MAP))
+                            {
+                                Map mapita = (Map)tablaOriginal.Rows[i][ac.NombreColumna];
+                                object oldValue = mapita.Get(clave);
+                                object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                mapita.Set(clave, valorcito);
+                            }
+                            else if (TipoCol.Equals(TipoDato.Tipo.LIST))
+                            {
+                                XList lx = (XList)tablaOriginal.Rows[i][ac.NombreColumna];
+                                object oldValue = lx.Get((int)clave);
+                                object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                lx.Set((int)clave, valorcito);
+                            }
+                            else if (TipoCol.Equals(TipoDato.Tipo.SET))
+                            {
+                                XSet lx = (XSet)tablaOriginal.Rows[i][ac.NombreColumna];
+                                object oldValue = lx.Get((int)clave);
+                                object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                lx.Set((int)clave, valorcito);
+                            }
                         }
                     }
                 }
@@ -282,46 +363,61 @@ public class UpdateTable : Instruccion
                     {
                         foreach (AsignacionColumna ac in ListaAsignaciones)
                         {
-                            if (ac.ValorPosicionObjeto is Nulo)
+                            if (ac.ListaAccesoColumna != null)
                             {
-                                object valorcito = ObtenerValorFinal(ac, tablaOriginal.Rows[i][ac.NombreColumna], ac.ValorColumna.Ejecutar(ent), ent);
-                                tablaOriginal.Rows[i][ac.NombreColumna] = valorcito;
+                                Objeto objetito = (Objeto)tablaOriginal.Rows[i][ac.NombreColumna];
+                                ent.Agregar(ac.NombreColumna, new Variable(new TipoDato(TipoDato.Tipo.OBJECT), ac.NombreColumna, objetito));
+
+                                AccesoObjeto ao = new AccesoObjeto(false, ac.NombreColumna, ac.ListaAccesoColumna, fila, columna);
+                                object objAtrValue = ao.Ejecutar(ent);
+                                AtributoObjeto atrObj = (AtributoObjeto)objAtrValue;
+
+                                foreach (AtributoObjeto atrObjItem in objetito.ListaAtributosObjeto)
+                                {
+                                    if (atrObjItem.Nombre.Equals(atrObj.Nombre))
+                                    {
+                                        atrObjItem.Valor = ac.ValorColumna.Ejecutar(ent);
+                                        break;
+                                    }
+                                }
+
+                                ent.EliminarVariable(ac.NombreColumna);
                             }
                             else
                             {
-                                object clave = ac.ValorPosicionObjeto.Ejecutar(ent);
+                                if (ac.ValorPosicionObjeto is Nulo)
+                                {
+                                    object valorcito = ObtenerValorFinal(ac, tablaOriginal.Rows[i][ac.NombreColumna], ac.ValorColumna.Ejecutar(ent), ent);
+                                    tablaOriginal.Rows[i][ac.NombreColumna] = valorcito;
+                                }
+                                else
+                                {
+                                    object clave = ac.ValorPosicionObjeto.Ejecutar(ent);
 
-                                TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
-                                TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
+                                    TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
+                                    TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
 
-                                if (TipoCol.Equals(TipoDato.Tipo.MAP))
-                                {
-                                    Map mapita = (Map)tablaOriginal.Rows[i][ac.NombreColumna];
-                                    object oldValue = mapita.Get(clave);
-                                    object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                                    mapita.Set(clave, valorcito);
-                                }
-                                else if (TipoCol.Equals(TipoDato.Tipo.OBJECT))
-                                {
-                                    Objeto obj = (Objeto)tablaOriginal.Rows[i][ac.NombreColumna];
-                                    AtributoObjeto atrobj = obj.ListaAtributosObjeto.Find(x => x.Nombre.Equals(clave));
-                                    object oldValue = atrobj.Valor;
-                                    object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                                    atrobj.Valor = valorcito;
-                                }
-                                else if (TipoCol.Equals(TipoDato.Tipo.LIST))
-                                {
-                                    XList lx = (XList)tablaOriginal.Rows[i][ac.NombreColumna];
-                                    object oldValue = lx.Get((int)clave);
-                                    object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                                    lx.Set((int)clave, valorcito);
-                                }
-                                else if (TipoCol.Equals(TipoDato.Tipo.SET))
-                                {
-                                    XSet lx = (XSet)tablaOriginal.Rows[i][ac.NombreColumna];
-                                    object oldValue = lx.Get((int)clave);
-                                    object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
-                                    lx.Set((int)clave, valorcito);
+                                    if (TipoCol.Equals(TipoDato.Tipo.MAP))
+                                    {
+                                        Map mapita = (Map)tablaOriginal.Rows[i][ac.NombreColumna];
+                                        object oldValue = mapita.Get(clave);
+                                        object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                        mapita.Set(clave, valorcito);
+                                    }
+                                    else if (TipoCol.Equals(TipoDato.Tipo.LIST))
+                                    {
+                                        XList lx = (XList)tablaOriginal.Rows[i][ac.NombreColumna];
+                                        object oldValue = lx.Get((int)clave);
+                                        object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                        lx.Set((int)clave, valorcito);
+                                    }
+                                    else if (TipoCol.Equals(TipoDato.Tipo.SET))
+                                    {
+                                        XSet lx = (XSet)tablaOriginal.Rows[i][ac.NombreColumna];
+                                        object oldValue = lx.Get((int)clave);
+                                        object valorcito = ObtenerValorFinal(ac, oldValue, ac.ValorColumna.Ejecutar(ent), ent);
+                                        lx.Set((int)clave, valorcito);
+                                    }
                                 }
                             }
                         }
@@ -379,16 +475,16 @@ public class UpdateTable : Instruccion
         return (filaVal is int || filaVal is double) && (nuevoVal is int || nuevoVal is double);
     }
 
-    private bool VerificarTipoDatoConObjetoCollection(DataTable tablaOriginal, AsignacionColumna ac, TipoDato.Tipo valueType, DataRow rowsi, Entorno ent)
+    private bool VerificarTipoDatoConCollection(DataTable tablaOriginal, AsignacionColumna ac, TipoDato.Tipo valueType, DataRow rowsi, Entorno ent)
     {
-        // 1. Verifico que la columna si sea de tipo Objeto/Collection para poder acceder a una posición.
+        // 1. Verifico que la columna si sea de tipo Collection para poder acceder a una posición.
         TipoDato TipoDatoCol = ((Columna)tablaOriginal.Columns[ac.NombreColumna]).TipoDatoColumna;
         TipoDato.Tipo TipoCol = TipoDatoCol.GetRealTipo();
-        TipoDato.Tipo[] permitidos = { TipoDato.Tipo.OBJECT, TipoDato.Tipo.MAP, TipoDato.Tipo.SET, TipoDato.Tipo.LIST };
+        TipoDato.Tipo[] permitidos = { TipoDato.Tipo.MAP, TipoDato.Tipo.SET, TipoDato.Tipo.LIST };
 
         if (permitidos.Contains(TipoCol))
         {
-            // 2. Verifico, si la columna es Map ú Objeto, que el atributo exista.  De lo contrario solo se valida que la expresión sea de tipo
+            // 2. Verifico, si la columna es Map, que el atributo exista.  De lo contrario solo se valida que la expresión sea de tipo
             // entero, si no, se arroja error.  Si la expresión de la posición es de tipo entero pero no existe, también se debe de arrojar error.
 
             if (TipoCol.Equals(TipoDato.Tipo.MAP))
@@ -406,27 +502,6 @@ public class UpdateTable : Instruccion
                 else
                 {
                     CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. La clave proporcionada para actualizar su valor no existe en la collection.", fila, columna);
-                    return false;
-                }
-            }
-            else if (TipoCol.Equals(TipoDato.Tipo.OBJECT))
-            {
-                Objeto obj = (Objeto)rowsi[ac.NombreColumna];
-                object valPos = ac.ValorPosicionObjeto.Ejecutar(ent);
-
-                if (obj.ListaAtributosObjeto.Any(x => x.Nombre.Equals(valPos)))
-                {
-                    AtributoObjeto atrobj = obj.ListaAtributosObjeto.Find(x => x.Nombre.Equals(valPos));
-
-                    // 3. Verifico que el tipo de dato del valor correspondiente a esa clave concuerde con el que se le quiere actualizar.
-                    if (!atrobj.Tipo.GetRealTipo().Equals(valueType))
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. La clave proporcionada para actualizar su valor no existe en el objeto.", fila, columna);
                     return false;
                 }
             }
@@ -466,10 +541,24 @@ public class UpdateTable : Instruccion
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. No se puede actualizar el valor en la posición indicada ya que el elemento no es de tipo Objeto/Collection.", fila, columna);
+            CQL.AddLUPError("Semántico", "[UPDATE_TABLE]", "Error. No se puede actualizar el valor en la posición indicada ya que el elemento no es de tipo Collection.", fila, columna);
             return false;
         }
 
         return true;
+    }
+
+    private object CasteoImplicito(TipoDato tipoDeclaracion, TipoDato tipoValor, object valor)
+    {
+        if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.INT) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+        {
+            return Convert.ToInt32((double)valor);
+        }
+        else if (tipoDeclaracion.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE) && tipoValor.GetRealTipo().Equals(TipoDato.Tipo.INT))
+        {
+            return ((int)valor) * 1.0;
+        }
+
+        return new Nulo();
     }
 }

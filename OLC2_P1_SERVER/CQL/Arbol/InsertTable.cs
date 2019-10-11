@@ -256,10 +256,13 @@ public class InsertTable : Instruccion
                 {
                     if (!valType.Equals(colType))
                     {
-                        string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
-                        CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
-                        if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
-                        return new ValuesException(mensaje);
+                        if (!((valType.Equals(TipoDato.Tipo.DOUBLE) && colType.Equals(TipoDato.Tipo.INT)) || (valType.Equals(TipoDato.Tipo.INT) && colType.Equals(TipoDato.Tipo.DOUBLE))))
+                        {
+                            string mensaje = "Error.  Los tipos de dato de los valores no concuerdan con los definidos en las columnas.";
+                            CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
+                            return new ValuesException(mensaje);
+                        }
                     }
                 }
             }
@@ -302,7 +305,10 @@ public class InsertTable : Instruccion
 
             if (!(valType.Equals(colType) || valType.Equals(TipoDato.Tipo.NULO)))
             {
-                return false;
+                if (!((valType.Equals(TipoDato.Tipo.DOUBLE) && colType.Equals(TipoDato.Tipo.INT)) || (valType.Equals(TipoDato.Tipo.INT) && colType.Equals(TipoDato.Tipo.DOUBLE))))
+                {
+                    return false;
+                }
             }
         }
 

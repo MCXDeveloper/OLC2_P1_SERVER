@@ -1,60 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a8ce24aa-4e87-4b0d-87b1-15c3f904ee18" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.vs/OLC2_P1_SERVER/v15/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OLC2_P1_SERVER/v15/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/analizadores/LUPGrammar.jison" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/analizadores/LUPGrammar.jison" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/analizadores/LUPGrammar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/analizadores/LUPGrammar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/javascripts/abstracto/AST.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/javascripts/abstracto/AST.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/javascripts/arbol/ErrorPackage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/javascripts/arbol/ErrorPackage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/javascripts/arbol/MessagePackage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/javascripts/arbol/MessagePackage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/views/ModoAvanzado.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/views/ModoAvanzado.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Abstracto/AST.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Abstracto/AST.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Analizadores/ASTBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Analizadores/ASTBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Analizadores/Grammar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Analizadores/Grammar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoCollection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoCollection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoColumna.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoColumna.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoObjeto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AccesoObjeto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AlterTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/AlterTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Asignacion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Asignacion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CasteoExplicito.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CasteoExplicito.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CollectionValue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CollectionValue.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/ColumnaTabla.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/ColumnaTabla.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateDatabase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateDatabase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateUserType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/CreateUserType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Declaracion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Declaracion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DeclaracionFuncion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DeclaracionFuncion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DropDatabase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DropDatabase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DropTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/DropTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/InsertTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/InsertTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/LlamadaFuncion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/LlamadaFuncion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Map.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Map.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Operacion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Operacion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/OperadorTernario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/OperadorTernario.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Select.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Select.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Switch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/Switch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/TruncateTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/TruncateTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/UseDatabase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/UseDatabase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/XList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/XList.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/XSet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Arbol/XSet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Entorno/Entorno.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Entorno/Entorno.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Estaticas/CQL.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Estaticas/CQL.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Manejadores/Error.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/CQL/Manejadores/TError.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/LUP/Arbol/QueryPackage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/LUP/Arbol/QueryPackage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/OLC2_P1_SERVER.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/OLC2_P1_SERVER.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/bin/OLC2_P1_SERVER.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/bin/OLC2_P1_SERVER.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/bin/OLC2_P1_SERVER.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/bin/OLC2_P1_SERVER.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.csprojAssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../OLC2_P1_SERVER/obj/Debug/OLC2_P1_SERVER.pdb" afterDir="false" />
-    </list>
+    <list default="true" id="a8ce24aa-4e87-4b0d-87b1-15c3f904ee18" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/olc2_p1_client/node_modules/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -66,53 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="65" column="36" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/views/ModoAvanzado.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="472" column="52" lean-forward="true" selection-start-line="472" selection-start-column="52" selection-end-line="472" selection-end-column="52" />
-              <folding>
-                <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-                <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#script#0;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#script#1;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#script#2;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#script#3;n#body#0;n#html#0;n#!!top" />
-                <element signature="n#script#4;n#body#0;n#html#0;n#!!top" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/public/javascripts/arbol/MessagePackage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="7" column="98" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="98" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/public/javascripts/abstracto/AST.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -165,10 +66,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2101" />
-    <option name="y" value="-19" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="x" value="240" />
+    <option name="y" value="131" />
+    <option name="width" value="1440" />
+    <option name="height" value="788" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -183,46 +84,6 @@
             <path>
               <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
               <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="javascripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="javascripts" type="462c0819:PsiDirectoryNode" />
-              <item name="abstracto" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="javascripts" type="462c0819:PsiDirectoryNode" />
-              <item name="arbol" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OLC2_P1_CLIENT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OLC2_P1_CLIENT" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -270,16 +131,17 @@
       <updated>1568156886989</updated>
       <workItem from="1568156889233" duration="31992000" />
       <workItem from="1568314173186" duration="35286000" />
+      <workItem from="1570129900844" duration="195000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67278000" />
+    <option name="totallyTimeSpent" value="67473000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14112692" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14112692" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -291,7 +153,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.19164883" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.19164883" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -336,13 +198,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/public/javascripts/require.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/client/public/javascripts/require.js" />
     <entry file="file://$PROJECT_DIR$/client/public/javascripts/arbol/LoginPackage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
@@ -421,13 +277,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="65" column="36" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/public/analizadores/LUPGrammar.jison">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
@@ -437,15 +286,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/public/javascripts/abstracto/AST.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
+        <state relative-caret-position="476">
+          <caret line="34" column="11" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/public/javascripts/arbol/MessagePackage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="7" column="98" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="98" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/views/ModoAvanzado.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="245">
-          <caret line="472" column="52" lean-forward="true" selection-start-line="472" selection-start-column="52" selection-end-line="472" selection-end-column="52" />
+          <caret line="535" column="52" selection-start-line="535" selection-start-column="52" selection-end-line="535" selection-end-column="52" />
           <folding>
             <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
             <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -458,10 +314,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/public/javascripts/arbol/MessagePackage.js">
+    <entry file="file://$PROJECT_DIR$/client/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="7" column="98" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="98" />
+        <state relative-caret-position="322">
+          <caret line="71" column="36" selection-start-line="71" selection-start-column="27" selection-end-line="71" selection-end-column="36" />
         </state>
       </provider>
     </entry>

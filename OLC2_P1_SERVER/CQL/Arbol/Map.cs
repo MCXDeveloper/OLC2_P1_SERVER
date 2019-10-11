@@ -231,4 +231,67 @@ public class Map
 
         return "{ }";
     }
+
+    public string GetChisonRepresentation()
+    {
+        if (ListaElementos != null)
+        {
+            string MapInString = "<";
+            List<string> ValoresMap = new List<string>();
+
+            foreach (KeyValuePair<object, object> kvp in ListaElementos)
+            {
+                /*string MapKey = kvp.Key is string ? "\"" + kvp.Key.ToString() + "\"" : kvp.Key.ToString();
+                string MapVal = kvp.Value is string ? "\"" + kvp.Value.ToString() + "\"" : kvp.Value.ToString();
+                ValoresMap.Add($" {MapKey} : {MapVal} ");*/
+
+                string MapKey = GetChisonValue(kvp.Key);
+                string MapVal = GetChisonValue(kvp.Value);
+                ValoresMap.Add($" {MapKey} = {MapVal} ");
+            }
+
+            MapInString += ValoresMap.Count > 0 ? string.Join(", ", ValoresMap) : "";
+            MapInString += ">";
+
+            return MapInString;
+        }
+
+        return "NULL";
+    }
+
+    private string GetChisonValue(object val)
+    {
+        if (val is string)
+        {
+            return "\"" + val.ToString() + "\"";
+        }
+        else if (val is Date)
+        {
+            return "'" + ((Date)val).Fecha + "'";
+        }
+        else if (val is Time)
+        {
+            return "'" + ((Time)val).Tiempo + "'";
+        }
+        else if (val is Map)
+        {
+            return ((Map)val).GetChisonRepresentation();
+        }
+        else if (val is XList)
+        {
+            return ((XList)val).GetChisonRepresentation();
+        }
+        else if (val is XSet)
+        {
+            return ((XSet)val).GetChisonRepresentation();
+        }
+        else if (val is Objeto)
+        {
+            return ((Objeto)val).GetChisonRepresentation();
+        }
+        else
+        {
+            return val.ToString();
+        }
+    }
 }

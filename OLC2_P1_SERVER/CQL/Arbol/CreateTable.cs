@@ -335,6 +335,7 @@ public class CreateTable : Instruccion
                 if (ListaLlavesPrimarias.Contains(col.NombreColumna))
                 {
                     pkList.Add(col);
+                    col.IsPK = true;
                 }
             }
         }

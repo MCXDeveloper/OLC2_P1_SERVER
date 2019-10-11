@@ -36,4 +36,52 @@ public class Objeto
 
         return objString;
     }
+
+    public string GetChisonRepresentation()
+    {
+        List<string> ValoresEnString = new List<string>();
+
+        foreach (AtributoObjeto ao in ListaAtributosObjeto)
+        {
+            ValoresEnString.Add("\"" + ao.Nombre + "\" = " + GetChisonValue(ao.Valor));
+        }
+
+        return ValoresEnString.Count > 0 ? "<" + string.Join(", ", ValoresEnString) + ">" : "NULL";
+    }
+
+    private string GetChisonValue(object val)
+    {
+        if (val is string)
+        {
+            return "\"" + val.ToString() + "\"";
+        }
+        else if (val is Date)
+        {
+            return "'" + ((Date)val).Fecha + "'";
+        }
+        else if (val is Time)
+        {
+            return "'" + ((Time)val).Tiempo + "'";
+        }
+        else if (val is Map)
+        {
+            return ((Map)val).GetChisonRepresentation();
+        }
+        else if (val is XList)
+        {
+            return ((XList)val).GetChisonRepresentation();
+        }
+        else if (val is XSet)
+        {
+            return ((XSet)val).GetChisonRepresentation();
+        }
+        else if (val is Objeto)
+        {
+            return ((Objeto)val).GetChisonRepresentation();
+        }
+        else
+        {
+            return val.ToString();
+        }
+    }
 }

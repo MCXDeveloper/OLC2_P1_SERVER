@@ -51,6 +51,8 @@ public class AST : Instruccion
     {
         foreach (Instruccion ins in Instrucciones)
         {
+            global = ent;
+
             if (ins is Declaracion)
             {
                 Declaracion x = (Declaracion)ins;

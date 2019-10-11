@@ -35,7 +35,8 @@ public class Rollback : Instruccion
             // 4. Verifico que el archivo tenga contenido.
             if (new FileInfo(path).Length != 0)
             {
-                string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
+                //string[] lines = File.ReadAllLines(path, Encoding.GetEncoding("iso-8859-1"));
+                string[] lines = File.ReadAllLines(path, Encoding.UTF8);
                 string contenido = string.Join("\n", lines);
 
                 // 5. Una vez tengo el contenido del archivo maestro, procedo a enviarlo a su respectivo parseo.
@@ -59,7 +60,11 @@ public class Rollback : Instruccion
 
         // Creo la base de datos y la tabla de errores correspondiente a Chison únicamente si si hubieron errores.
         CreateAndLoadChisonLog();
-        CQL.RestartSession();
+
+        if (IsInitFlag)
+        {
+            CQL.RestartSession();
+        }
 
         return new Nulo();
     }

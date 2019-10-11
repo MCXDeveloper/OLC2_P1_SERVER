@@ -29,6 +29,18 @@ public class Entorno
         }
     }
 
+    public void EliminarVariable(string id)
+    {
+        for (Entorno e = this; e != null; e = e.Anterior)
+        {
+            Variable encontrado = (Variable)(e.TablaVariables[id]);
+            if (encontrado != null)
+            {
+                e.TablaVariables.Remove(id);
+            }
+        }
+    }
+
     public object ObtenerVariable(string id)
     {
         for(Entorno e = this; e != null; e = e.Anterior)

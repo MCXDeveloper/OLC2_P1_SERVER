@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -149,12 +150,11 @@ public class Table : InstruccionBD
         {
             string subchison = new string('\t', numTabs + 3) + "<" + Environment.NewLine;
 
-            foreach (DataColumn col in Tabla.Columns)
+            foreach (Columna col in Tabla.Columns)
             {
                 string tabColumn = "\"" + col.ColumnName + "\"";
                 bool isLastColumn = Tabla.Columns[Tabla.Columns.Count - 1].Equals(col);
-                string chisonval = row[col.ColumnName] is string ? "\"" + row[col.ColumnName].ToString() + "\"" : row[col.ColumnName].ToString();
-
+                string chisonval = GetChisonRowValue(col, row[col.ColumnName]);
                 subchison += new string('\t', numTabs + 4) + tabColumn + " = " + chisonval + (isLastColumn ? Environment.NewLine : ", " + Environment.NewLine);
             }
 
@@ -185,5 +185,55 @@ public class Table : InstruccionBD
         response += "[-TABLE]";
 
         return response;
+    }
+
+    private string GetChisonRowValue(Columna col, object val)
+    {
+        if (val is null || val is DBNull)
+        {
+            return "NULL";
+        }
+        else if (val is string)
+        {
+            return "\"" + val.ToString() + "\"";
+        }
+        else if (val is DateTime)
+        {
+            if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.DATE))
+            {
+                return "'" + ((DateTime)val).Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "'";
+            }
+            else
+            {
+                return "'" + ((DateTime)val).ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture) + "'";
+            }
+        }
+        else
+        {
+            if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.MAP))
+            {
+                Map xx = (Map)val;
+                return xx.GetChisonRepresentation();
+            }
+            else if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.LIST))
+            {
+                XList xx = (XList)val;
+                return xx.GetChisonRepresentation();
+            }
+            else if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.SET))
+            {
+                XSet xx = (XSet)val;
+                return xx.GetChisonRepresentation();
+            }
+            else if (col.TipoDatoColumna.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
+            {
+                Objeto xx = (Objeto)val;
+                return xx.GetChisonRepresentation();
+            }
+            else
+            {
+                return val.ToString();
+            }    
+        }
     }
 }

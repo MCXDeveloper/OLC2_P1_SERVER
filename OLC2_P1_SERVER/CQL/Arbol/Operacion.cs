@@ -605,28 +605,55 @@ public class Operacion : Exception, Expresion, Instruccion
         else if (op1 is XList && op2 is XList)
         {
             XList xOp1 = (XList)op1;
-            foreach (object obj in ((XList)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+                foreach (object obj in ((XList)op2).ListaElementos)
+                {
+                    xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+
             return xOp1;
         }
         else if (op1 is XSet && op2 is XSet)
         {
             XSet xOp1 = (XSet)op1;
-            foreach (object obj in ((XSet)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+                foreach (object obj in ((XSet)op2).ListaElementos)
+                {
+                    xOp1.ListaElementos.RemoveAll(x => x.Equals(obj));
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+
             return xOp1;
         }
         else if (op1 is Map && op2 is XSet)
         {
             Map xOp1 = (Map)op1;
-            foreach (object obj in ((XSet)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.Remove(obj);
+                foreach (object obj in ((XSet)op2).ListaElementos)
+                {
+                    xOp1.Remove(obj);
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+
             return xOp1;
         }
         else
@@ -700,28 +727,55 @@ public class Operacion : Exception, Expresion, Instruccion
         else if (op1 is XList && op2 is XList)
         {
             XList xOp1 = (XList)op1;
-            foreach (object obj in ((XList)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.Insert(obj);
+                foreach (object obj in ((XList)op2).ListaElementos)
+                {
+                    xOp1.Insert(obj);
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+    
             return xOp1;
         }
         else if (op1 is XSet && op2 is XSet)
         {
             XSet xOp1 = (XSet)op1;
-            foreach (object obj in ((XSet)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.Insert(obj);
+                foreach (object obj in ((XSet)op2).ListaElementos)
+                {
+                    xOp1.Insert(obj);
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+
             return xOp1;
         }
         else if (op1 is Map && op2 is Map)
         {
             Map xOp1 = (Map)op1;
-            foreach (KeyValuePair<object, object> entry in ((Map)op2).ListaElementos)
+
+            if (!typeFlag)
             {
-                xOp1.Insert(entry.Key, entry.Value);
+                foreach (KeyValuePair<object, object> entry in ((Map)op2).ListaElementos)
+                {
+                    xOp1.Insert(entry.Key, entry.Value);
+                }
             }
+            else
+            {
+                typeFlag = false;
+            }
+
             return xOp1;
         }
         else

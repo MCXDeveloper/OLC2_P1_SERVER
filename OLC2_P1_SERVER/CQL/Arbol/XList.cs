@@ -171,4 +171,50 @@ public class XList
 
         return "{%  %}";
     }
+
+    public string GetChisonRepresentation()
+    {
+        List<string> ValoresEnString = new List<string>();
+
+        if (ListaElementos != null)
+        {
+            foreach (object val in ListaElementos)
+            {
+                if (val is string)
+                {
+                    ValoresEnString.Add("\"" + val.ToString() + "\"");
+                }
+                else if (val is Date)
+                {
+                    ValoresEnString.Add("'" + ((Date)val).Fecha + "'");
+                }
+                else if (val is Time)
+                {
+                    ValoresEnString.Add("'" + ((Time)val).Tiempo + "'");
+                }
+                else if (val is Map)
+                {
+                    ValoresEnString.Add(((Map)val).GetChisonRepresentation());
+                }
+                else if (val is XList)
+                {
+                    ValoresEnString.Add(((XList)val).GetChisonRepresentation());
+                }
+                else if (val is XSet)
+                {
+                    ValoresEnString.Add(((XSet)val).GetChisonRepresentation());
+                }
+                else if (val is Objeto)
+                {
+                    ValoresEnString.Add(((Objeto)val).GetChisonRepresentation());
+                }
+                else
+                {
+                    ValoresEnString.Add(val.ToString());
+                }
+            }
+        }
+
+        return ValoresEnString.Count > 0 ? "[" + string.Join(", ", ValoresEnString) + "]" : "NULL";
+    }
 }

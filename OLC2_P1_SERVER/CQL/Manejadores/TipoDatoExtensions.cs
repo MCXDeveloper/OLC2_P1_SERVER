@@ -35,6 +35,10 @@ public static class TipoDatoExtensions
         {
             return "Cursor";
         }
+        else if (td.GetRealTipo().Equals(TipoDato.Tipo.COUNTER))
+        {
+            return "Counter";
+        }
         else if (td.GetRealTipo().Equals(TipoDato.Tipo.MAP))
         {
             if (td.GetElemento() is MapType)

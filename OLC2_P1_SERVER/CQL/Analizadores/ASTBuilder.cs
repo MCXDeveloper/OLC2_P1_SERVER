@@ -1012,7 +1012,7 @@ public class ASTBuilder
         {
             switch (actual.ChildNodes.Count)
             {
-                case 3:
+                case 4:
                     return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)RecorridoAuxiliar(actual.ChildNodes[3]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
                     return new UpdateTable(ObtenerLexema(actual, 1), (List<AsignacionColumna>)RecorridoAuxiliar(actual.ChildNodes[3]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]), GetFila(actual, 0), GetColumna(actual, 0));
@@ -1033,6 +1033,8 @@ public class ASTBuilder
             {
                 case 3:
                     return new AsignacionColumna(ObtenerLexema(actual, 0), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[1]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]));
+                case 5:
+                    return new AsignacionColumna(ObtenerLexema(actual, 0), (List<Expresion>)Recorrido(actual.ChildNodes[2]), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[3]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[4]));
                 default:
                     return new AsignacionColumna(ObtenerLexema(actual, 0), (Expresion)RecorridoAuxiliar(actual.ChildNodes[2]), (TipoAsignacion)RecorridoAuxiliar(actual.ChildNodes[4]), (Expresion)RecorridoAuxiliar(actual.ChildNodes[5]));
             }

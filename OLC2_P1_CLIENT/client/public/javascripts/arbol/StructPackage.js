@@ -33,7 +33,6 @@ class StructPackage {
         if (!(tablesArray === undefined || tablesArray.length == 0)) {
             
             tablesArray.forEach(element => {
-                console.log(element.lista_columnas);
                 tablesJSON.push("{ 'text' : '"+ element.name +"', 'state' : { 'opened' : true, 'selected' : false }, 'children' : [ "+ this.GetColAtrJSON(element.lista_columnas) +" ] }");
             });
 

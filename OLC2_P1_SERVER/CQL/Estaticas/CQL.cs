@@ -19,7 +19,7 @@ public class CQL
     public static string BaseDatosEnUso { get; set; }
     public static int BatchErrorCounter { get; set; }
     public static string UsuarioLogueado { get; set; }
-    public static List<string> PilaRespuestas { get; set; }
+    public static List<string> PilaRespuestas = new List<string>();
     public static List<Usuario> ListaUsuariosDisponibles { get; set; }
     public static List<RollbackError> PilaErroresRollback { get; set; }
     
@@ -244,11 +244,11 @@ public class CQL
     {
         if (IsInitRollback)
         {
-            PilaErroresRollback.Add(new RollbackError(type, location, description, line, column));
+            PilaErroresRollback.Add(new RollbackError(type, location.Replace("[", "╠ ").Replace("]", " ╣"), description, line, column));
         }
         else
         {
-            PilaRespuestas.Add("[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+LOCATION]" + location + "[-LOCATION][+DESC]" + description + "[-DESC][-ERROR]" + Environment.NewLine);
+            PilaRespuestas.Add("[+ERROR][+LINE]" + line + "[-LINE][+COLUMN]" + column + "[-COLUMN][+TYPE]" + type + "[-TYPE][+LOCATION]" + location.Replace("[", "╠ ").Replace("]", " ╣") + "[-LOCATION][+DESC]" + description + "[-DESC][-ERROR]" + Environment.NewLine);
         }
     }
 
@@ -280,7 +280,7 @@ public class CQL
         IsInitRollback = false;
         BaseDatosEnUso = string.Empty;
         UsuarioLogueado = string.Empty;
-        PilaRespuestas = new List<string>();
+        //PilaRespuestas = new List<string>();
         ListaUsuariosDisponibles = new List<Usuario>();
         PilaErroresRollback = new List<RollbackError>();
     }
@@ -296,8 +296,6 @@ public class CQL
         BatchErrorCounter = 0;
         IsInitRollback = false;
         BaseDatosEnUso = string.Empty;
-        BaseDatosEnUso = string.Empty;
-        UsuarioLogueado = string.Empty;
         UsuarioLogueado = string.Empty;
         PilaRespuestas = new List<string>();
     }

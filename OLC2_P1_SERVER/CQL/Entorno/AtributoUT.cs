@@ -28,7 +28,7 @@ public class AtributoUT : InstruccionBD
     public string CrearChison(int numTabs)
     {
         string chison = new string('\t', numTabs + 1) + "<" + Environment.NewLine;
-        chison += new string('\t', numTabs + 2) + "\"NAME\" = \"" + Identificador + "\"" + Environment.NewLine;
+        chison += new string('\t', numTabs + 2) + "\"NAME\" = \"" + Identificador + "\", " + Environment.NewLine;
         chison += new string('\t', numTabs + 2) + "\"TYPE\" = \"" + TipoDatoExtensions.ToFriendlyString(Tipo) + "\"" + Environment.NewLine;
         chison += new string('\t', numTabs + 1) + ">" + Environment.NewLine;
         return chison;

@@ -56,12 +56,13 @@ public class LlamadaFuncion : Instruccion, Expresion
                 {
                     foreach (Instruccion ins in f.ListaInstrucciones)
                     {
-                        object result = ins.Ejecutar(local);
-
-                        if (result is Return)
+                        if (ins is Return)
                         {
-                            object resp = ((Return)result).Ejecutar(local);
-                            return resp;
+                            return ((Return)ins).Ejecutar(local);
+                        }
+                        else
+                        {
+                            ins.Ejecutar(local);
                         }
                     }
                 }

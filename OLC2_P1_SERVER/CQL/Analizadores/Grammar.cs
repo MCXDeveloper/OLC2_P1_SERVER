@@ -480,6 +480,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         ASIGNACION_COLUMNA.Rule = identificador + TIPO_ASIGNACION + EXPRESION
             | identificador + cor_a + EXPRESION + cor_c + TIPO_ASIGNACION + EXPRESION
+            | identificador + punto + LISTA_ACCESO + TIPO_ASIGNACION + EXPRESION
             ;
 
         SENTENCIA_THROW.Rule = r_throw + r_new + TIPO_EXCEPCION;
