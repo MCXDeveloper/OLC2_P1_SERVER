@@ -62,6 +62,21 @@ public class AccesoObjeto : Expresion, Instruccion
         {
             return new TipoDato(TipoDato.Tipo.SET);
         }
+        else if (valor is Objeto)
+        {
+            return new TipoDato(TipoDato.Tipo.OBJECT, ((Objeto)valor).TipoDatoObjeto.GetElemento());
+        }
+        else if (valor is AtributoObjeto)
+        {
+            if (((AtributoObjeto)valor).Tipo.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
+            {
+                return new TipoDato(TipoDato.Tipo.OBJECT, ((AtributoObjeto)valor).Tipo.GetElemento());
+            }
+            else
+            {
+                return ((AtributoObjeto)valor).Tipo;
+            }
+        }
         else
         {
             return new TipoDato(TipoDato.Tipo.OBJECT);
@@ -245,13 +260,13 @@ public class AccesoObjeto : Expresion, Instruccion
                     {
                         FuncionSet fs = (FuncionSet)acceso;
                         fs.Padre = ((AtributoObjeto)elemento).Valor;
-                        fs.Ejecutar(ent);
+                        return fs.Ejecutar(ent);
                     }
                     else
                     {
                         FuncionSet fs = (FuncionSet)acceso;
                         fs.Padre = elemento;
-                        fs.Ejecutar(ent);
+                        return fs.Ejecutar(ent);
                     }
                 }
                 else if (acceso is FuncionClear)

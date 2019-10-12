@@ -49,7 +49,7 @@ public class XList
         }
     }
 
-    public bool Set(int posicion, object valor)
+    public object Set(int posicion, object valor)
     {
         if (ListaElementos.ElementAtOrDefault(posicion) != null)
         {
@@ -65,7 +65,10 @@ public class XList
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[LIST]", "No se puede actualizar un elemento en una posición inexistente.", fila, columna);
+            string mensaje = "No se puede actualizar un elemento en una posición inexistente.";
+            CQL.AddLUPError("Semántico", "[LIST]", mensaje, fila, columna);
+            //if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+            return new IndexOutException(mensaje);
         }
 
         return false;

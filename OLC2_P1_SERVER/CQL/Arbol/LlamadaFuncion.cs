@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -98,6 +99,21 @@ public class LlamadaFuncion : Instruccion, Expresion
             if (exp is LlamadaFuncion)
             {
                 id += "_" + ((LlamadaFuncion)exp).GetTipo(ent).GetRealTipo();
+            }
+            else if (exp is AccesoObjeto)
+            {
+                AccesoObjeto aux = (AccesoObjeto)exp;
+                aux.IsValor = false;
+                TipoDato auxTipo = aux.GetTipo(ent);
+
+                if (auxTipo.GetRealTipo().Equals(TipoDato.Tipo.OBJECT))
+                {
+                    id += "_" + TipoDato.Tipo.OBJECT + "_" + (string)auxTipo.GetElemento();
+                }
+                else
+                {
+                    id += "_" + auxTipo.GetRealTipo();
+                }
             }
             else
             {

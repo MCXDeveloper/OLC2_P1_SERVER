@@ -37,7 +37,9 @@ public class For : Instruccion
                 }
                 else
                 {
-                    ins.Ejecutar(local);
+                    object aux = ins.Ejecutar(local);
+                    if (aux is Exception)
+                        return aux;
                 }
             }
 

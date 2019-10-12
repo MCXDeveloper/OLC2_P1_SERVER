@@ -43,7 +43,22 @@ public class Declaracion : Instruccion
 
                 if (simbolo is Nulo)
                 {
-                    ent.Agregar(variable, new Variable(Tipo, variable, new Nulo()));
+                    if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.INT))
+                    {
+                        ent.Agregar(variable, new Variable(Tipo, variable, 0));
+                    }
+                    else if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.DOUBLE))
+                    {
+                        ent.Agregar(variable, new Variable(Tipo, variable, 0.0));
+                    }
+                    else if (Tipo.GetRealTipo().Equals(TipoDato.Tipo.BOOLEAN))
+                    {
+                        ent.Agregar(variable, new Variable(Tipo, variable, false));
+                    }
+                    else
+                    {
+                        ent.Agregar(variable, new Variable(Tipo, variable, new Nulo()));
+                    }
                 }
                 else
                 {
@@ -101,7 +116,10 @@ public class Declaracion : Instruccion
                                         }
                                         else
                                         {
-                                            CQL.AddLUPError("Semántico", "[DECLARACION]", "El UserType '" + nombre_user_type + "' con el que se está declarando la variable no existe en el sistema.", fila, columna);
+                                            string mensaje = "El UserType '" + nombre_user_type + "' con el que se está declarando la variable no existe en el sistema.";
+                                            CQL.AddLUPError("Semántico", "[DECLARACION]", mensaje, fila, columna);
+                                            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'TypeDontExists' no capturada.  " + mensaje); }
+                                            return new TypeDontExists(mensaje);
                                         }
                                     }
                                     else

@@ -220,7 +220,14 @@ public class Asignacion : Instruccion
                 }
                 else
                 {
-                    CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
+                    if (VarAccess is Exception)
+                    {
+                        return VarAccess;
+                    }
+                    else
+                    {
+                        CQL.AddLUPError("Semántico", "[ASIGNACION]", "Error de tipos.  Se espera que el acceso a un objeto devuelva un valor de tipo Objeto.", fila, columna);
+                    }
                 }
             }
         }

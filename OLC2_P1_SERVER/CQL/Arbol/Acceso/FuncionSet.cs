@@ -43,7 +43,7 @@ public class FuncionSet : Expresion
 
                 if (posicion is int)
                 {
-                    coleccion.Set((int)posicion, Valor.Ejecutar(ent));
+                    return coleccion.Set((int)posicion, Valor.Ejecutar(ent));
                 }
                 else
                 {
@@ -57,7 +57,7 @@ public class FuncionSet : Expresion
 
                 if (posicion is int)
                 {
-                    coleccion.Set((int)posicion, Valor.Ejecutar(ent));
+                    return coleccion.Set((int)posicion, Valor.Ejecutar(ent));
                 }
                 else
                 {

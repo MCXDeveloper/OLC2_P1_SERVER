@@ -219,7 +219,10 @@ public class InsertTable : Instruccion
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", "Error.  Alguno de los campos proporcionados en la lista de campos no existe.", fila, columna);
+                string mensaje = "Error.  Alguno de los campos proporcionados en la lista de campos no existe.";
+                CQL.AddLUPError("Semántico", "[INSERT_TABLE]", mensaje, fila, columna);
+                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ColumnException' no capturada.  " + mensaje); }
+                return new ColumnException(mensaje);
             }
         }
         else
@@ -229,8 +232,6 @@ public class InsertTable : Instruccion
             if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'ValuesException' no capturada.  " + mensaje); }
             return new ValuesException(mensaje);
         }
-
-        return false;
     }
 
     private object ValidateValueTypesWithColumnTypes(Table tablita, Entorno ent)

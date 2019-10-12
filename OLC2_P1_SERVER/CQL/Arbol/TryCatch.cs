@@ -31,6 +31,8 @@ public class TryCatch : Instruccion
         {
             case TipoExcepcion.ARITHMETIC_EXCEPTION:
                 try { return EjecutarInstruccionesTry(ent); } catch (ArithmeticException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.TYPE_DONT_EXISTS:
+                try { return EjecutarInstruccionesTry(ent); } catch (TypeDontExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.TYPE_ALREADY_EXISTS:
                 try { return EjecutarInstruccionesTry(ent); } catch (TypeAlreadyExists ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.BD_ALREADY_EXISTS:
