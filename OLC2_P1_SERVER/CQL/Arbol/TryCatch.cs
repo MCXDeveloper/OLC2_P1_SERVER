@@ -67,6 +67,8 @@ public class TryCatch : Instruccion
                 try { return EjecutarInstruccionesTry(ent); } catch (NumberReturnsException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
             case TipoExcepcion.BATCH_EXCEPTION:
                 try { return EjecutarInstruccionesTry(ent); } catch (BatchException ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
+            case TipoExcepcion.EXCEPTION:
+                try { return EjecutarInstruccionesTry(ent); } catch (Exception ex) { return EjecutarInstruccionesCatch(ex.Message, ent); }
         }
 
         CQL.TryCatchFlag = false;

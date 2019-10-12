@@ -93,14 +93,6 @@ public class AccesoObjeto : Expresion, Instruccion
         {
             object padre = ((Variable)simbolo).Valor;
 
-            if (ListaAcceso.Count == 2)
-            {
-                if (ListaAcceso[1] is FuncionSet)
-                {
-                    Debug.WriteLine("xx");
-                }
-            }
-
             foreach (Expresion exp in ListaAcceso)
             {
                 object access_resp = ValidarAcceso(padre, exp, ent);

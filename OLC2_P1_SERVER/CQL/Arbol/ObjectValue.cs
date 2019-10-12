@@ -45,7 +45,7 @@ public class ObjectValue : Expresion
             {
                 Expresion exp = ListaExpresiones[i];
                 AtributoUT aut = ut.ListaAtributos[i];
-                listAtrObj.Add(new AtributoObjeto(exp.GetTipo(ent), aut.Identificador, exp.Ejecutar(ent)));
+                listAtrObj.Add(new AtributoObjeto(aut.Tipo, aut.Identificador, exp.Ejecutar(ent)));
             }
 
             return new Objeto(GetTipo(ent), listAtrObj);

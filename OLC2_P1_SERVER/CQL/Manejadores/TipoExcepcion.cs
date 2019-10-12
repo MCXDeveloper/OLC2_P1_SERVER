@@ -5,6 +5,7 @@ using System.Web;
 
 public enum TipoExcepcion
 {
+    EXCEPTION,
     BD_DONT_EXISTS,
     BATCH_EXCEPTION,
     TYPE_DONT_EXISTS,

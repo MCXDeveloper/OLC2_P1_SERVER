@@ -107,6 +107,7 @@ public class Grammar : Irony.Parsing.Grammar
         KeyTerm r_toupper = ToTerm("touppercase");
         KeyTerm r_tolower = ToTerm("tolowercase");
         KeyTerm r_substring = ToTerm("substring");
+        KeyTerm r_exception = ToTerm("exception");
         KeyTerm r_startswith = ToTerm("startswith");
         KeyTerm r_getminutes = ToTerm("getminuts");
         KeyTerm r_getseconds = ToTerm("getseconds");
@@ -414,7 +415,6 @@ public class Grammar : Irony.Parsing.Grammar
         LISTA_INSTRUCCIONES.Rule = MakePlusRule(LISTA_INSTRUCCIONES, INSTRUCCION);
 
         INSTRUCCION.Rule = DECLARACION + puco
-            //| DECLARACION_CURSOR + puco
             | SENTENCIA_ACCESO + puco
             | ASIGNACION_MULTIPLE + puco
             | ASIGNACION + puco
@@ -465,8 +465,6 @@ public class Grammar : Irony.Parsing.Grammar
         ASIGNACION_MULTIPLE.Rule = LISTA_VARIABLES + igual + LLAMADA_PROCEDIMIENTO;
 
         SENTENCIA_FOREACH.Rule = r_for + r_each + par_a + LISTA_PARAMETROS + par_c + r_in + variable + llave_a + LISTA_INSTRUCCIONES + llave_c;
-
-        //DECLARACION_CURSOR.Rule = r_cursor + variable + r_is + SENTENCIA_TB_SELECT;
 
         ACCION_CURSOR.Rule = r_open + variable
             | r_close + variable
@@ -786,6 +784,7 @@ public class Grammar : Irony.Parsing.Grammar
             | r_functionalreadyexists
             | r_procedurealreadyexists
             | r_objectalreadyexists
+            | r_exception
             ;
 
         this.Root = INICIO;

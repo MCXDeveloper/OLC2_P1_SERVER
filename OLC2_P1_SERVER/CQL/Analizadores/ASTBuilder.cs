@@ -944,7 +944,11 @@ public class ASTBuilder
         }
         else if (EstoyAca(actual, "TIPO_EXCEPCION"))
         {
-            if (EstoyAca(actual.ChildNodes[0], "bddontexists"))
+            if (EstoyAca(actual.ChildNodes[0], "exception"))
+            {
+                return TipoExcepcion.EXCEPTION;
+            }
+            else if (EstoyAca(actual.ChildNodes[0], "bddontexists"))
             {
                 return TipoExcepcion.BD_DONT_EXISTS;
             }
