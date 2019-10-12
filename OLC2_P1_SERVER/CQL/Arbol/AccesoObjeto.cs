@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -91,6 +92,14 @@ public class AccesoObjeto : Expresion, Instruccion
         if(!(simbolo is Nulo))
         {
             object padre = ((Variable)simbolo).Valor;
+
+            if (ListaAcceso.Count == 2)
+            {
+                if (ListaAcceso[1] is FuncionSet)
+                {
+                    Debug.WriteLine("xx");
+                }
+            }
 
             foreach (Expresion exp in ListaAcceso)
             {
@@ -221,15 +230,33 @@ public class AccesoObjeto : Expresion, Instruccion
             {
                 if (acceso is FuncionInsert)
                 {
-                    FuncionInsert fi = (FuncionInsert)acceso;
-                    fi.Padre = elemento;
-                    fi.Ejecutar(ent);
+                    if (elemento is AtributoObjeto)
+                    {
+                        FuncionInsert fi = (FuncionInsert)acceso;
+                        fi.Padre = ((AtributoObjeto)elemento).Valor;
+                        fi.Ejecutar(ent);
+                    }
+                    else
+                    {
+                        FuncionInsert fi = (FuncionInsert)acceso;
+                        fi.Padre = elemento;
+                        fi.Ejecutar(ent);
+                    }
                 }
                 else if (acceso is FuncionSet)
                 {
-                    FuncionSet fs = (FuncionSet)acceso;
-                    fs.Padre = elemento;
-                    fs.Ejecutar(ent);
+                    if (elemento is AtributoObjeto)
+                    {
+                        FuncionSet fs = (FuncionSet)acceso;
+                        fs.Padre = ((AtributoObjeto)elemento).Valor;
+                        fs.Ejecutar(ent);
+                    }
+                    else
+                    {
+                        FuncionSet fs = (FuncionSet)acceso;
+                        fs.Padre = elemento;
+                        fs.Ejecutar(ent);
+                    }
                 }
                 else if (acceso is FuncionClear)
                 {

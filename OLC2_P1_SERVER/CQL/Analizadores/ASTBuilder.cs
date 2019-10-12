@@ -88,9 +88,11 @@ public class ASTBuilder
             switch (actual.ChildNodes.Count)
             {
                 case 6:
+                    //r_create + r_type + identificador + par_a + LISTA_ATR_TYPE + par_c
                     return new CreateUserType(false, ObtenerLexema(actual, 2), (List<AtributoUT>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
                 default:
-                    return new CreateUserType(true, ObtenerLexema(actual, 2), (List<AtributoUT>)RecorridoAuxiliar(actual.ChildNodes[4]), GetFila(actual, 0), GetColumna(actual, 0));
+                    //r_create + r_type + r_if + r_not + r_exists + identificador + par_a + LISTA_ATR_TYPE + par_c
+                    return new CreateUserType(true, ObtenerLexema(actual, 5), (List<AtributoUT>)RecorridoAuxiliar(actual.ChildNodes[7]), GetFila(actual, 0), GetColumna(actual, 0));
             }
         }
         else if (EstoyAca(actual, "LISTA_ATR_TYPE"))

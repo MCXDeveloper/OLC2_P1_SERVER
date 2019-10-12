@@ -52,7 +52,7 @@ public class XSet
         {
             string mensaje = "No se puede obtener un elemento en una posición inexistente.";
             CQL.AddLUPError("Semántico", "[SET]", mensaje, fila, columna);
-            if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+            //if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
             return new IndexOutException(mensaje);
         }
     }

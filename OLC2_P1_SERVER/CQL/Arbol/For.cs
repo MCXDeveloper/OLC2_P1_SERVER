@@ -21,11 +21,13 @@ public class For : Instruccion
 
     public object Ejecutar(Entorno ent)
     {
-        inicializador.Ejecutar(ent);
+        Entorno xx = new Entorno(ent);
 
-        while ((bool)condicion.Ejecutar(ent))
+        inicializador.Ejecutar(xx);
+
+        while ((bool)condicion.Ejecutar(xx))
         {
-            Entorno local = new Entorno(ent);
+            Entorno local = new Entorno(xx);
 
             foreach (Instruccion ins in lista_instrucciones)
             {
@@ -39,7 +41,7 @@ public class For : Instruccion
                 }
             }
 
-            incrementador.Ejecutar(ent);
+            incrementador.Ejecutar(xx);
         }
 
         return new Nulo();

@@ -309,6 +309,28 @@ public class Operacion : Exception, Expresion, Instruccion
         {
             return (bool)op1 != (bool)op2;
         }
+        else if (!(op1 is int || op1 is double) && op2 is Nulo)
+        {
+            if (op1 is Exception)
+            {
+                return false;
+            }
+            else
+            {
+                return op1 is Nulo ? false : true;
+            }
+        }
+        else if (!(op2 is int || op2 is double) && op1 is Nulo)
+        {
+            if (op2 is Exception)
+            {
+                return false;
+            }
+            else
+            {
+                return op2 is Nulo ? false : true;
+            }
+        }
         else
         {
             string mensaje = "La operación DIFERENTE QUE no se puede realizar entre variables de tipo '" + op1.GetType().ToString() + "' & '" + op2.GetType().ToString() + "'.";
@@ -342,6 +364,28 @@ public class Operacion : Exception, Expresion, Instruccion
         else if (op1 is bool && op2 is bool)
         {
             return (bool)op1 == (bool)op2;
+        }
+        else if (!(op1 is int || op1 is double) && op2 is Nulo)
+        {
+            if (op1 is Exception)
+            {
+                return true;
+            }
+            else
+            {
+                return op1 is Nulo ? true : false;
+            }
+        }
+        else if (!(op2 is int || op2 is double) && op1 is Nulo)
+        {
+            if (op2 is Exception)
+            {
+                return true;
+            }
+            else
+            {
+                return op2 is Nulo ? true : false;
+            }
         }
         else
         {

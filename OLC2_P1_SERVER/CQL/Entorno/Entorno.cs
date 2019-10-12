@@ -13,8 +13,8 @@ public class Entorno
     public Entorno(Entorno anterior)
     {
         Anterior = anterior;
-        TablaVariables = new Hashtable();
-        TablaFunciones = new Hashtable();
+        TablaVariables = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+        TablaFunciones = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
     }
 
     public void Agregar(string id, object simbolo)

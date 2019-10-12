@@ -17,7 +17,7 @@ public class Objeto
 
     public object GetAtributo(bool onlyValue, string NombreAtributo)
     {
-        AtributoObjeto result = ListaAtributosObjeto.Find(x => x.Nombre.Equals(NombreAtributo));
+        AtributoObjeto result = ListaAtributosObjeto.Find(x => x.Nombre.Equals(NombreAtributo, StringComparison.InvariantCultureIgnoreCase));
         return (result is null) ? new Nulo() : (onlyValue ? result.Valor : result);
     }
 

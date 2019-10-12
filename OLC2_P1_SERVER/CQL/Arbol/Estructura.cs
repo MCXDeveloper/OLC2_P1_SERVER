@@ -15,7 +15,22 @@ public class Estructura : Expresion
 
     public object Ejecutar(Entorno ent)
     {
-        return TipoDatoEstructura;
+        if (TipoDatoEstructura.GetRealTipo().Equals(Tipo.MAP))
+        {
+            if (TipoDatoEstructura.GetElemento() is MapType)
+            {
+                MapType mt = (MapType)TipoDatoEstructura.GetElemento();
+                return new Map(mt.TipoIzq, mt.TipoDer, 0, 0);
+            }
+            else
+            {
+                return TipoDatoEstructura;
+            }
+        }
+        else
+        {
+            return TipoDatoEstructura;
+        }
     }
 
     public TipoDato GetTipo(Entorno ent)

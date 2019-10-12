@@ -30,7 +30,7 @@ public class Map
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: "+ clave.GetType().FullName +" | Declarado: "+ TipoDatoClave.GetRealTipo().ToString() +")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "1. Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: "+ clave.GetType().FullName +" | Declarado: "+ TipoDatoClave.GetRealTipo().ToString() +")", fila, columna);
         }
 
         return false;
@@ -48,13 +48,13 @@ public class Map
             {
                 string mensaje = "No se pudo obtener la clave especificada ya que no existe en la colección.";
                 CQL.AddLUPError("Semántico", "[MAP]", mensaje, fila, columna);
-                if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
+                //if (!CQL.TryCatchFlag) { CQL.AddLUPMessage("Excepción de tipo 'IndexOutException' no capturada.  " + mensaje); }
                 return new IndexOutException(mensaje);
             }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "2. Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return new Nulo();
@@ -77,7 +77,7 @@ public class Map
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "3. Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -99,7 +99,7 @@ public class Map
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "4. Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
@@ -123,7 +123,7 @@ public class Map
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[MAP]", "Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
+            CQL.AddLUPError("Semántico", "[MAP]", "5. Error de tipos.  El tipo de la clave no corresponde con el tipo con el que fue declarado el objeto MAP (Recibido: " + clave.GetType().FullName + " | Declarado: " + TipoDatoClave.GetRealTipo().ToString() + ")", fila, columna);
         }
 
         return false;
