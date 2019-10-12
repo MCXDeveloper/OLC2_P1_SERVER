@@ -1,63 +1,1050 @@
 <
-    "Fecha" = '2011-10-12',
-    "Hora" = '14:00:00',
-    "Local" = 
-        <
-            "Nombre" = "Real Madrid",
-            "Aficion" = 100000,
-            "Pais" = "España"
-        >,
-    "Visita" =
-        <   
-            "Nombre" = "Chelsea",
-            "Aficion" = 80000,
-            "Pais" = "Inglaterra"
-        >,
-    "Resultado" =
-        <
-            "Local" = 5,
-            "Visita" = 3
-        >
+	"Fecha" = '1940-02-22',
+	"Hora" = '05:06:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 56687,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 43062,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 4,
+			"Visita" = 3
+		>
 >,
 <
-    "Fecha" = '2011-10-12',
-    "Hora" = '16:00:00',
-    "Local" = 
-        <
-            "Nombre" = "Barcelona",
-            "Aficion" = 100000,
-            "Pais" = "España"
-        >,
-    "Visita" =
-        <   
-            "Nombre" = "Bayern",
-            "Aficion" = 90000,
-            "Pais" = "Alemania"
-        >,
-    "Resultado" =
-        <
-            "Local" = 4,
-            "Visita" = 2
-        >
+	"Fecha" = '1982-09-13',
+	"Hora" = '01:34:00',
+	"Local" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 74428,
+			"Pais" = "Portugal"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 31464,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 3
+		>
 >,
 <
-    "Fecha" = '2015-10-12',
-    "Hora" = '16:00:00',
-    "Local" = 
-        <
-            "Nombre" = "Arsenal",
-            "Aficion" = 70000,
-            "Pais" = "Inglaterra"
-        >,
-    "Visita" =
-        <   
-            "Nombre" = "Liverpool",
-            "Aficion" = 85000,
-            "Pais" = "Inglaterra"
-        >,
-    "Resultado" =
-        <
-            "Local" = 1,
-            "Visita" = 1
-        >
+	"Fecha" = '1906-09-08',
+	"Hora" = '00:55:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 94292,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 66830,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 1,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1903-02-13',
+	"Hora" = '03:09:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 47843,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 21579,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1944-09-11',
+	"Hora" = '18:44:00',
+	"Local" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 97647,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 43529,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1977-08-15',
+	"Hora" = '09:35:00',
+	"Local" = 
+		<
+			"Nombre" = "Norwich",
+			"Aficion" = 82914,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "FC Koln",
+			"Aficion" = 64674,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '2013-01-09',
+	"Hora" = '08:13:00',
+	"Local" = 
+		<
+			"Nombre" = "Barcelona",
+			"Aficion" = 84913,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 79749,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1998-03-25',
+	"Hora" = '06:32:00',
+	"Local" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 82557,
+			"Pais" = "Portugal"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 71704,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1971-09-28',
+	"Hora" = '06:32:00',
+	"Local" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 44790,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "FC Koln",
+			"Aficion" = 23836,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1944-09-28',
+	"Hora" = '06:14:00',
+	"Local" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 94599,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 95701,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 4
+		>
+>,
+<
+	"Fecha" = '1955-04-06',
+	"Hora" = '07:38:00',
+	"Local" = 
+		<
+			"Nombre" = "Barcelona",
+			"Aficion" = 47392,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 25498,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1900-11-16',
+	"Hora" = '22:44:00',
+	"Local" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 48684,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 48227,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 4,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1906-01-13',
+	"Hora" = '05:14:00',
+	"Local" = 
+		<
+			"Nombre" = "Chelsea",
+			"Aficion" = 21233,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 22733,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1936-09-06',
+	"Hora" = '21:05:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 65504,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 69268,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1936-03-02',
+	"Hora" = '05:10:00',
+	"Local" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 69888,
+			"Pais" = "Alemania"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 33020,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 4
+		>
+>,
+<
+	"Fecha" = '1956-07-26',
+	"Hora" = '09:32:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 42297,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "FC Koln",
+			"Aficion" = 22326,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1912-09-20',
+	"Hora" = '04:57:00',
+	"Local" = 
+		<
+			"Nombre" = "Barcelona",
+			"Aficion" = 66270,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 76019,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1917-08-22',
+	"Hora" = '09:09:00',
+	"Local" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 30012,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 65387,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1915-11-13',
+	"Hora" = '00:13:00',
+	"Local" = 
+		<
+			"Nombre" = "Atletico de Madrid",
+			"Aficion" = 70555,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 69160,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1980-03-06',
+	"Hora" = '00:45:00',
+	"Local" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 79805,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Real Madrid",
+			"Aficion" = 22815,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1930-07-11',
+	"Hora" = '13:42:00',
+	"Local" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 65258,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 64177,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1920-10-06',
+	"Hora" = '19:06:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 38394,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 41537,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 4
+		>
+>,
+<
+	"Fecha" = '1938-06-25',
+	"Hora" = '04:55:00',
+	"Local" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 32218,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 85192,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 1,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1942-02-16',
+	"Hora" = '00:13:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 69609,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 38122,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1980-09-13',
+	"Hora" = '13:36:00',
+	"Local" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 79280,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 52829,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1946-06-19',
+	"Hora" = '02:51:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 57630,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Bayern Munchen",
+			"Aficion" = 92131,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1947-11-12',
+	"Hora" = '13:17:00',
+	"Local" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 64905,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 45996,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1996-01-22',
+	"Hora" = '16:35:00',
+	"Local" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 67693,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Bayern Munchen",
+			"Aficion" = 65269,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 1,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1985-06-28',
+	"Hora" = '02:44:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 55958,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 78739,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '1991-11-14',
+	"Hora" = '13:44:00',
+	"Local" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 56970,
+			"Pais" = "Alemania"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 29861,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 4,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1918-05-20',
+	"Hora" = '14:53:00',
+	"Local" = 
+		<
+			"Nombre" = "Atletico de Madrid",
+			"Aficion" = 38096,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 61167,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '2005-03-22',
+	"Hora" = '20:30:00',
+	"Local" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 63354,
+			"Pais" = "Alemania"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 42403,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1985-07-14',
+	"Hora" = '10:04:00',
+	"Local" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 73420,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 43748,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '2003-02-11',
+	"Hora" = '08:44:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 20178,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Atletico de Madrid",
+			"Aficion" = 45995,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 4
+		>
+>,
+<
+	"Fecha" = '1968-10-27',
+	"Hora" = '15:18:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 75705,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 85680,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 1,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '1938-06-21',
+	"Hora" = '00:38:00',
+	"Local" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 68073,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 58489,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 4,
+			"Visita" = 1
+		>
+>,
+<
+	"Fecha" = '2009-04-12',
+	"Hora" = '17:20:00',
+	"Local" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 57836,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 20765,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1911-05-11',
+	"Hora" = '15:32:00',
+	"Local" = 
+		<
+			"Nombre" = "FC Koln",
+			"Aficion" = 31151,
+			"Pais" = "Alemania"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 26190,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 4
+		>
+>,
+<
+	"Fecha" = '1952-11-02',
+	"Hora" = '16:15:00',
+	"Local" = 
+		<
+			"Nombre" = "FC Koln",
+			"Aficion" = 27232,
+			"Pais" = "Alemania"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Norwich",
+			"Aficion" = 31474,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1988-09-18',
+	"Hora" = '00:39:00',
+	"Local" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 49542,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 74575,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '2002-06-22',
+	"Hora" = '15:14:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 51760,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Real Madrid",
+			"Aficion" = 90430,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 5
+		>
+>,
+<
+	"Fecha" = '2014-08-28',
+	"Hora" = '10:28:00',
+	"Local" = 
+		<
+			"Nombre" = "Atletico de Madrid",
+			"Aficion" = 39709,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 97569,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 2,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1914-09-13',
+	"Hora" = '09:50:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 82626,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 46491,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 1,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1970-11-21',
+	"Hora" = '04:34:00',
+	"Local" = 
+		<
+			"Nombre" = "Milan F.C.",
+			"Aficion" = 70638,
+			"Pais" = "Italia"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Oporto",
+			"Aficion" = 69030,
+			"Pais" = "Portugal"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 3
+		>
+>,
+<
+	"Fecha" = '1977-09-08',
+	"Hora" = '21:25:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester City",
+			"Aficion" = 94812,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Chelsea",
+			"Aficion" = 66561,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1923-04-27',
+	"Hora" = '07:42:00',
+	"Local" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 28809,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Juventus",
+			"Aficion" = 42777,
+			"Pais" = "Italia"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 0,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1978-03-07',
+	"Hora" = '10:15:00',
+	"Local" = 
+		<
+			"Nombre" = "Barcelona",
+			"Aficion" = 47788,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Arsenal",
+			"Aficion" = 76429,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 4,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1926-11-13',
+	"Hora" = '21:27:00',
+	"Local" = 
+		<
+			"Nombre" = "Manchester United",
+			"Aficion" = 66076,
+			"Pais" = "Inglaterra"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Liverpool",
+			"Aficion" = 27041,
+			"Pais" = "Inglaterra"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 5,
+			"Visita" = 2
+		>
+>,
+<
+	"Fecha" = '1967-05-17',
+	"Hora" = '01:55:00',
+	"Local" = 
+		<
+			"Nombre" = "Atletico de Madrid",
+			"Aficion" = 98994,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Valencia",
+			"Aficion" = 63756,
+			"Pais" = "Espana"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 0
+		>
+>,
+<
+	"Fecha" = '1909-05-09',
+	"Hora" = '18:26:00',
+	"Local" = 
+		<
+			"Nombre" = "Villareal",
+			"Aficion" = 53545,
+			"Pais" = "Espana"
+		>,
+	"Visita" = 
+		<
+			"Nombre" = "Borussia Dortmund",
+			"Aficion" = 90964,
+			"Pais" = "Alemania"
+		>,
+	"Resultado" = 
+		<
+			"Local" = 3,
+			"Visita" = 5
+		>
 >

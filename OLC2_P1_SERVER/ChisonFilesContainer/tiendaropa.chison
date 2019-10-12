@@ -1,44 +1,500 @@
 <
 	"ID" = 1,
-	"Articulo" =
+	"Articulo" = 
 		<
-			"Tipo" = "Pantalon",
-			"Marca" = "Marca1",
-			"Precio" = 189.50,
-			"Tallas" = [27,28,29,30,31,32]
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca10",
+			"Precio" = 275.08,
+			"tallas" = [29,33,37,31]
 		>
-
 >,
 <
 	"ID" = 2,
-	"Articulo" =
+	"Articulo" = 
 		<
-			"Tipo" = "Camisa",
-			"Marca" = "MarcaCamisa",
-			"Precio" = 189.50,
-			"Tallas" = [14.5,15,18.5]
+			"Tipo" = "Camiseta",
+			"Marca" = "marca3",
+			"Precio" = 279.69,
+			"tallas" = [33,31,28,35,29,32,30]
 		>
-
 >,
 <
 	"ID" = 3,
-	"Articulo" =
+	"Articulo" = 
 		<
-			"Tipo" = "Zapato",
-			"Marca" = "MarcaZapato",
-			"Precio" = 499.99,
-			"Tallas" = [6,7,7.6,9]
+			"Tipo" = "Camisa",
+			"Marca" = "marca10",
+			"Precio" = 244.76,
+			"tallas" = [31,34,30]
 		>
-
 >,
 <
 	"ID" = 4,
-	"Articulo" =
+	"Articulo" = 
+		<
+			"Tipo" = "Zapatos",
+			"Marca" = "marca5",
+			"Precio" = 256.69,
+			"tallas" = [37,29,31,30,33,34]
+		>
+>,
+<
+	"ID" = 5,
+	"Articulo" = 
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "marca7",
+			"Precio" = 277.64,
+			"tallas" = [30,34,36]
+		>
+>,
+<
+	"ID" = 6,
+	"Articulo" = 
+		<
+			"Tipo" = "Bufanda",
+			"Marca" = "marca4",
+			"Precio" = 151.34,
+			"tallas" = [33,34,32,36]
+		>
+>,
+<
+	"ID" = 7,
+	"Articulo" = 
+		<
+			"Tipo" = "Gorra",
+			"Marca" = "marca10",
+			"Precio" = 116.77,
+			"tallas" = [30,29,37,31,33]
+		>
+>,
+<
+	"ID" = 8,
+	"Articulo" = 
 		<
 			"Tipo" = "Pantalon",
-			"Marca" = "Marca2",
-			"Precio" = 225,
-			"Tallas" = [29,32]
+			"Marca" = "marca6",
+			"Precio" = 253.64,
+			"tallas" = [30,35,31,37]
 		>
-
+>,
+<
+	"ID" = 9,
+	"Articulo" = 
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "marca1",
+			"Precio" = 117.2,
+			"tallas" = [33,37,36]
+		>
+>,
+<
+	"ID" = 10,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca10",
+			"Precio" = 190.24,
+			"tallas" = [32,28,36]
+		>
+>,
+<
+	"ID" = 11,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca7",
+			"Precio" = 148.0,
+			"tallas" = [33]
+		>
+>,
+<
+	"ID" = 12,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca10",
+			"Precio" = 178.79,
+			"tallas" = [33,29,34,30]
+		>
+>,
+<
+	"ID" = 13,
+	"Articulo" = 
+		<
+			"Tipo" = "Cincho",
+			"Marca" = "marca1",
+			"Precio" = 220.55,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 14,
+	"Articulo" = 
+		<
+			"Tipo" = "Bufanda",
+			"Marca" = "marca9",
+			"Precio" = 158.07,
+			"tallas" = [35]
+		>
+>,
+<
+	"ID" = 15,
+	"Articulo" = 
+		<
+			"Tipo" = "Gorra",
+			"Marca" = "marca7",
+			"Precio" = 103.56,
+			"tallas" = [28,29]
+		>
+>,
+<
+	"ID" = 16,
+	"Articulo" = 
+		<
+			"Tipo" = "Cincho",
+			"Marca" = "marca3",
+			"Precio" = 153.07,
+			"tallas" = [31,33]
+		>
+>,
+<
+	"ID" = 17,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca6",
+			"Precio" = 135.27,
+			"tallas" = [34,35,37,28,36,32]
+		>
+>,
+<
+	"ID" = 18,
+	"Articulo" = 
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "marca4",
+			"Precio" = 253.89,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 19,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca10",
+			"Precio" = 153.25,
+			"tallas" = [37]
+		>
+>,
+<
+	"ID" = 20,
+	"Articulo" = 
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "marca9",
+			"Precio" = 123.44,
+			"tallas" = [36,28]
+		>
+>,
+<
+	"ID" = 21,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca3",
+			"Precio" = 130.03,
+			"tallas" = [33,29]
+		>
+>,
+<
+	"ID" = 22,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca3",
+			"Precio" = 143.72,
+			"tallas" = [37,31,29,30,32]
+		>
+>,
+<
+	"ID" = 23,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca1",
+			"Precio" = 173.86,
+			"tallas" = [32,37,28,31]
+		>
+>,
+<
+	"ID" = 24,
+	"Articulo" = 
+		<
+			"Tipo" = "Bufanda",
+			"Marca" = "marca10",
+			"Precio" = 226.62,
+			"tallas" = [30,29,35,31]
+		>
+>,
+<
+	"ID" = 25,
+	"Articulo" = 
+		<
+			"Tipo" = "Camisa",
+			"Marca" = "marca8",
+			"Precio" = 211.72,
+			"tallas" = [31]
+		>
+>,
+<
+	"ID" = 26,
+	"Articulo" = 
+		<
+			"Tipo" = "Zapatos",
+			"Marca" = "marca6",
+			"Precio" = 250.79,
+			"tallas" = [29,36,30,32]
+		>
+>,
+<
+	"ID" = 27,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca5",
+			"Precio" = 247.84,
+			"tallas" = [28,35,36,33,34,37]
+		>
+>,
+<
+	"ID" = 28,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca1",
+			"Precio" = 157.3,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 29,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca10",
+			"Precio" = 218.61,
+			"tallas" = [37,35,36]
+		>
+>,
+<
+	"ID" = 30,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca4",
+			"Precio" = 296.34,
+			"tallas" = [36,28,34,30]
+		>
+>,
+<
+	"ID" = 31,
+	"Articulo" = 
+		<
+			"Tipo" = "Cincho",
+			"Marca" = "marca5",
+			"Precio" = 138.62,
+			"tallas" = [33,37,30,36]
+		>
+>,
+<
+	"ID" = 32,
+	"Articulo" = 
+		<
+			"Tipo" = "Cincho",
+			"Marca" = "marca8",
+			"Precio" = 109.34,
+			"tallas" = [32,28,31,34,35]
+		>
+>,
+<
+	"ID" = 33,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantaloneta",
+			"Marca" = "marca5",
+			"Precio" = 275.26,
+			"tallas" = [33,37,35,29]
+		>
+>,
+<
+	"ID" = 34,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca8",
+			"Precio" = 201.78,
+			"tallas" = [32,30,33,31,36]
+		>
+>,
+<
+	"ID" = 35,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca7",
+			"Precio" = 225.64,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 36,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca3",
+			"Precio" = 293.98,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 37,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca1",
+			"Precio" = 178.46,
+			"tallas" = [32]
+		>
+>,
+<
+	"ID" = 38,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca2",
+			"Precio" = 272.01,
+			"tallas" = [31,28,32]
+		>
+>,
+<
+	"ID" = 39,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca6",
+			"Precio" = 127.84,
+			"tallas" = [28,31]
+		>
+>,
+<
+	"ID" = 40,
+	"Articulo" = 
+		<
+			"Tipo" = "Cincho",
+			"Marca" = "marca7",
+			"Precio" = 173.04,
+			"tallas" = [35,28,32]
+		>
+>,
+<
+	"ID" = 41,
+	"Articulo" = 
+		<
+			"Tipo" = "Camiseta",
+			"Marca" = "marca1",
+			"Precio" = 205.6,
+			"tallas" = [32,31]
+		>
+>,
+<
+	"ID" = 42,
+	"Articulo" = 
+		<
+			"Tipo" = "Zapatos",
+			"Marca" = "marca9",
+			"Precio" = 220.5,
+			"tallas" = [33,28,30]
+		>
+>,
+<
+	"ID" = 43,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca4",
+			"Precio" = 218.38,
+			"tallas" = []
+		>
+>,
+<
+	"ID" = 44,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca9",
+			"Precio" = 236.91,
+			"tallas" = [35,31,30,34]
+		>
+>,
+<
+	"ID" = 45,
+	"Articulo" = 
+		<
+			"Tipo" = "Bufanda",
+			"Marca" = "marca4",
+			"Precio" = 128.8,
+			"tallas" = [30,34]
+		>
+>,
+<
+	"ID" = 46,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca8",
+			"Precio" = 282.04,
+			"tallas" = [32,31,28,30]
+		>
+>,
+<
+	"ID" = 47,
+	"Articulo" = 
+		<
+			"Tipo" = "Bufanda",
+			"Marca" = "marca8",
+			"Precio" = 203.93,
+			"tallas" = [34,28,37,30,31]
+		>
+>,
+<
+	"ID" = 48,
+	"Articulo" = 
+		<
+			"Tipo" = "Zapatos",
+			"Marca" = "marca7",
+			"Precio" = 201.88,
+			"tallas" = [31,32,33,28]
+		>
+>,
+<
+	"ID" = 49,
+	"Articulo" = 
+		<
+			"Tipo" = "Zapatos",
+			"Marca" = "marca3",
+			"Precio" = 269.15,
+			"tallas" = [33,29,30,31,34,37]
+		>
+>,
+<
+	"ID" = 50,
+	"Articulo" = 
+		<
+			"Tipo" = "Pantalon",
+			"Marca" = "marca9",
+			"Precio" = 221.38,
+			"tallas" = [34,37,33,36,31]
+		>
 >

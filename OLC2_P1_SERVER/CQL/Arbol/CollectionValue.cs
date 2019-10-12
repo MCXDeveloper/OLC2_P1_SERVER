@@ -57,15 +57,18 @@ public class CollectionValue : Expresion
             {
                 if (ValidarTiposList(ListSetArray, ent, fila, columna))
                 {
-                    ListType tipoList = ObtenerListType(ent);
-                    XList listita = new XList(tipoList.TipoDatoList, fila, columna);
-
-                    foreach (Expresion ex in ListSetArray)
+                    if (ListSetArray.Count > 0)
                     {
-                        listita.Insert(ex.Ejecutar(ent));
-                    }
+                        ListType tipoList = ObtenerListType(ent);
+                        XList listita = new XList(tipoList.TipoDatoList, fila, columna);
 
-                    return listita;
+                        foreach (Expresion ex in ListSetArray)
+                        {
+                            listita.Insert(ex.Ejecutar(ent));
+                        }
+
+                        return listita;
+                    }
                 }
                 else
                 {
@@ -76,15 +79,18 @@ public class CollectionValue : Expresion
             {
                 if (ValidarTiposSet(ListSetArray, ent, fila, columna))
                 {
-                    SetType tipoSet = ObtenerSetType(ent);
-                    XSet setsito = new XSet(tipoSet.TipoDatoSet, fila, columna);
-
-                    foreach (Expresion ex in ListSetArray)
+                    if (ListSetArray.Count > 0)
                     {
-                        setsito.Insert(ex.Ejecutar(ent));
-                    }
+                        SetType tipoSet = ObtenerSetType(ent);
+                        XSet setsito = new XSet(tipoSet.TipoDatoSet, fila, columna);
 
-                    return setsito;
+                        foreach (Expresion ex in ListSetArray)
+                        {
+                            setsito.Insert(ex.Ejecutar(ent));
+                        }
+
+                        return setsito;
+                    }
                 }
                 else
                 {
@@ -167,17 +173,24 @@ public class CollectionValue : Expresion
 
     public bool ValidarTiposList(List<Expresion> list_elements, Entorno ent, int fila, int columna)
     {
-        // Como primer punto vamos a tomar el primer elemento de la lista para que nos indique el tipo de la misma.
-        TipoDato type = list_elements[0].GetTipo(ent);
-
-        // Se procede a verificar que todos los elementos de la lista sean del mismo tipo.
-        if(ValidateSameType(list_elements, type, ent))
+        if (list_elements.Count > 0)
         {
-            return true;
+            // Como primer punto vamos a tomar el primer elemento de la lista para que nos indique el tipo de la misma.
+            TipoDato type = list_elements[0].GetTipo(ent);
+
+            // Se procede a verificar que todos los elementos de la lista sean del mismo tipo.
+            if (ValidateSameType(list_elements, type, ent))
+            {
+                return true;
+            }
+            else
+            {
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción LIST.", fila, columna);
+            }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción LIST.", fila, columna);
+            return true;
         }
 
         return false;
@@ -185,27 +198,34 @@ public class CollectionValue : Expresion
 
     public bool ValidarTiposSet(List<Expresion> list_elements, Entorno ent, int fila, int columna)
     {
-        // Como primer punto vamos a tomar el primer elemento de la lista para que nos indique el tipo de la misma.
-        TipoDato type = list_elements[0].GetTipo(ent);
-
-        // Se procede a verificar que todos los elementos de la lista sean del mismo tipo.
-        if (ValidateSameType(list_elements, type, ent))
+        if (list_elements.Count > 0)
         {
-            // Al ser la instruccion SET se necesita que ningún valor esté repetido en la lista, por lo que se procede a validar esa cuestión.
-            object _valor_ = list_elements[0].Ejecutar(ent);
+            // Como primer punto vamos a tomar el primer elemento de la lista para que nos indique el tipo de la misma.
+            TipoDato type = list_elements[0].GetTipo(ent);
 
-            if(ValidateUniqueValues(list_elements, _valor_, ent))
+            // Se procede a verificar que todos los elementos de la lista sean del mismo tipo.
+            if (ValidateSameType(list_elements, type, ent))
             {
-                return true;
+                // Al ser la instruccion SET se necesita que ningún valor esté repetido en la lista, por lo que se procede a validar esa cuestión.
+                object _valor_ = list_elements[0].Ejecutar(ent);
+
+                if (ValidateUniqueValues(list_elements, _valor_, ent))
+                {
+                    return true;
+                }
+                else
+                {
+                    CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes dentro de la colección SET no se pueden repetir.", fila, columna);
+                }
             }
             else
             {
-                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Los valores correspondientes dentro de la colección SET no se pueden repetir.", fila, columna);
+                CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción SET.", fila, columna);
             }
         }
         else
         {
-            CQL.AddLUPError("Semántico", "[COLLECTION_VALUE]", "Error de tipos.  Todos los elementos correspondientes deben ser del mismo tipo en la instrucción SET.", fila, columna);
+            return true;
         }
 
         return false;

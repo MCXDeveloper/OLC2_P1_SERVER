@@ -107,37 +107,37 @@
     "INSTR" = $ 
                 List @arr = [5,6,4,7,3,8,2,9,1,10];
         
-				if(@asc){
-					for (int @i = 0; @i < @arr.size(); @i++) {
-						for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
-						{
-							if (@arr.get(@j) > @arr.get(@j+1)) 
-							{ 
-								// intercambia las posiciones
-								int @temp = @arr.get(@j); 
-								@arr.set(@j,@arr.get(@j+1)); 
-								@arr.set(@j+1,@temp);
-							} 
-						}
-					}
-				}else{
-					for (int @i = 0; @i < @arr.size(); @i++) {
-						for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
-						{
-							if (@arr.get(@j) < @arr.get(@j+1)) 
-							{ 
-								// intercambia las posiciones
-								int @temp = @arr.get(@j); 
-								@arr.set(@j,@arr.get(@j+1)); 
-								@arr.set(@j+1,@temp);
-							} 
-						}
-					}
-				}
+                if(@asc){
+                    for (int @i = 0; @i < @arr.size(); @i++) {
+                        for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
+                        {
+                            if (@arr.get(@j) > @arr.get(@j+1)) 
+                            { 
+                                // intercambia las posiciones
+                                int @temp = @arr.get(@j); 
+                                @arr.set(@j,@arr.get(@j+1)); 
+                                @arr.set(@j+1,@temp);
+                            } 
+                        }
+                    }
+                }else{
+                    for (int @i = 0; @i < @arr.size(); @i++) {
+                        for (int @j = 0; @j < @arr.size()-@i-1; @j++) 
+                        {
+                            if (@arr.get(@j) < @arr.get(@j+1)) 
+                            { 
+                                // intercambia las posiciones
+                                int @temp = @arr.get(@j); 
+                                @arr.set(@j,@arr.get(@j+1)); 
+                                @arr.set(@j+1,@temp);
+                            } 
+                        }
+                    }
+                }
 
-				for(int @cont =0;@cont<@arr.size(); @cont++){
-					log(@arr.get(@cont));
-				}           
+                for(int @cont =0;@cont<@arr.size(); @cont++){
+                    log(@arr.get(@cont));
+                }           
             $
 >,
 <    
@@ -149,7 +149,7 @@
 
                 Set @primos = new Set<Int>;
 
-                for(int @t=1; @t<=@cant; @t++){
+                for(int @t=1; @t<=@cant;@t++){
                     for(int @i=2;@i<@t;@i++) {
                         if(@t%@i==0){
                             @primos.insert(@t);
@@ -157,7 +157,8 @@
                     }
                 }
 
-                //delete from Primos where id in @primos;
+                delete from Primos where id in @primos;
+
 
                 @cant = Count(<<select * from Primos>>);
                 log("La tabla primos tiene " + @cant + " valores");

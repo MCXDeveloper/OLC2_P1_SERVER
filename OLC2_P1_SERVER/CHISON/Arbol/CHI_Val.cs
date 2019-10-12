@@ -64,7 +64,7 @@ namespace OLC2_P1_SERVER.CHISON.Arbol
                             if (!string.IsNullOrEmpty(NombreObjetoActual))
                             {
                                 KeyValuePair<string, List<CHI_Atributo>> kvp = StaticChison.ObjetosRecopilados.FirstOrDefault(x => x.Key.Equals(NombreObjetoActual));
-                                CHI_Atributo catr = kvp.Value.Find(x => x.NombreAtributo.Equals(v.Clave.ToString().Replace("\"", "")));
+                                CHI_Atributo catr = kvp.Value.Find(x => x.NombreAtributo.Equals(v.Clave.ToString().Replace("\"", ""), StringComparison.InvariantCultureIgnoreCase));
                                 v.NombreObjetoActual = catr.TipoDatoAtributo.OtroTipo;
                                 aux += ((string[])v.Ejecutar())[1] + (v.Equals(listita.Last()) ? "" : ", ");
                             }

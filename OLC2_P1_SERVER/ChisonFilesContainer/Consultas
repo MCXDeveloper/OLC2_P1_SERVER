@@ -1,0 +1,70 @@
+use Database1;
+
+//Las consultas 1,2 y 3 se califican juntas
+
+//Consulta 1
+Select * from Alumno;                        //Tiene 50 registros
+Delete from Alumno where Carnet % 2 ==0;    //Deberia de eliminar a todos los pares
+
+
+//Consulta 2
+UPDATE Alumno SET Nombre = "Julio", Edad = 23, Carnet=20000 WHERE Nombre=="Alumno1" && Edad<18;          //Modifica el primer registro
+
+//Consulta 3
+Insert into Alumno(Nombre,Carnet) values("Luis", 201602656);
+Insert into Alumno(Nombre,Carnet) values("Rainman", 201600000);
+Select * from Alumno where  Carnet % 2 == 0;                  // Solo deberiamos de estar los 3  auxiliares
+
+
+//Consulta 4
+Select Nombre from Alumno
+    where Direccion.nivel>3 && "Perreologia avanzada" in Cursos_Aprobados;
+
+    //RESPUESTA
+    //Alumno5        
+    //Alumno39
+    
+
+//Consulta 5
+SELECT Fecha, Hora, Local.Nombre, Visita.Nombre
+from Partido
+where Resultado.local - Resultado.visita >= 3 || Resultado.local - Resultado.visita <= -3;
+
+    /*Respuesta 
+    Manchester United vs FC Koln
+    Juventus vs Oporto
+    Atletico de Madrid vs Borussia Dortmund
+    Juventus vs Milan F.C.
+    Valencia vs Oporto
+    Atletico de Madrid vs Arsenal
+    Milan F.C. vs Valencia
+    Juventus vs Borussia Dortmund
+    Juventus vs Milan F.C.
+    FC Koln vs Oporto
+    FC Koln vs Norwich
+    Manchester City vs Real Madrid
+    Milan F.C. vs Oporto
+    Barcelona vs Arsenal
+    Manchester United vs Liverpool
+    Atletico de Madrid vs Valencia*/
+
+//Consulta 6
+SELECT * FROM TiendaRopa 
+WHERE 
+    32 IN Articulo.tallas && (Articulo.marca == "marca7"    || Articulo.marca == "marca8");
+
+
+// Respuesta ID numero 32, 34 ,40 ,46 ,48
+
+use Database2;
+
+
+//Consulta 7
+call OrderList(true);
+//RESPUESTA 1,2,3,4,5,6,7,8,9,10
+call OrderList(false);
+//RESPUESTA 10,9,8,7,6,5,4,3,2,1
+
+//Consulta 8
+call EliminarPrimos();
+//Respuesta * Primero imprime 19 y despues 12

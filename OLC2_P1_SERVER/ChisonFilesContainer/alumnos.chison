@@ -1,48 +1,600 @@
 <
-    "Carnet" = 1,
-    "Nombre" = "Alumno1",
-    "Edad" = 18,
-    "Cursos_Aprobados" = ["Compiladores 1","Matematica Intermedia 2"],
-    "Direccion" = 
-        <
-            "Apartamento" = "2B",
-            "Zona" = "4ta Calle y 3ra Avenida Z.15",
-            "Nivel" = 2
-        >
+	"Carnet" = 1,
+	"Nombre" = "Alumno1",
+	"Edad" = 17,
+	"Cursos_Aprobados" = ["Procesos de manufactura"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2J",
+			"Ubicacion" = "Hacienda Real",
+			"Nivel" = 1
+		>
 >,
 <
-    "Carnet" = 2,
-    "Nombre" = "Alumno2",
-    "Edad" = 24,
-    "Cursos_Aprobados" = ["Compiladores 2","Estadistica 1","Matematica Intermedia 3"],
-    "Direccion" = 
-        <
-            "Apartamento" = "",
-            "Zona" = "Avenida Reforma Final, Z.9",
-            "Nivel" = 0
-        >
+	"Carnet" = 2,
+	"Nombre" = "Alumno2",
+	"Edad" = 32,
+	"Cursos_Aprobados" = ["Ing. electrica 1","Organizacion Computacional","Procesos de manufactura","Compiladores 2","Perreologia avanzada"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5J",
+			"Ubicacion" = "Lomas del Norte",
+			"Nivel" = 2
+		>
 >,
 <
-    "Carnet" = 3,
-    "Nombre" = "Alumno3",
-    "Edad" = 19,
-    "Cursos_Aprobados" = ["Estructuras de Datos","Mate Computo 2","Ecologia"],
-    "Direccion" = 
-        <
-            "Apartamento" = "4A",
-            "Zona" = "4ta Calle y 3ra Avenida Z.15",
-            "Nivel" = 4
-        >
+	"Carnet" = 3,
+	"Nombre" = "Alumno3",
+	"Edad" = 21,
+	"Cursos_Aprobados" = ["Ing. electrica 1","Compiladores 2","EDD","Organizacion Computacional"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2D",
+			"Ubicacion" = "Calzada San Juan",
+			"Nivel" = 3
+		>
 >,
 <
-    "Carnet" = 4,
-    "Nombre" = "Alumno4",
-    "Edad" = 22,
-    "Cursos_Aprobados" = ["Compiladores 2","Quimica 1","Organizacion Computacional","Ingenieria Economica"],
-    "Direccion" = 
-        <
-            "Apartamento" = "5A",
-            "Zona" = "4ta Calle y 3ra Avenida Z.15",
-            "Nivel" = 5
-        >
+	"Carnet" = 4,
+	"Nombre" = "Alumno4",
+	"Edad" = 32,
+	"Cursos_Aprobados" = ["Lenguajes Formales","Jugar Billar 1","Matematica Aplicada 3","Organizacion Computacional","Matematica Aplicada 3"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5E",
+			"Ubicacion" = "Hacienda Real",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 5,
+	"Nombre" = "Alumno5",
+	"Edad" = 19,
+	"Cursos_Aprobados" = ["Saltarse Cursos 2","Procesos de manufactura","Perreologia avanzada","Quimica 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1J",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 6,
+	"Nombre" = "Alumno6",
+	"Edad" = 29,
+	"Cursos_Aprobados" = ["Ing. electrica 1","Quimica 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3J",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 7,
+	"Nombre" = "Alumno7",
+	"Edad" = 20,
+	"Cursos_Aprobados" = ["Mate Computo 1","Quimica 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3F",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 8,
+	"Nombre" = "Alumno8",
+	"Edad" = 26,
+	"Cursos_Aprobados" = ["Perreologia avanzada"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5J",
+			"Ubicacion" = "Calzada San Juan",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 9,
+	"Nombre" = "Alumno9",
+	"Edad" = 16,
+	"Cursos_Aprobados" = ["Lenguajes Formales","Matematica Aplicada 1","Resistencia de materiales","Quimica 2","Matematica Aplicada 1","Quimica 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5D",
+			"Ubicacion" = "Casa Mia",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 10,
+	"Nombre" = "Alumno10",
+	"Edad" = 16,
+	"Cursos_Aprobados" = ["Procesos de manufactura","Matematica Aplicada 3"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4B",
+			"Ubicacion" = "Calzada San Juan",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 11,
+	"Nombre" = "Alumno11",
+	"Edad" = 27,
+	"Cursos_Aprobados" = ["Compiladores 1","Compiladores 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1A",
+			"Ubicacion" = "Hacienda Real",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 12,
+	"Nombre" = "Alumno12",
+	"Edad" = 27,
+	"Cursos_Aprobados" = ["Procesos de manufactura","Compiladores 2","Ing. electrica 1","Matematica Aplicada 3"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4F",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 13,
+	"Nombre" = "Alumno13",
+	"Edad" = 33,
+	"Cursos_Aprobados" = ["Resistencia de materiales","Matematica Aplicada 1","Matematica Aplicada 3","Lenguajes Formales","Matematica Aplicada 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4C",
+			"Ubicacion" = "Casa Mia",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 14,
+	"Nombre" = "Alumno14",
+	"Edad" = 26,
+	"Cursos_Aprobados" = ["Matematica Aplicada 3","Gerenciales 1","Quimica 1","Jugar Billar 1","Quimica 1","Matematica Aplicada 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2H",
+			"Ubicacion" = "El milagro",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 15,
+	"Nombre" = "Alumno15",
+	"Edad" = 33,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "3G",
+			"Ubicacion" = "Lomas del Norte",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 16,
+	"Nombre" = "Alumno16",
+	"Edad" = 25,
+	"Cursos_Aprobados" = ["Compiladores 1","Procesos de manufactura","Quimica 3"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3F",
+			"Ubicacion" = "La montaña",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 17,
+	"Nombre" = "Alumno17",
+	"Edad" = 25,
+	"Cursos_Aprobados" = ["Lenguajes Formales","Compiladores 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3D",
+			"Ubicacion" = "Casa Mia",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 18,
+	"Nombre" = "Alumno18",
+	"Edad" = 24,
+	"Cursos_Aprobados" = ["Saltarse Cursos 2","Quimica 3","Saltarse Cursos 2","Compiladores 2","Mate Computo 1","Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4J",
+			"Ubicacion" = "El milagro",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 19,
+	"Nombre" = "Alumno19",
+	"Edad" = 21,
+	"Cursos_Aprobados" = ["Organizacion Computacional","Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5B",
+			"Ubicacion" = "La petapa",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 20,
+	"Nombre" = "Alumno20",
+	"Edad" = 33,
+	"Cursos_Aprobados" = ["Ing. electrica 1","EDD","Matematica Aplicada 1","Quimica 1","Saltarse Cursos 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4H",
+			"Ubicacion" = "Foraneo",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 21,
+	"Nombre" = "Alumno21",
+	"Edad" = 17,
+	"Cursos_Aprobados" = ["Gerenciales 1","Mate Computo 2","Quimica 3"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4J",
+			"Ubicacion" = "Avenida reforma",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 22,
+	"Nombre" = "Alumno22",
+	"Edad" = 33,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "1E",
+			"Ubicacion" = "Casa Mia",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 23,
+	"Nombre" = "Alumno23",
+	"Edad" = 22,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "3H",
+			"Ubicacion" = "La Reformita",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 24,
+	"Nombre" = "Alumno24",
+	"Edad" = 18,
+	"Cursos_Aprobados" = ["Mate Computo 1","Perreologia avanzada"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5B",
+			"Ubicacion" = "El milagro",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 25,
+	"Nombre" = "Alumno25",
+	"Edad" = 20,
+	"Cursos_Aprobados" = ["Ing. electrica 1","Procesos de manufactura"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4F",
+			"Ubicacion" = "La Reformita",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 26,
+	"Nombre" = "Alumno26",
+	"Edad" = 20,
+	"Cursos_Aprobados" = ["Quimica 3","Matematica Aplicada 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5C",
+			"Ubicacion" = "La petapa",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 27,
+	"Nombre" = "Alumno27",
+	"Edad" = 21,
+	"Cursos_Aprobados" = ["Procesos de manufactura","Matematica Aplicada 2","Quimica 1","Procesos de manufactura"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3J",
+			"Ubicacion" = "Calzada San Juan",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 28,
+	"Nombre" = "Alumno28",
+	"Edad" = 24,
+	"Cursos_Aprobados" = ["Mate Computo 1","Resistencia de materiales","Lenguajes Formales","Compiladores 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5A",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 29,
+	"Nombre" = "Alumno29",
+	"Edad" = 16,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "1H",
+			"Ubicacion" = "Avenida reforma",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 30,
+	"Nombre" = "Alumno30",
+	"Edad" = 17,
+	"Cursos_Aprobados" = ["Ing. electrica 1","Quimica 2","Quimica 1","Quimica 3","Perreologia avanzada","Organizacion Computacional"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4G",
+			"Ubicacion" = "El milagro",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 31,
+	"Nombre" = "Alumno31",
+	"Edad" = 18,
+	"Cursos_Aprobados" = ["Saltarse Cursos 2","Quimica 1","Organizacion Computacional"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1I",
+			"Ubicacion" = "Boulevard Vista Hermosa",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 32,
+	"Nombre" = "Alumno32",
+	"Edad" = 22,
+	"Cursos_Aprobados" = ["Mate Computo 2","Gerenciales 1","Procesos de manufactura"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5I",
+			"Ubicacion" = "El milagro",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 33,
+	"Nombre" = "Alumno33",
+	"Edad" = 34,
+	"Cursos_Aprobados" = ["Gerenciales 1","Compiladores 2","Resistencia de materiales","Gerenciales 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1G",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 34,
+	"Nombre" = "Alumno34",
+	"Edad" = 26,
+	"Cursos_Aprobados" = ["Gerenciales 1","Organizacion Computacional","Jugar Billar 1","Quimica 2","Quimica 1","Organizacion Computacional"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1G",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 35,
+	"Nombre" = "Alumno35",
+	"Edad" = 31,
+	"Cursos_Aprobados" = ["Matematica Aplicada 3","Mate Computo 2","Organizacion Computacional","Quimica 3","Saltarse Cursos 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4D",
+			"Ubicacion" = "Lomas del Norte",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 36,
+	"Nombre" = "Alumno36",
+	"Edad" = 23,
+	"Cursos_Aprobados" = ["Quimica 1","Matematica Aplicada 1","EDD","Compiladores 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4A",
+			"Ubicacion" = "Hacienda Real",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 37,
+	"Nombre" = "Alumno37",
+	"Edad" = 24,
+	"Cursos_Aprobados" = ["Matematica Aplicada 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5J",
+			"Ubicacion" = "Lomas del Norte",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 38,
+	"Nombre" = "Alumno38",
+	"Edad" = 24,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "3D",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 39,
+	"Nombre" = "Alumno39",
+	"Edad" = 26,
+	"Cursos_Aprobados" = ["Perreologia avanzada","Jugar Billar 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4G",
+			"Ubicacion" = "Hacienda Real",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 40,
+	"Nombre" = "Alumno40",
+	"Edad" = 32,
+	"Cursos_Aprobados" = ["Quimica 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2I",
+			"Ubicacion" = "La montaña",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 41,
+	"Nombre" = "Alumno41",
+	"Edad" = 27,
+	"Cursos_Aprobados" = ["Lenguajes Formales","Jugar Billar 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1I",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 42,
+	"Nombre" = "Alumno42",
+	"Edad" = 31,
+	"Cursos_Aprobados" = ["Mate Computo 2","Gerenciales 1","Compiladores 1","Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1J",
+			"Ubicacion" = "Lomas del Norte",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 43,
+	"Nombre" = "Alumno43",
+	"Edad" = 16,
+	"Cursos_Aprobados" = ["Saltarse Cursos 2","Mate Computo 2"],
+	"Direccion" = 
+		<
+			"Apartamento" = "5D",
+			"Ubicacion" = "Carretera a el salvador",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 44,
+	"Nombre" = "Alumno44",
+	"Edad" = 22,
+	"Cursos_Aprobados" = ["Organizacion Computacional"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4A",
+			"Ubicacion" = "Zona 12",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 45,
+	"Nombre" = "Alumno45",
+	"Edad" = 20,
+	"Cursos_Aprobados" = [],
+	"Direccion" = 
+		<
+			"Apartamento" = "5B",
+			"Ubicacion" = "La Reformita",
+			"Nivel" = 0
+		>
+>,
+<
+	"Carnet" = 46,
+	"Nombre" = "Alumno46",
+	"Edad" = 17,
+	"Cursos_Aprobados" = ["Jugar Billar 1","Quimica 2","Perreologia avanzada","Compiladores 2","Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "4F",
+			"Ubicacion" = "Calzada Roosevelt",
+			"Nivel" = 4
+		>
+>,
+<
+	"Carnet" = 47,
+	"Nombre" = "Alumno47",
+	"Edad" = 29,
+	"Cursos_Aprobados" = ["Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "3H",
+			"Ubicacion" = "Foraneo",
+			"Nivel" = 2
+		>
+>,
+<
+	"Carnet" = 48,
+	"Nombre" = "Alumno48",
+	"Edad" = 23,
+	"Cursos_Aprobados" = ["EDD","Lenguajes Formales","Resistencia de materiales"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2G",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 3
+		>
+>,
+<
+	"Carnet" = 49,
+	"Nombre" = "Alumno49",
+	"Edad" = 32,
+	"Cursos_Aprobados" = ["Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "1H",
+			"Ubicacion" = "Zona 14",
+			"Nivel" = 1
+		>
+>,
+<
+	"Carnet" = 50,
+	"Nombre" = "Alumno50",
+	"Edad" = 30,
+	"Cursos_Aprobados" = ["Mate Computo 1"],
+	"Direccion" = 
+		<
+			"Apartamento" = "2F",
+			"Ubicacion" = "Foraneo",
+			"Nivel" = 1
+		>
 >

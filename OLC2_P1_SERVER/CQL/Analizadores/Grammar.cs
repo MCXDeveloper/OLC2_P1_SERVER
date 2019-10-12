@@ -660,7 +660,7 @@ public class Grammar : Irony.Parsing.Grammar
 
         CASE.Rule = r_case + EXPRESION + dospu + llave_a + LISTA_INSTRUCCIONES + llave_c;
 
-        LISTA_EXPRESIONES.Rule = MakePlusRule(LISTA_EXPRESIONES, coma, EXPRESION);
+        LISTA_EXPRESIONES.Rule = MakeStarRule(LISTA_EXPRESIONES, coma, EXPRESION);
 
         FUNCION_AGREGACION.Rule = TIPO_FUN_AGG + par_a + menor + menor + SENTENCIA_TB_SELECT + mayor + mayor + par_c;
 
