@@ -99,6 +99,10 @@ public class AccesoObjeto : Expresion, Instruccion
                 
                 if(access_resp is Nulo)
                 {
+                    if (IsValor)
+                    {
+                        padre = access_resp;
+                    }
                     break;
                 }
                 else
